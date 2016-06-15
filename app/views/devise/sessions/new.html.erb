@@ -3,9 +3,15 @@
     <h2 class="text-primary">Log in</h2>
     <hr>
     <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    
+      <!-- <div class="field form-group">
+        <%# f.label :email %><br />
+        <%# f.email_field :email, autofocus: true, class:'form-control' %>
+      </div> -->
+
       <div class="field form-group">
-        <%= f.label :email %><br />
-        <%= f.email_field :email, autofocus: true, class:'form-control' %>
+        <%= f.label :donor_id %><br />
+        <%= f.telephone_field :donor_id, autofocus: true, class:'form-control' %>
       </div>
 
       <div class="field form-group">

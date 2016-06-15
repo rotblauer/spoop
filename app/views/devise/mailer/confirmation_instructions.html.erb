@@ -1,5 +1,9 @@
-<p>Welcome <%= @email %>!</p>
+<p>Hello from Spoop!</p>
 
-<p>You can confirm your account email through the link below:</p>
+<% if @record.admin? %>
+<p>Your admin number is <strong><%= @record.donor_id %></strong>.</p> 
+<% end %>
+
+<p>Please confirm your email through the link below, and then use your <%= @record.role %> number to log in.</p>
 
 <p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>

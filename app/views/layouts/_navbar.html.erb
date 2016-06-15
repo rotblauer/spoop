@@ -13,10 +13,6 @@
     <!-- 
     `if @user` is working to hide this section from admins because they are unable to access users#show by a before_filter in users_controller, thus there is no @user var defined in their scope of access. TODO: improve/make explicit this permission -->
     <% if @user %>
-
-      <span class="text-info hidden-xs-down">
-        <%= @user.email %>
-      </span>
     
       <div class="pull-xs-right">
         <!-- toggle api key modal -->
