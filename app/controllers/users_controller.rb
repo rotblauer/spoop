@@ -55,7 +55,7 @@ class UsersController < ApplicationController
     # @open_biome_logs = @meta_logs.map(&:open_biome_log) #@user.open_biome_logs.all
     
     # If there are no resources for the user yet...
-    redirect_to begin_user_path(@user) if (@meta_logs.empty?)
+    redirect_to begin_user_path(@user) if !@meta_logs.any?
     
     @open_biome_logs = @user.open_biome_logs.all
     @donor_logs = @user.donor_logs.all
@@ -194,10 +194,12 @@ class UsersController < ApplicationController
     #figure out css for manual punchcard range
     @ds = punchcard_range.descriptive_statistics
  
-    gon.us_start_date = {
-      big: ((@meta_logs.first.time_of_passage - 3.months).to_f * 1000).to_i,
-      small: ((@meta_logs.first.time_of_passage).to_f * 1000).to_i,
-    }
+    if @meta_logs.any?
+      gon.us_start_date = {
+        big: ((@meta_logs.first.time_of_passage - 3.months).to_f * 1000).to_i,
+        small: ((@meta_logs.first.time_of_passage).to_f * 1000).to_i,
+      }
+    end
     gon.us_timebristolweight = time_bristol_weight
     gon.us_trulia_data = trulia_data
     gon.us_pie_charts_products = @open_biome_logs.processed.where(usage: 'treatment').group(:product).count.map { |k,v| { 'name' => k, 'y' => v } }
@@ -284,6 +286,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:donor_id, :name, :email, :password)
+      params.require(:user).permit(:donor_id, :name, :email, :password, :password_confirmation)
     end
 end

@@ -3,10 +3,57 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable, :lockable, :timeoutable
+         :recoverable, :rememberable, :trackable,
+         :confirmable, :lockable, :timeoutable #, :validatable
 
-  # attr_encrypted :email, key: Rails.application.secrets.secret_key_base, attribute: 'email'
+  attr_encrypted :email, key: Rails.application.secrets.secret_key_base
+  
+  
+  def email_required?
+    true
+  end
+
+  def email_changed?
+    encrypted_email_changed? #self.
+  end 
+
+  # def self.find_for_authentication(tainted_conditions)
+  #   # User.find_by_donor_id(tainted_conditions[:donor_id])
+  #   User.find_by_email(tainted_conditions[:email])
+  #   # User.find_by_donor_id()
+  #   # User.find_by_email(tainted_conditions[:email])
+  # end
+
+  # def self.find_for_database_authentication(warden_conditions)
+  #   conditions = warden_conditions.dup
+  #   if donor_id = conditions.delete(:donor_id)
+  #     where(conditions.to_h).where(["donor_id = :value", { :value => donor_id.to_i }]).first
+  #   elsif conditions.has_key?(:donor_id)
+  #     where(conditions.to_h).first
+  #   end
+  # end
+
+  # def self.find_first_by_auth_conditions(tainted_conditions, opts={})
+  # 	User.find_by_email(tainted_conditions[:email])
+  # end
+
+  def password_required?
+  	true
+  end
+
+  # def email_was
+		# User.decrypt_email(encrypted_email_was)
+  # end
+
+  # def apply_to_attribute_or_variable(attr, method)
+
+  # end
+
+  # def email_unique?
+  #   records = Array(self.class.find_by(email: self.email))
+  #   records.reject{|u| self.persisted? && u.id == self.id}.empty?
+  # end
+  
 
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
@@ -20,11 +67,15 @@ class User < ActiveRecord::Base
 	
 
 	#email is a real email
-	validates_format_of :email, :with => SpoopConstants::VALID_EMAIL_REGEX
-	validates :email, presence: true
-	validates :email, uniqueness: true
+	# MIGRATE TO DONOR_ID CENTRIC
+	# validates_format_of :email, :with => SpoopConstants::VALID_EMAIL_REGEX
+	# validates :email, presence: true
+	# validates :email, uniqueness: true
+	# 
+	# validate :validate_email_uniqueness #validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
+	# validates :email_encrypted, presence: true
+	validates_format_of :email, with: Devise.email_regexp, if: :email_changed? #, allow_blank: true,
 	
-	#make sure they claim to read the fine print
 	validates :read_the_fine_print, inclusion: {in: [true]}
 	
 	validates :role, presence: true
@@ -32,14 +83,14 @@ class User < ActiveRecord::Base
 
 	validates :group, inclusion: { in: GROUPS }
 	
-	#grab and check against secret donor numbers
-	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{|a|a.to_i}
-	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
-	#unique donor number
-	validates :donor_id, uniqueness: true, if: :donor?
+	# VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a }  
+	# validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
+	validates :donor_id, presence: true
+	validates :donor_id, uniqueness: true
 	
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
 	validate :knows_admin_secret_if_admin, on: :create
+
 
 	before_create :set_default_values
 	after_create :create_user_api_key
@@ -100,5 +151,11 @@ class User < ActiveRecord::Base
 			end
 		end
 	end
+
+	protected
+
+	# def validate_email_uniqueness
+	#   errors.add(:email, :taken) unless email_unique?
+	# end
 
 end
