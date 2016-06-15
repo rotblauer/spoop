@@ -12,47 +12,12 @@ class User < ActiveRecord::Base
   def email_required?
     true
   end
-
   def email_changed?
     encrypted_email_changed? #self.
-  end 
-
-  # def self.find_for_authentication(tainted_conditions)
-  #   # User.find_by_donor_id(tainted_conditions[:donor_id])
-  #   User.find_by_email(tainted_conditions[:email])
-  #   # User.find_by_donor_id()
-  #   # User.find_by_email(tainted_conditions[:email])
-  # end
-
-  # def self.find_for_database_authentication(warden_conditions)
-  #   conditions = warden_conditions.dup
-  #   if donor_id = conditions.delete(:donor_id)
-  #     where(conditions.to_h).where(["donor_id = :value", { :value => donor_id.to_i }]).first
-  #   elsif conditions.has_key?(:donor_id)
-  #     where(conditions.to_h).first
-  #   end
-  # end
-
-  # def self.find_first_by_auth_conditions(tainted_conditions, opts={})
-  # 	User.find_by_email(tainted_conditions[:email])
-  # end
-
+  end
   def password_required?
   	true
   end
-
-  # def email_was
-		# User.decrypt_email(encrypted_email_was)
-  # end
-
-  # def apply_to_attribute_or_variable(attr, method)
-
-  # end
-
-  # def email_unique?
-  #   records = Array(self.class.find_by(email: self.email))
-  #   records.reject{|u| self.persisted? && u.id == self.id}.empty?
-  # end
   
 
   ROLES = ['donor', 'admin', 'open']
@@ -66,13 +31,6 @@ class User < ActiveRecord::Base
 	has_one :api_key, dependent: :destroy
 	
 
-	#email is a real email
-	# MIGRATE TO DONOR_ID CENTRIC
-	# validates_format_of :email, :with => SpoopConstants::VALID_EMAIL_REGEX
-	# validates :email, presence: true
-	# validates :email, uniqueness: true
-	# 
-	# validate :validate_email_uniqueness #validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
 	validates :email, presence: true
 	validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
 	
