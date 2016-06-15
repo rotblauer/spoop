@@ -46,7 +46,7 @@
 
 		<%= form_for(:user, as: :user, url: session_path(:user)) do |f| %>
 
-		    <%= f.email_field :email, value: 'mrroboto@spoop.info', class:'form-control hidden-xs-up' %>
+		    <%= f.telephone_field :donor_id, value: '9999', class:'form-control hidden-xs-up' %>
 
 		    <%= f.password_field :password, value: 'shitshitshit', class:'form-control hidden-xs-up' %>
 
