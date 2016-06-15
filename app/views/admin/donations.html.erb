@@ -1,0 +1,245 @@
+<!-- handle tabs -->
+<script>
+  $('#admin-nav').find('a').removeClass('active');
+  $('#donations-tab').addClass('active');
+</script>
+
+<p class="text-info"> <i class="fa fa-info-circle"></i> All data below reflects <strong>only Open Biome logs</strong>.</p>
+
+
+
+<p class="text-muted">Donations by day</p>
+<!-- heatmap element -->
+<div id="overview-heatmap"></div>
+
+<!-- heatmap configger -->
+<script>
+$(function () {
+	var overview_cal = new CalHeatMap();
+
+	overview_cal.init({
+		itemSelector: '#overview-heatmap',
+		domain: 'month',
+		subDomain: 'x_day',
+		range: 4,
+		cellSize: $(document).width() / 50,
+		domainDynamicDimension: false,
+		legend: [5, 10, 15, 20],
+		label: {'position': 'top'},
+		start: parseInt('<%= @start_date %>'),
+		highlight: ['now'],
+		data: JSON.parse(gon.overview_heatmap_data)
+
+	});
+});
+</script>
+
+<div class="row p-y-3 text-xs-center">
+	<% 
+		donor_donations_count_by_day = (@open_biome_logs.group(:donor_number).group_by_day(:time_received).count).map{ |k,v| v if v > 0 } #.compact # removes nil vals
+		donor_donations_count_by_week = (@open_biome_logs.group(:donor_number).group_by_week(:time_received).count).map{ |k,v| v if v > 0  } #.compact # removes nil 
+		donor_processable_rate = ((@open_biome_logs.processed.count.to_f / @open_biome_logs.count.to_f) * 100).to_f
+	%>
+	
+	<div class="col-sm-4">
+		<p class="text-muted">Donor donations count per day</p>
+		<h2 class="text-primary">
+			~ <%= donor_donations_count_by_day.mean.round(2) %>
+		</h2>
+	</div>
+	<div class="col-sm-4">
+		<p class="text-muted">per week</p>
+		<h2 class="text-primary">
+			~ <%= donor_donations_count_by_week.mean.round(2) %>
+		</h2>
+	</div>
+	<div class="col-sm-4">
+		<p class="text-muted">Overall processable rate</p>
+		<h2 class="text-success">
+			<%= number_to_percentage donor_processable_rate, precision: 0 %>
+		</h2>
+	</div>
+	
+</div>
+
+<style>
+
+#average-weights-graph {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#average-weights-graph rect {
+  fill: green;
+}
+
+#average-weights-graph text {
+  /*fill: black;*/
+  font: 0.8rem sans-serif;
+  text-anchor: middle;
+}
+
+</style>
+
+<p class="text-muted m-t-3">Donations per week by donor</p>
+<div class="row p-t-3">
+<%= line_chart ob_logs_by_donor_daily_path, library: {chart: {zoomType: 'x'}}, height: '40vh' %>
+</div>
+
+<p class="text-muted m-t-3">Donations per week by donor - stacked</p>
+<div class="row p-t-3">
+
+	<%= 
+		column_chart ob_logs_by_donor_daily_path, stacked: true, height: "50vh", library: {chart: {zoomType: 'x'}, xAxis: {type: 'datetime', 
+		tickInterval: 5, dateTimeLabelFormats: {
+				millisecond: '%e. %b',
+				second: '%H:%M:%S',
+				minute: '%H:%M',
+				hour: '%H:%M',
+				day: '%e. %b',
+				week: '%e. %b',
+				month: '%b \'%y',
+				year: '%Y'
+			}}}
+	%>
+</div>
+
+<p class="text-muted m-t-3">Average donation weight by donor</p>
+<div class="row p-t-3">
+	
+		<svg id="average-weights-graph"></svg>		
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<p class="text-muted">
+			<i class="fa fa-balance-scale"></i> Donor aggregate <span class="text-success">processed</span> weight donated
+		</p>
+		<%= pie_chart @open_biome_logs.processed.group(:donor_number).sum(:weight) %>
+	</div>
+	<div class="col-sm-6">
+		<p class="text-muted">
+			<i class="fa fa-hashtag"></i> 
+			Donor aggregate <span class="text-success">processed</span> donations count
+		</p>
+		<%= pie_chart @open_biome_logs.processed.group(:donor_number).count %>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	$(function () {
+		var data = gon.avg_weights;
+		console.log(data);
+
+		var width = $('#average-weights-graph').parent().width(), 
+			barHeight = 40;
+
+		var x = d3.scale.linear()
+		    .range([0, width]);
+
+		var chart = d3.select("#average-weights-graph")
+		    .attr("width", width)
+		    .attr('height', 400);
+
+		function draw (data) {
+
+			var arr = [];
+			for (d in data) {
+				arr.push(data[d]);
+			}
+			var counts = {};
+
+			for(var i = 0; i< arr.length; i++) {
+			    var num = arr[i];
+			    counts[num] = counts[num] ? counts[num]+1 : 1;
+			}
+
+		  x.domain([d3.min(data, function (d) { return d.value * 0.9; }), d3.max(data, function(d) { return d.value * 1.1; })]);
+
+		  chart.attr("height", 200);
+
+		  var bar = chart.selectAll("g")
+		      .data(data)
+		    .enter().append("g")
+		      .attr("transform", function(d, i) { 
+		      	// return "translate(0," + i * barHeight + ")"; 
+		      	// return "translate(0,0)";
+		      	console.log('g ->' + x(d.value)); 
+		      	return 'translate(' + x(d.value) + ',' + barHeight + ')';
+		      })
+
+		      ;
+
+		  bar.append("rect")
+		      // .attr("width", function(d) { return x(d.value); })
+		      .attr("width", 1)
+		      .attr("height", barHeight);
+
+		  //grams
+		  bar.append("text")
+		      // .attr("x", function(d) { console.log('text -> ' + x(d.value)); return x(d.value); })
+		      .attr('x', 0)
+		      .attr("y", - barHeight / 2)
+		      .attr("dy", ".35em")
+		      .attr('dx', 0)
+		      .attr('fill', 'lightgray')
+		      .attr('transform', 'rotate(90,' + 0 + ',' + -barHeight/2 + ')')
+		      
+		      .text(function(d) { return d.value + 'g'; });
+
+		  //donor ids
+		  bar.append("text")
+		  		// .attr('x', function (d) { return x(d.value); })
+		  		// .attr('x',0)
+		  		//trying to get the donor ids to stacks when there are more than one for a given gram value
+		  		.attr('x', function (d) {
+		  			return 5*counts[d.value];
+		  		})
+		  		.attr('y', barHeight + 20)
+		  		// .attr('y', function (d) { return barHeight + 20 + 5*counts[d.value]; })
+		  		.attr('dy', '.35em')
+		  		.attr('dx', 0)
+		  		.attr('fill', 'green')
+		  		.attr('transform', 'rotate(90,' + 0 + ',' + (barHeight+20) + ')')
+		  		
+		  		.text(function (d) {return d.id; });
+		};
+
+		draw(data);
+
+		function type(d) {
+		  d.value = +d.value; // coerce to number
+		  return d;
+		}
+
+		// var width = 420,
+		//     barHeight = 20;
+
+		// var x = d3.scale.linear()
+		//     .domain([0, d3.max(data)])
+		//     .range([0, width]);
+
+		// var chart = d3.select("#average-weights-graph")
+		//     .attr("width", width)
+		//     .attr("height", barHeight * data.length);
+
+		// var bar = chart.selectAll("g")
+		//     .data(data)
+		//   .enter().append("g")
+		//     .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+
+		// bar.append("rect")
+		//     .attr("width", x)
+		//     .attr("height", barHeight - 1);
+
+		// bar.append("text")
+		//     .attr("x", function(d) { return x(d) - 3; })
+		//     .attr("y", barHeight / 2)
+		//     .attr("dy", ".35em")
+		//     .text(function(d) { return d; });
+	});
+</script>

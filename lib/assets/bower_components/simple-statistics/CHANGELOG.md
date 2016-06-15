@@ -1,0 +1,174 @@
+# CHANGELOG
+
+## 1.0.1
+
+Fixes:
+
+* Fixes to ckmeans algorithm (thanks to @llimllib) (#125)
+
+Housekeeping:
+
+* Add keywords to package. Fixes #120
+* Standardize indentation, add example for epsilon
+* Browser testing with Sauce Labs
+
+Bundle size optimizations:
+
+* Add external sourcemaps for minified and unminified standalone bundles
+* Use bundle-collapser for smaller bundles
+* Indicate numericSort as an internal method.
+
+## 1.0.0
+
+### Breaking Changes
+
+* Removed the .m() and .b() shortcuts from the linear regression
+  class. Use `.mb().b` and `.mb().m` instead.
+* linearRegression is now a function, and linearRegressionLine is a separate
+  function.
+
+**UPGRADING**
+
+#### Linear Regression
+
+Before:
+
+```js
+var l = ss.linear_regression().data([[0, 0], [1, 1]]);
+l.line()(0); // 0
+```
+
+After:
+
+```js
+var line = ss.linearRegressionLine(ss.linearRegression([[0, 0], [1, 1]]));
+line(0); // 0
+```
+
+#### Jenks -> ckmeans
+
+The implementation of Jenks natural breaks was removed: an implementation
+of Ckmeans, an improvement on its technique, is added. Ckmeans should
+work better for nearly all Jenks usecases.
+
+Before:
+
+```js
+ss.jenks([1, 2, 4, 5, 7, 9, 10, 20], 3) //= [1, 7, 20, 20]
+```
+
+After:
+
+```js
+ss.ckmeans([1, 2, 4, 5, 7, 9, 10, 20], 3))
+
+[ [ 1,
+    2,
+    4,
+    5,
+    7,
+    9 ],
+  [ 10 ],
+  [ 20 ] ]
+```
+
+Instead of class breaks, ckmeans returns clustered data. Class breaks
+can be derived by taking the first value from each cluster:
+
+```js
+var breaks = ss.ckmeans([1, 2, 4, 5, 7, 9, 10, 20], 3)).map(function(cluster) {
+  return cluster[0];
+});
+```
+
+* `BayesModel` is now a class
+* `PerceptronModel` is now a class, and the `weights` and `bias` members
+  are accessable as properties rather than methods.
+* All multi-word method names are now camelCase rather than underscore_cased:
+  this means that a method like `ss.r_squared` is now accessible as `ss.rSquared`
+
+### New Features
+
+* Ckmeans replaces Jenks
+* `sortedUniqueCount` provides an extremely fast method for counting
+  unique values of sorted arrays.
+* `sumNthPowerDeviations` is now exposed, providing a simple way to calculate
+  the fundamental aspect of measures like variance and skewness.
+
+### Non-Breaking Changes
+
+* JSDoc documentation throughout
+* Each function is now its own file, and simple-statistics
+  is assembled with CommonJS-style require() statements. simple-statistics can
+  still be used in a browser with browserify.
+* The standard normal table is now calculated using the cumulative distribution
+  function, rather than hardcoded.
+
+## 0.9.2
+
+* Improved test coverage
+* Switched linting from JSHint to [eslint](http://eslint.org/) and fixed
+  style issues this uncovered.
+
+## 0.9.1
+
+* Fixes `.jenks` corner cases.
+
+## 0.9.0
+
+* Adds `.sample` for simple random sampling
+* Adds `.shuffle` and `.shuffleInPlace` for random permutations
+* Adds `.chunk` for splitting arrays into chunked subsets
+
+## 0.8.1
+
+* fixes a bug in `mode` that favored the last new number
+
+## 0.8.0
+
+* `mixin` can now take an array in order to mixin functions into a single array
+  instance rather than the global Array prototype.
+
+## 0.7.0
+
+* Adds `simple_statistics.harmonicMean` thanks to [jseppi](https://github.com/jseppi)
+
+## 0.6.0
+
+* Adds `simple_statistics.quantileSorted` thanks to [rluta](http://github.com/rluta)
+* `simple_statistics.quantile` now accepts a sorted list of quantiles as a second argument
+* Improved test coverage
+
+## 0.5.0
+
+* Adds `simple_statistics.cumulativeStdNormalProbability` by [doronlinder](https://github.com/doronlinder)
+* Adds `simple_statistics.zScore` by doronlinder
+* Adds `simple_statistics.standardNormalTable`
+
+## 0.4.0
+
+* Adds `simple_statistics.median_absolute_deviation()` by siculars
+* Adds `simple_statistics.iqr()` by siculars
+* Adds `simple_statistics.skewness()` by Doron Linder
+* Lower-level accessors for linear regression allow users to do the line
+  equation themselves
+
+## 0.3.0
+
+* Adds `simple_statistics.jenks()`
+* Adds `simple_statistics.jenksMatrices()`
+* Improves test coverage and validation
+
+## 0.2.0
+
+* Adds `simple_statistics.quantile()`
+* Adds `simple_statistics.mixin()`
+* Adds `simple_statistics.geometricMean()`
+* Adds `simple_statistics.sampleVariance()`
+* Adds `simple_statistics.sampleCovariance()`
+
+## 0.1.0
+
+* Adds `simple_statistics.tTest()`
+* Adds `simple_statistics.min()`
+* Adds `simple_statistics.max()`

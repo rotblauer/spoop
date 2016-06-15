@@ -1,0 +1,22 @@
+<div class="m-t-3">
+	
+	<hr>
+	<div class="p-y-2">
+		
+		<p class="text-info">
+			
+			
+		
+		
+			<span class="text-muted">Need help? Get </span><%= link_to 'support', support_path, class:'text-info' %>. <%= '<i class="fa fa-arrow-left"></i>'.html_safe if current_page?(support_path) %><br>
+			<span class="text-muted">Not a donor? Sign up for the </span><%= link_to 'public beta', new_non_donor_path, class:'text-info' %>. <%= '<i class="fa fa-arrow-left"></i>'.html_safe if current_page?(new_non_donor_path) %><br>
+			<span class="text-muted">Learn more about </span><%= link_to 'Open Biome', 'http://openbiome.org', class:'text-info', target:'_blank' %>.<br>
+			<span class="text-muted">Read the </span><%= link_to 'terms & conditions', terms_and_conditions_path, class:'text-info' %> <span class="text-muted">again for fun.</span> <%= '<i class="fa fa-arrow-left"></i>'.html_safe if current_page?(terms_and_conditions_path) %>
+			<br>
+			<span class="text-muted" >
+				&copy; <span class="text-info"><%= link_to 'Rotblauer, LLC', 'http://areteh.co', class:'text-info', target:'_blank' %></span> 2016
+			</span>
+		
+		</p>
+	</div>
+</div>

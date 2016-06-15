@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @donor_log.user %>
+</p>
+
+<p>
+  <strong>Bristol score:</strong>
+  <%= @donor_log.bristol_score %>
+</p>
+
+<p>
+  <strong>Weight:</strong>
+  <%= @donor_log.weight %>
+</p>
+
+<p>
+  <strong>Donated:</strong>
+  <%= @donor_log.donated %>
+</p>
+
+<p>
+  <strong>Processable:</strong>
+  <%= @donor_log.processable %>
+</p>
+
+<p>
+  <strong>Notes:</strong>
+  <%= @donor_log.notes %>
+</p>
+
+<p>
+  <strong>Time of passage:</strong>
+  <%= @donor_log.time_of_passage %>
+</p>
+
+<p>
+  <strong>Date of passage:</strong>
+  <%= @donor_log.date_of_passage %>
+</p>
+
+<%= link_to 'Edit', edit_user_donor_log_path(@user, @donor_log) %> |
+<%= link_to 'Back', user_donor_logs_path(@user) %>

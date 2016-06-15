@@ -1,0 +1,146 @@
+
+<%= form_for [@user, @donor_log] do |f| %>
+<div class="row" style="margin-top: -2vh;">
+<div class="col-xs-12">
+
+<%= link_to '<i class="fa fa-arrow-left"></i> Back'.html_safe, user_path(@user), class:'btn btn-muted-outline btn-sm' %>
+
+<% if request.path_info.include?('edit') %>
+  <span class="label label-warning">Editing</span>
+<% end %>
+
+<div class="pull-xs-right hidden-sm-up">
+  <div class="">
+   <%# f.submit "Save", class:'btn btn-sm btn-success' %>
+   <%= button_tag(class: 'btn btn-sm btn-success') do %>
+     <i class="fa fa-plus"></i>
+   <% end %>
+  </div>
+</div>
+
+<p class="text-xs-center" style="padding-top: 0;">
+<div class="text-xs-center">
+  <!-- moment datepicker -->
+  <div moment-picker="donor_log.time_of_passage">
+       <div class="text-xs-center lead text-info">
+       <i class="fa fa-calendar"></i>&nbsp;
+      {{ donor_log.time_of_passage | date: 'short'}}
+      </div>
+  </div>
+
+  <!-- secret rails input -->
+  <input type="hidden" name="donor_log[time_of_passage]" value="{{donor_log.time_of_passage}}" />
+</div>
+</p>
+
+
+</div>
+</div>
+
+<div class="row">
+
+  
+    <!-- handle errors -->
+    <% if @donor_log.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@donor_log.errors.count, "error") %> prohibited this donor_log from being saved:</h2>
+  
+        <ul>
+        <% @donor_log.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  
+  <!-- gui -->
+  <div class="col-xs-12 col-md-6">
+    <div class="m-t-3 p-t-2 hidden-sm-down"></div>
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="poop-gui-container">
+        <div class='poop-gui bristol bristol-bg{{donor_log.bristol_score}}'
+              style="height: {{ (donor_log.weight / 100) * 70 }}px; border-radius: {{ (donor_log.weight / 100) * 35 }}px; width: {{ (donor_log.weight / 100) * 70 }}px; margin-bottom: 10px; margin-top: -5px;"></div>
+    
+        </div>
+      </div>
+      <div class="col-xs-6">
+        <div class="poop-gui-container">
+          <h1 class="poop-gui bristol bristol-fg{{donor_log.bristol_score}}">
+            {{donor_log.weight}}g<sup>B{{donor_log.bristol_score}}</sup>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<div class="col-xs-12 col-md-6">
+
+  <div class="field form-group">
+    <%= f.label :notes, class:'text-success' %>&nbsp;
+    <small class="text-muted">Use <span class="label label-primary">#hashtags</span> to provide context. </small>
+    <%= f.text_area :notes, class:'form-control', 'ng-model' => 'donor_log.notes'  %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :bristol_score, class:'text-success' %><br>
+
+    <input rzslider type="range" rz-slider-options="bristolSliderOptions" rz-slider-model="donor_log.bristol_score" class="form-control" />
+
+    <input type="hidden" name="donor_log[bristol_score]" value="{{donor_log.bristol_score}}" />
+
+  </div>
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="field form-group">
+        <%= f.label :weight, class:'text-success' %><br>
+        
+        <input rzslider type="range" rz-slider-options="weightSliderOptions" rz-slider-model="donor_log.weight" class="form-control" />
+
+        <input type="hidden" name="donor_log[weight]" value="{{donor_log.weight}}" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-xs-12 ">
+
+      <div class="form-group">
+        <div class="btn-group">
+          <button type="button" role="button" class="btn" ng-class="{'btn-success' : donor_log.processable, 'btn-warning' : !donor_log.donated, 'btn-danger': (donor_log.donated && !donor_log.processable), 'active': donor_log.donated}" ng-click="donor_log.donated = !donor_log.donated">
+            Donated
+          </button>
+          <button type="button" role="button" class="btn" ng-class="{'btn-success' : donor_log.processable, 'btn-warning' : !donor_log.donated, 'btn-danger': (donor_log.donated && !donor_log.processable), 'active': donor_log.processable}" ng-click="donor_log.processable = !donor_log.processable">
+            Processable
+          </button>
+
+        </div>
+        <span class="text-success" ng-show="donor_log.processable">&nbsp;Donated & processed</span>
+        <span class="text-warning" ng-show="!donor_log.donated">&nbsp;Not donated</span>
+        <span class="text-danger" ng-show="donor_log.donated && !donor_log.processable">&nbsp;Rejected</span>
+        <input type="hidden" name="donor_log[donated]" value="{{donor_log.donated}}" />
+        <input type="hidden" name="donor_log[processable]" value="{{donor_log.processable}}" />
+      </div>
+    </div>
+
+  </div>
+  
+  
+</div>
+
+<div class="col-xs-12 hidden-xs-down">
+  <hr>
+  <%= button_tag(class: 'btn btn-lg btn-block btn-success') do %>
+    <i class="fa fa-plus"></i>
+  <% end %>
+</div>
+  
+</div>
+<% end %>
+
+<script>
+$(document).ready(function() {
+     $("textarea").hashtags();
+  });
+</script>

@@ -1,0 +1,39 @@
+$('.link-toggle-private').bind('ajax:success', function(data) {  
+    
+    // console.log(data);
+
+    var link = $(this);
+    var eyeball = link.find('i');
+    var i_class_private = 'fa-eye-slash';
+    var link_class_private = 'text-danger';
+    var i_class_public = 'fa-eye';
+    var link_class_public = 'text-success'; // 'label label-success';
+    var title_if_public = 'This log is public for Open Biome. Click to make private.';
+    var title_if_private = 'This log is private to you. Click to open this log to Open Biome.';
+
+    // is private
+    <% if @donor_log.is_private %>
+      link
+        // .attr('title', title_if_private)
+        .attr('data-original-title', title_if_private).tooltip('show')
+        .addClass(link_class_private)
+        .removeClass(link_class_public)
+        .tooltip({title: title_if_private});
+      eyeball
+        .addClass(i_class_private)
+        .removeClass(i_class_public);
+    
+    // is public
+    <% else %>
+      link
+        // .attr('title', title_if_public)
+        .attr('data-original-title', title_if_public).tooltip('show')
+        .addClass(link_class_public)
+        .removeClass(link_class_private)
+        .tooltip({title: title_if_public});
+      eyeball
+        .addClass(i_class_public)
+        .removeClass(i_class_private);
+    <% end %>
+
+}); 

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spoop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!--Import Google Icon Font-->
+  <!-- <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= include_gon(init: true) %>
+  <%= javascript_include_tag "//www.google.com/jsapi" %>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <link rel="apple-touch-icon" href="/spoop-touch.png" />
+  <link rel="apple-touch-startup-image" href="/spoop-touch.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+</head>
+<body ng-app="spoopApp">
+
+<!-- counts queries for speeeeeeed -->
+<% if Rails.env.development? %>
+<%= query_diet_widget if user_signed_in? %>
+<% end %>
+
+<!-- makes getResponsiveBreakpoints() available in js -->
+<%= render 'layouts/responsive_breakpoints' %>
+
+
+
+<!-- heads up -->
+<%= render 'layouts/flash_messages' %>
+
+<!-- demo reminder -->
+<% if user_signed_in? && current_user.demo %>
+  <div class="alert alert-warning">
+    <strong>Welcome to Mr. Roboto's Spoop account!</strong> <%= link_to 'Head on back',destroy_user_session_path, method: :delete, class: 'text-success' %> to sign up for yourself whenever you're ready.
+  </div>
+<% end %>
+
+<!-- navbar -->
+<% unless current_page?(root_path) %>
+<%= render 'layouts/navbar' %>
+<%= render 'layouts/donor_options_navbar' if user_signed_in? && current_user.donor? %>
+<% end %>
+
+<!-- tabs - open_biome_logs, donor_logs, profile(?)... -->
+<div class="hidden-xs-down">
+<%= render 'layouts/admin_nav' if user_signed_in? && current_user.admin? && !current_page?(root_path) %>
+</div>
+
+
+<div class="container p-a-1">
+  <%= yield %>
+  <%= render 'layouts/footer' %>
+</div>
+
+
+<!-- make error notifications prettier -->
+<script>
+  $(function () {
+    var error_shower = $('#error_explanation');
+    error_shower.addClass('alert alert-danger');
+    error_shower.find('h2').replaceTagName('strong');
+    $('.field_with_errors').addClass('text-danger');
+  });
+</script>
+
+<%= render 'layouts/google_anal' if Rails.env.production? %>
+
+<% if false # Rails.env.development? %>
+  <div class="container">
+    <hr>
+    <div class="row">
+      <pre>
+      <%= debug(params)  %>
+      </pre>
+    </div>
+  </div>
+
+<% end %>
+
+</body>
+</html>

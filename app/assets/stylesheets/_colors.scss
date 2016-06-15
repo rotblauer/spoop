@@ -1,0 +1,94 @@
+$q1: #dae289;
+$q2: #9cc069;
+$q3: #669d45;
+$q4: #637939;
+$q5: #3b6427;
+
+$mocha: lighten(#804000, 5%);
+
+$b1: #5C2E00; 
+$b2: #703800; 
+$b3: #854200; 
+$b4: #9A4D00; 
+$b5: #AB5500; 
+$b6: #BC5D00; 
+$b7: #CD6600;
+
+.bg-muted {
+	background-color: #ededed;
+}
+.bg-q1 {
+	background-color: $q1;
+};
+.bg-q2 {
+	background-color: $q2;
+};
+.bg-q3 {
+	background-color: $q3;
+};
+.bg-q4 {
+	background-color: $q4;
+};
+.bg-q5 {
+	background-color: $q5;
+};
+
+.text-lighter {
+	font-weight: lighter;
+}
+
+.mocha {
+	color: $mocha;
+}
+.bg-mocha {
+	background-color: $mocha;
+}
+
+.bristol {
+	//backgrounds
+	&.bristol-bg1 {
+	  background-color: $b1; // darken($mocha, 18%);
+	}
+	&.bristol-bg2 {
+	  background-color: $b2; // darken($mocha, 12%);
+	}
+	&.bristol-bg3 {
+	  background-color: $b3; // darken($mocha, 6%);
+	}
+	&.bristol-bg4 {
+	  background-color: $b4; // $mocha;
+	}
+	&.bristol-bg5 {
+	  background-color: $b5; // lighten($mocha, 10%);
+	}
+	&.bristol-bg6 {
+	  background-color: $b6; // lighten($mocha, 20%);
+	}
+	// soft, soupy poop
+	&.bristol-bg7 {
+	  background-color: $b7; // lighten($mocha, 30%);
+	}	
+	// foregrounds
+	&.bristol-fg1 {
+	  color: $b1; //darken($mocha, 18%);
+	}
+	&.bristol-fg2 {
+	  color: $b2; //darken($mocha, 12%);
+	}
+	&.bristol-fg3 {
+	  color: $b3; //darken($mocha, 6%);
+	}
+	&.bristol-fg4 {
+	  color: $b4; //$mocha;
+	}
+	&.bristol-fg5 {
+	  color: $b5; //lighten($mocha, 10%);
+	}
+	&.bristol-fg6 {
+	  color: $b6; //lighten($mocha, 20%);
+	}
+	// soft, soupy poop
+	&.bristol-fg7 {
+	  color: $b7; //lighten($mocha, 30%);
+	}	
+}

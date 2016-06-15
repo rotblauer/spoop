@@ -1,0 +1,278 @@
+/* Cal-HeatMap CSS */
+
+.cal-heatmap-container {
+  display: block;
+}
+
+.cal-heatmap-container .graph
+{
+  font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+}
+
+.cal-heatmap-container .graph-label
+{
+  fill: #999;
+  font-size: 10px
+}
+
+.cal-heatmap-container .graph, .cal-heatmap-container .graph-legend rect {
+  shape-rendering: crispedges
+}
+
+.cal-heatmap-container .graph-rect
+{
+  fill: #ededed
+}
+
+.cal-heatmap-container .graph-subdomain-group rect:hover
+{
+  stroke: #000;
+  stroke-width: 1px
+}
+
+.cal-heatmap-container .subdomain-text {
+  font-size: 8px;
+  fill: #999;
+  pointer-events: none
+}
+
+.cal-heatmap-container .hover_cursor:hover {
+  cursor: pointer
+}
+
+.cal-heatmap-container .qi {
+  background-color: #999;
+  fill: #999
+}
+
+/*
+Remove comment to apply this style to date with value equal to 0
+.q0
+{
+  background-color: #fff;
+  fill: #fff;
+  stroke: #ededed
+}
+*/
+
+.cal-heatmap-container .q1
+{
+  background-color: #dae289;
+  fill: #dae289
+}
+
+.cal-heatmap-container .q2
+{
+  background-color: #cedb9c;
+  fill: #9cc069
+}
+
+.cal-heatmap-container .q3
+{
+  background-color: #b5cf6b;
+  fill: #669d45
+}
+
+.cal-heatmap-container .q4
+{
+  background-color: #637939;
+  fill: #637939
+}
+
+.cal-heatmap-container .q5
+{
+  background-color: #3b6427;
+  fill: #3b6427
+}
+
+.cal-heatmap-container rect.highlight
+{
+  stroke:#444;
+  stroke-width:1
+}
+
+.cal-heatmap-container text.highlight
+{
+  fill: #444
+}
+
+.cal-heatmap-container rect.highlight-now
+{
+  stroke: red
+}
+
+.cal-heatmap-container text.highlight-now
+{
+  fill: red;
+  font-weight: 800
+}
+
+.cal-heatmap-container .domain-background {
+  fill: none;
+  shape-rendering: crispedges
+}
+
+.ch-tooltip {
+  padding: 10px;
+  background: #222;
+  color: #bbb;
+  font-size: 12px;
+  line-height: 1.4;
+  width: 140px;
+  position: absolute;
+  z-index: 99999;
+  text-align: center;
+  border-radius: 2px;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+  display: none;
+  box-sizing: border-box;
+}
+
+.ch-tooltip::after{
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  content: "";
+  padding: 0;
+  display: block;
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+    border-width: 6px 6px 0;
+    border-top-color: #222;
+}
+
+
+
+
+// Small devices (landscape phones, 34em and up)
+// @media (min-width: 34em) { ... }
+
+// Medium devices (tablets, 48em and up)
+// @media (min-width: 48em) { ... }
+
+// Large devices (desktops, 62em and up)
+// @media (min-width: 62em) { ... }
+
+// // Extra large devices (large desktops, 75em and up)
+// @media (min-width: 75em) { ... }
+
+.col-xs-1-7, .col-sm-1-7, .col-md-1-7, .col-lg-1-7,
+.col-xs-2-7, .col-sm-2-7, .col-md-2-7, .col-lg-2-7,
+.col-xs-3-7, .col-sm-3-7, .col-md-3-7, .col-lg-3-7,
+.col-xs-4-7, .col-sm-4-7, .col-md-4-7, .col-lg-4-7 {
+  position: relative;
+  // border: 1px solid red;
+  color: white;
+  min-height: 1px;
+  // padding-right: 15px;
+  // padding-left: 15px;
+} 
+
+.col-xs-1-7 {
+  width: percentage(1/7);
+  float: left;
+}
+.col-xs-2-7 {
+  width: percentage(2/7);
+  float: left;
+}
+  
+.col-xs-3-7 {
+  width: percentage(3/7);
+  float: left;
+}
+  
+.col-xs-4-7 {
+  width: percentage(4/7);
+  float: left;
+}
+.col-xs-5-7 {
+  width: percentage(5/7);
+  float: left;
+}
+  
+.col-xs-6-7 {
+  width: percentage(6/7);
+  float: left;
+}
+@media (min-width: 34em) {
+  .col-sm-1-7 {
+    width: percentage(1/7);
+    float: left;
+  }
+  .col-sm-2-7 {
+    width: percentage(2/7);
+    float: left;
+  }
+  .col-sm-3-7 {
+    width: percentage(3/7);
+    float: left;
+  }
+  .col-sm-4-7 {
+    width: percentage(4/7);
+    float: left;
+  }
+  .col-sm-5-7 {
+    width: percentage(5/7);
+    float: left;
+  }
+  .col-sm-6-7 {
+    width: percentage(6/7);
+    float: left;
+  }
+}
+@media (min-width: 48em) {
+  .col-md-1-7 {
+    width: percentage(1/7);
+    float: left;
+  }
+  .col-md-2-7 {
+    width: percentage(2/7);
+    float: left;
+  }
+  .col-md-3-7 {
+    width: percentage(3/7);
+    float: left;
+  }
+  .col-md-4-7 {
+    width: percentage(4/7);
+    float: left;
+  }
+  .col-md-5-7 {
+    width: percentage(5/7);
+    float: left;
+  }
+  .col-md-6-7 {
+    width: percentage(6/7);
+    float: left;
+  }
+}
+@media (min-width: 68em) {
+  .col-lg-1-7 {
+    width: percentage(1/7);
+    float: left;
+  }
+  .col-lg-2-7 {
+    width: percentage(2/7);
+    float: left;
+  }
+  .col-lg-3-7 {
+    width: percentage(3/7);
+    float: left;
+  }
+  .col-lg-4-7 {
+    width: percentage(4/7);
+    float: left;
+  }
+  .col-lg-5-7 {
+    width: percentage(5/7);
+    float: left;
+  }
+  .col-lg-6-7 {
+    width: percentage(6/7);
+    float: left;
+  }
+} 

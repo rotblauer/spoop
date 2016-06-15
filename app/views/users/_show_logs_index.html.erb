@@ -1,0 +1,179 @@
+<div class="row text-xs-center">
+
+	<% if false # @user.demo %>
+	<div class="row text-xs-center">
+		<div class="col-xs-6">
+			
+			<div class="alert alert-warning alert-dismissible fade in " role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+				<i class="fa fa-info-circle"></i>
+				These are your records, and <strong><u>they're  private</u></strong>, unless you actively decide to share them with Open Biome.
+			</div>
+			
+		</div>
+		<div class="col-xs-6">
+			<div class="alert alert-warning alert-dismissible fade in " role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+				<i class="fa fa-info-circle"></i>
+				These are Open Biome records you've imported. Do they match up?
+			</div>
+		</div>
+	</div>
+	<% end %>
+
+	<div class="col-xs-12 hidden-sm-up">
+		<h6 class="text-muted">
+			Your donor & Open Biome logs<br>
+			<small >Open Biome logs take precedence.</small>
+		</h6>
+		
+	</div>
+	<div class="col-sm-6 hidden-xs-down">
+		<h6 class="text-muted">
+			Your donor logs
+		</h6>
+	</div>
+	<div class="col-sm-6 hidden-xs-down">
+		<h6 class="text-muted">
+			Your Open Biome logs
+		</h6>
+		
+	</div>
+</div>
+
+<style>
+	.poo-dot-container {
+
+
+	}
+	.text-container {
+		/*display: inline;*/
+	}
+	.square-box{
+	    position: relative;
+	    width: 20%;
+	    overflow: hidden;
+	    background: transparent; /*#4679BD;*/
+	    float: left;
+
+	}
+	.square-box:before{
+	    content: "";
+	    display: block; 
+	    padding-top: 100%;
+	}
+	.square-content{
+	    position:  absolute;
+	    top: 0;
+	    left: 0;
+	    bottom: 0;
+	    right: 0;
+	    color: white;
+	}
+	.square-content .poo-circle-holder {
+	   display: table;
+	   width: 100%;
+	   height: 100%;
+	}
+</style>
+
+<!-- order by days first -->
+<% 
+		day_index = -1
+		log_index = -1
+		# @merged_poo_passage_dates.each do |day, daylogs|
+		@meta_logs.group_by{|x| x.time_of_passage.strftime("%A, %b %-d %Y")}.each do |day, daylogs| # daylogs --> unique metalogs by exact time
+
+		day_index += 1
+%>
+
+<!-- day names row -->
+<div class="row text-xs-center p-t-1">
+	<p class="bg-muted text-info"><%= day[0..-6] %></p>
+	<!-- <hr>	 -->
+</div>
+
+<%	
+		# reverse order so day is chronological top -> bottom
+		# daylogs.map{|p| p.time_of_passage}.reverse.each do |passage_time| 
+		daylogs.map{|p| [p.time_of_passage, p.donor_log, p.open_biome_log]}.reverse.each do |passage_time, dl, obl|
+			log_index += 1
+
+		## 330 requests -> 211. still high, but better
+		#
+		#
+		#I'm leaving these hear for learning sake.
+		# ?these are calling unnecessary extra requests to db
+		# donor_log = @donor_logs.find_by(time_of_passage: passage_time)
+		# open_biome_log = @open_biome_logs.find_by(time_of_passage: passage_time)
+		# 
+		# works a little better
+		# donor_log = @donor_logs.find_by(time_of_passage: passage_time) if did
+		# open_biome_log = @open_biome_logs.find_by(time_of_passage: passage_time) if obid
+		# 
+		# 
+		donor_log = dl if dl
+		open_biome_log = obl if obl
+
+%>
+
+<!-- every day gets a row -->
+<div class="row">
+	
+	<!-- render the corresponding donor log -->
+	<div class="col-xs-12 hidden-sm-up">
+		<ul class="list-group">
+			<% if false#  not open_biome_log.present? %>
+				<%= render partial: 'layouts/log', locals: {log: donor_log} %>
+			<% elsif false# %>
+				<%= render partial: 'layouts/log', locals: {log: open_biome_log} %>
+			<% end %>
+		</ul>
+	</div>
+
+	<!-- render the corresponding donor log -->
+	<div class="col-sm-6 hidden-xs-down">
+		<ul class="list-group">
+			<% if donor_log.present? %>
+				<%= render partial: 'layouts/log', locals: {log: donor_log} %>
+			<% end %>
+		</ul>
+	</div>
+
+
+	<!-- render the open biome log if it exists -->
+	<div class="col-sm-6 hidden-xs-down">
+		<ul class="list-group">
+			
+			<% if open_biome_log.present? %>
+			
+				<%= render partial: 'layouts/log', locals: {log: open_biome_log} %>
+			
+			<!-- if there are no corresponding ob logs and its the first -->
+			<% elsif day_index == 0 and log_index == 0 %>
+			
+				<div class="p-y-2 p-x-1 hidden-xs-down">
+					<p class="text-info">
+						Corresponding Open Biome logs will appear here, next to their donor-logged counterparts. <strong><%= link_to '<i class="icon fa fa-cloud-upload"></i> Want to import some?'.html_safe, import_user_open_biome_logs_path(@user) %> </strong>
+					</p>
+				</div>
+
+			
+			<% end %>
+		</ul>
+	</div>
+
+</div>
+<% end %> <!-- end passage_time -->
+<% end %> <!-- end day, daylogs -->
+
+
+<script>
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip();
+});
+</script>

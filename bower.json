@@ -1,0 +1,34 @@
+{ "name": "spoop",
+  "lib": {
+    "name": "bower-rails generated lib assets",
+    "dependencies": {
+      "angular": "~1.4.5",
+      "angular-animate": "~1.4.5",
+      "angular-sanitize": "~1.4.5",
+      "angular-ui-router": "~0.2.15",
+      "angular-dynamic-locale": "~0.1.27",
+      "angular-translate": "~2.8.1",
+      "angular-translate-loader-static-files": "~2.8.1",
+      "angular-localForage": "~1.2.3",
+      "angular-resource": "^1.5.5",
+      "angular-filter": "^0.5.8",
+      "angular-nvd3": "^1.0.7",
+      "angular-moment": "^0.10.3",
+      "underscore": "^1.8.3",
+      "cal-heatmap": "^3.6.0",
+      "simple-statistics": "^1.0.1"
+    },
+    "resolutions": {
+      "angular": "1.5.5",
+      "angular-animate": "~1.4.5",
+      "angular-sanitize": "~1.4.5",
+      "angular-ui-router": "~0.2.15",
+      "cal-heatmap": "^3.6.0"
+    }
+  },
+  "vendor": {
+    "name": "bower-rails generated vendor assets",
+    "dependencies": {
+    }
+  }
+}

@@ -1,0 +1,42 @@
+  				<div class="card p-b-1">
+  				<div class="card-block">
+  					<p class="text-muted" style="margin-bottom: 0;">
+	  					
+	  					<h3 class="text-info" style="display: inline"><%= donor.donor_id %></h3> 
+	  					
+	  					- <%= donor.email %> - <%= donor.id %> 
+	  					
+	  					<%= link_to '<i class="fa fa-pencil"></i>'.html_safe, edit_user_path(donor), class:'text-muted pull-xs-right' %>
+  					</p>
+  					<div class="row text-xs-center">
+  							<div class="col-xs-6">
+  							<small class="text-muted">
+  								Donor Logs 
+  							</small>					
+  							<h5 class='text-warning'><%= donor.donor_logs.count %></h5>
+  							
+  						</div>
+  						<div class="col-xs-6">
+  							<small class="text-muted">
+  								OB Logs 
+  							</small>
+  							<h5 class='text-primary'><%= donor.open_biome_logs.count %></h5>
+  						</div>
+  					</div>
+  					
+  				  <hr>
+  				  <% if donor.open_biome_logs.any? %>
+  					  <small class="text-muted">
+  					  	
+  					  	<i class="fa fa-clock-o"></i>&nbsp;Latest OB log:
+
+  					  	<span class="text-primary"><%= l donor.open_biome_logs.order('time_of_passage DESC').first.time_of_passage, format: :day_and_month %> <em>(<%=  time_ago_in_words(donor.open_biome_logs.order('time_of_passage DESC').first.time_of_passage) %> ago)</em></span>
+
+  					  </small>  
+
+  				  <% end %>
+  				  <%= render partial: 'open_biome_logs/import', locals: {user: donor} %>
+  					  
+
+  				</div>
+  			</div>

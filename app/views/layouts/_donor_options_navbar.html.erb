@@ -1,0 +1,62 @@
+<script>
+	$(function () {
+		$('#toggle-donor-options-navbar').on('click', function () {
+			$('#donor-options-navbar').slideToggle();
+			var openFolderClass = "fa-folder-open-o";
+			var closedFolderClass = "fa-folder-o";
+			var icon = $(this).find('i');
+			icon.toggleClass(closedFolderClass + ' ' + openFolderClass);
+		});	
+	});
+	
+</script>
+
+<div id="donor-options-navbar" style="display: none;">	
+	<div class="row text-xs-center">
+		
+		<div class="col-sm-4 p-y-2">
+			<!-- 
+			we only allow actual users to edit their registrations, but admins can edit as resource 
+			-->
+			<% if current_user.is_user(@user) %>
+			  <%= link_to edit_user_registration_path, class:'text-primary m-r-1' do %>
+			    <i class="fa fa-pencil fa-5x"></i>
+			    <div class="hidden-xs-down">
+			    	<p class="lead">Edit your profile</p>
+			    </div>
+			  <% end %>
+			<!-- else is admin -->
+			<% else %>
+			  <%= link_to edit_user_path(@user), class:'text-primary m-r-1' do %>
+			    <i class="fa fa-pencil fa-5x"></i>
+			    <div class="hidden-xs-down">
+			    	<p class="lead">Edit profile</p>
+			    </div>
+			  <% end %>
+			<% end %>
+		</div>
+		
+		<div class="col-sm-4 p-y-2">
+			<%= link_to import_user_open_biome_logs_path(@user), class:"text-primary m-r-1" do %>
+			  <i class="fa fa-cloud-upload fa-5x"></i>
+			  <div class="hidden-xs-down">
+			  	<p class="lead">Import Open Biome logs</p>
+			  </div>
+			<% end %>
+		</div>
+
+		<div class="col-sm-4 p-y-2">
+			<%= link_to  api_info_user_path(@user), class:'m-r-1 text-primary' do %>
+				<i class='fa fa-key fa-5x'></i>
+				<div class="hidden-xs-down">
+					<p class="lead">iOS and API key</p>
+				</div>
+			<% end %>
+		</div>
+	</div>
+</div>
+
+
+
+
+  

@@ -1,0 +1,83 @@
+<style>
+	.log-ob {
+		/*border-left: 0.3rem solid #5bc0de;*/
+	}
+</style>
+	
+<li class="list-group-item list-group-item-<%= processing_label(log)[:css] %> <%= log.class == OpenBiomeLog ? 'log-ob' : '' %> log-entry padding-light m-b-1" >
+
+	<div class="bristol bristol-bg<%= log.bristol_score %>" style="z-index: 1000; float: top; width: <%= "#{log.weight / @ds[:max]}%" %>; height: 0.3rem; border-radius: 0.15rem 0.15rem 0.15rem 0rem; margin-top: -10px; margin-left: -10px;" ></div>
+	
+
+	<% 
+			sides_ratio = (log.weight.to_f / @ds[:max].to_f ).round # is ratio
+			border_radius = sides_ratio / 2
+	%>
+
+	<div class="square-box m-y-1 m-r-1">
+		<div class="square-content">
+			<div class="poo-circle-holder">
+				<div id='poo-circle-<%= log.class.to_s + log.id.to_s %>' class='bristol bristol-bg<%= log.bristol_score %>' style="margin-left: auto; margin-right: auto; vertical-align: middle;">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- set circle poo size and location -->
+	<script>
+		$(function () {
+			
+			var sr = parseFloat('<%= sides_ratio %>') / 100;
+			var circle = $('#poo-circle-<%= log.class.to_s + log.id.to_s %>');
+			var parent = circle.parent();
+			var side = Math.floor(sr * parent.width());
+			var side_diff = (parent.width() - side) / 2;
+			
+			circle
+				.width(side + 'px')
+				.height(side + 'px')
+				.css('border-radius', Math.floor(side / 2) + 'px')
+				.css('margin-top', Math.floor(side_diff));
+		});
+	</script>
+
+	<div class="text-container p-a-1">
+
+		
+		<span class="pull-xs-right  m-r-1 muted-text-hack">
+
+			<%= link_for("<i class='fa fa-pencil'></i>".html_safe, 'edit', log.class.to_s, log.id, log.user_id) %>
+
+			<% if log.class == DonorLog %>
+				<%= link_to toggle_private_user_donor_log_path(@user, log), method: :patch, class: "link-toggle-private #{log.is_private ? 'text-danger' : 'text-success'}", :remote => true, data: {toggle: 'tooltip', placement: 'top'}, title: "#{log.is_private ? 'This log is private to you. Click to open this log to Open Biome.' : 'This log is public for Open Biome. Click to make private.'}", style:'text-decoration: none;' do %>
+				  <i class="fa <%= log.is_private ? 'fa-eye-slash' : 'fa-eye' %>"></i>
+				<% end %>
+
+			<% end %>
+
+			<span class="label label-<%= processing_label(log)[:css] %>">
+				<%= processing_label(log)[:text] %>
+			</span>
+		</span>
+
+		<p class="text-primary">
+			<%= localize log.time_of_passage, format: :oclock %> 
+			<% if log.class.to_s == 'OpenBiomeLog' %>
+				<span class="label label-info">OB</span>
+			<% end %>
+		</p>
+
+		<h4 class="bristol bristol-fg<%= log.bristol_score %>">
+			<%= log.weight.round %>g
+			<sup >B<%= log.bristol_score %></sup>
+		</h4>
+		
+		<div class="">
+			<p class="" style="margin-bottom: 0;">
+				<%= highlight_hashtags(log.notes) if log.class == DonorLog %>
+			</p>
+		</div>
+		
+	</div>
+
+</li>

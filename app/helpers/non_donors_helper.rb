@@ -1,0 +1,2 @@
+module NonDonorsHelper
+end

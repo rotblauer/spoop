@@ -1,0 +1,117 @@
+<%= form_for [@user, @open_biome_log]  do |f| %>
+  <% if @open_biome_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@open_biome_log.errors.count, "error") %> prohibited this open_biome_log from being saved:</h2>
+
+      <ul>
+      <% @open_biome_log.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
+  </div>
+  <div class="field">
+    <%= f.label :donated_on %><br>
+    <%= f.text_field :donated_on %>
+  </div>
+  <div class="field">
+    <%= f.label :donor_group %><br>
+    <%= f.text_field :donor_group %>
+  </div>
+  <div class="field">
+    <%= f.label :donor_number %><br>
+    <%= f.number_field :donor_number %>
+  </div>
+  <div class="field">
+    <%= f.label :sample %><br>
+    <%= f.text_field :sample %>
+  </div>
+  <div class="field">
+    <%= f.label :quarantine_state %><br>
+    <%= f.text_field :quarantine_state %>
+  </div>
+  <div class="field">
+    <%= f.label :product %><br>
+    <%= f.text_field :product %>
+  </div>
+  <div class="field">
+    <%= f.label :usage %><br>
+    <%= f.text_field :usage %>
+  </div>
+  <div class="field">
+    <%= f.label :processing_state %><br>
+    <%= f.text_field :processing_state %>
+  </div>
+  <div class="field">
+    <%= f.label :weight %><br>
+    <%= f.text_field :weight %>
+  </div>
+  <div class="field">
+    <%= f.label :bristol_score %><br>
+    <%= f.number_field :bristol_score %>
+  </div>
+  <div class="field">
+    <%= f.label :batch %><br>
+    <%= f.text_field :batch %>
+  </div>
+  <div class="field">
+    <%= f.label :bio_safety_cabinet_number %><br>
+    <%= f.number_field :bio_safety_cabinet_number %>
+  </div>
+  <div class="field">
+    <%= f.label :buffer_multiplier_used %><br>
+    <%= f.text_field :buffer_multiplier_used %>
+  </div>
+  <div class="field">
+    <%= f.label :number_units_produced %><br>
+    <%= f.number_field :number_units_produced %>
+  </div>
+  <div class="field">
+    <%= f.label :on_site_donation %><br>
+    <%= f.text_field :on_site_donation %>
+  </div>
+  <div class="field">
+    <%= f.label :received_by_name %><br>
+    <%= f.text_field :received_by_name %>
+  </div>
+  <div class="field">
+    <%= f.label :processed_by_name %><br>
+    <%= f.text_field :processed_by_name %>
+  </div>
+  <div class="field">
+    <%= f.label :time_of_passage %><br>
+    <%= f.datetime_select :time_of_passage %>
+  </div>
+  <div class="field">
+    <%= f.label :time_received %><br>
+    <%= f.datetime_select :time_received %>
+  </div>
+  <div class="field">
+    <%= f.label :time_started %><br>
+    <%= f.datetime_select :time_started %>
+  </div>
+  <div class="field">
+    <%= f.label :time_finished %><br>
+    <%= f.datetime_select :time_finished %>
+  </div>
+  <div class="field">
+    <%= f.label :rejection_reason %><br>
+    <%= f.text_field :rejection_reason %>
+  </div>
+  <div class="field">
+    <%= f.label :rejection_reason_other %><br>
+    <%= f.text_field :rejection_reason_other %>
+  </div>
+  <div class="field">
+    <%= f.label :biologics_master_file_version_number %><br>
+    <%= f.number_field :biologics_master_file_version_number %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

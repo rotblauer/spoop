@@ -1,0 +1,55 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 
+  donated_on: MyString
+  donor_group: MyString
+  donor_number: 1
+  sample: MyString
+  quarantine_state: MyString
+  product: MyString
+  usage: MyString
+  processing_state: MyString
+  weight: 1.5
+  bristol_score: 1
+  batch: MyString
+  bio_safety_cabinet_number: 1
+  buffer_multiplier_used: 1.5
+  number_units_produced: 1
+  on_site_donation: MyString
+  received_by_name: MyString
+  processed_by_name: MyString
+  time_of_passage: 2016-05-21 18:25:54
+  time_received: 2016-05-21 18:25:54
+  time_started: 2016-05-21 18:25:54
+  time_finished: 2016-05-21 18:25:54
+  rejection_reason: MyString
+  rejection_reason_other: MyString
+  biologics_master_file_version_number: 1
+
+two:
+  user_id: 
+  donated_on: MyString
+  donor_group: MyString
+  donor_number: 1
+  sample: MyString
+  quarantine_state: MyString
+  product: MyString
+  usage: MyString
+  processing_state: MyString
+  weight: 1.5
+  bristol_score: 1
+  batch: MyString
+  bio_safety_cabinet_number: 1
+  buffer_multiplier_used: 1.5
+  number_units_produced: 1
+  on_site_donation: MyString
+  received_by_name: MyString
+  processed_by_name: MyString
+  time_of_passage: 2016-05-21 18:25:54
+  time_received: 2016-05-21 18:25:54
+  time_started: 2016-05-21 18:25:54
+  time_finished: 2016-05-21 18:25:54
+  rejection_reason: MyString
+  rejection_reason_other: MyString
+  biologics_master_file_version_number: 1

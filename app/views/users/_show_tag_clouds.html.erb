@@ -1,0 +1,31 @@
+<style>
+	.big {
+	 font-size: 2rem; 
+		line-height:  2rem * 1.1; 	
+	}
+	.medium {
+	 font-size: 1.4rem; 
+		line-height:  1.4rem * 1.1; 
+	}
+	.small {
+	 font-size: 1rem; 
+		line-height:  1rem * 1.1; 	
+	}
+</style>
+
+<div class="col-sm-4 p-a-1 text-xs-center">
+	<% tag_cloud(@tags_processable, %w(small medium big)) do |tag, css_class| %>
+	  <%# link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
+	  <%= content_tag :span, '#' + tag.name, class: 'label label-success' + ' ' + css_class %>
+	<% end %>
+</div>
+
+<div class="col-sm-4 p-a-1 text-xs-center"><% tag_cloud(@tags_not_donated, %w(small medium big)) do |tag, css_class| %>
+	  <%# link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
+	  <%= content_tag :span, '#' + tag.name, class: 'label label-warning' + ' ' + css_class %>
+	<% end %></div>
+
+<div class="col-sm-4 p-a-1 text-xs-center"><% tag_cloud(@tags_rejected, %w(small medium big)) do |tag, css_class| %>
+	  <%# link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
+	  <%= content_tag :span, '#' + tag.name, class: 'label label-danger' + ' ' + css_class %>
+	<% end %></div>

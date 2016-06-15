@@ -1,0 +1,60 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  activerecord: 
+    models: 
+      #fixme: doesn't work
+      non_donor:
+        one: Spooper
+        other: Spoopers
+    attributes:
+      user: 
+        donor_id: 'Donor number'
+        read_the_fine_print_with_link: 'I agree with %{href}'
+        fine_print_link: 'the lawyers'
+        read_the_fine_print: 'I agree with the lawyers'
+        role: 'My role with Open Biome is '
+        admin_secret: 'Secret admin phrase'
+      non_donor: 
+        newsletter_ok: 'Should we send you updates when we do new stuff?'
+    errors: 
+      models: 
+        user: 
+          attributes: 
+            admin_secret: 
+              inclusion: "isn't right!"
+            donor_id: 
+              taken: 'number is already taken'
+              inclusion: "%{value} isn't a valid donor number... but if I'm wrong and it is for sure your actual donor number, please send me an email at rotblauer@gmail.com, and tell me what's attached to the on-site bathroom key 😉"
+            read_the_fine_print:
+              # included in [true]
+              inclusion: "please! They'll go on strike..."
+        non_donor:
+          attributes:
+            email: 
+              blank: 'is absolutely positively necessary for this kind of thing.'
+              taken: 'is already on the list!'
+  time:
+    formats:
+      short: "%a %k:%M%P - %b %-d"
+      day_and_month: '%b %-d'
+      oclock: "%k:%M%P"

@@ -1,0 +1,31 @@
+<ul id="admin-nav" class="nav nav-tabs m-t-1 ">
+<!--   <li class="nav-item">
+    <a class="nav-link active" href="#">Active</a>
+  </li> -->
+  <li class="nav-item">
+    <!-- <a class="nav-link" data-toggle="tab" href="/users/" role="tab">Link</a> -->
+    <%= link_to "Humans", admin_humans_path, id: 'donors-tab', class:'nav-link active' %>
+  </li>
+  <li class="nav-item">
+    <%= link_to 'Donations', admin_donations_path, id:'donations-tab', class:'nav-link text-info' %>
+  </li>
+  <li class="nav-item">
+    <%= link_to 'Logs', admin_logs_path, id:'logs-tab', class:'nav-link text-info' %>
+  </li>
+  <li class="nav-item">
+    <%= link_to 'Donor Insights', admin_donor_insights_path, id:'di-tab', class:'nav-link text-warning' %>
+  </li>
+
+  <% if current_user.site_admin? %>
+  <li class="nav-item">
+    <%= link_to 'Meta', meta_spoop_path, id:'meta-tab', class:'nav-link text-muted' %>
+  </li>
+  <% end %>
+
+  <%= link_to '<i class="fa fa-sign-out"></i>'.html_safe, destroy_user_session_path, method: :delete, class:'pull-sm-right nav-item text-danger',style:"padding: 0.5em 1.0em;" %>
+  <span id="testes" class="nav-item pull-sm-right text-primary" style="padding: 0.5em 1.0em;">
+    <%= current_user.role.capitalize %> - <%= current_user.email %>
+  </span>
+  
+
+</ul>

@@ -1,0 +1,209 @@
+
+
+{{ bristol_score }}
+
+<%= form_for [@user, @donor_log] do |f| %>
+  <% if @donor_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@donor_log.errors.count, "error") %> prohibited this donor_log from being saved:</h2>
+
+      <ul>
+      <% @donor_log.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="field form-group">
+    <%= f.label :bristol_score, class:'text-success' %><br>
+    <%= f.range_field :bristol_score, id: 'new-poo-slider', max: 7, min:1, step:1, class: 'form-control'%>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-4">
+      <div class="field form-group">
+        <%= f.label :weight, class:'text-success' %><br>
+        <%= f.telephone_field :weight, class:'form-control' %>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="col-xs-6 ">
+        <div class="field form-group">
+          <%= f.label :donated, class:'text-success' %><br>
+          <%= f.check_box :donated, class:'form-control' %>
+        </div>    
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="field form-group">
+        <%= f.label :processable, class:'text-success' %><br>
+        <%= f.check_box :processable, class:'form-control' %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="field form-group">
+    <%= f.label :notes, class:'text-success' %>&nbsp;
+    <small class="text-muted">Use <span class="label label-primary">#hashtags</span> to tag your poops. </small>
+    <%= f.text_area :notes, class:'form-control' %>
+  </div>
+  <div class="field form-group">
+    <%= f.label :time_of_passage, class:'text-success' %><br>
+    <%= f.datetime_select :time_of_passage, class:'date form-control' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Save!", class:'btn btn-success btn-block' %>
+  </div>
+<% end %>
+
+
+
+<!-- <input type="text" id="myInputField">
+
+<div id="something" contentEditable="true">
+    Hi, my name is <span class="name">John</span> and i'm 20 years old!    
+</div>
+
+<style>
+#something{
+      width: 400px;
+      height: 100px;
+      border: 1px solid grey;
+  }
+  
+  .name{
+       background: yellow;   
+  }</style> -->
+
+<script>
+  // $(function() {
+  
+  //     var hashtags = false;
+  
+  //     $(document).on('keydown', '#something', function (e) {        
+  //         arrow = {
+  //             hashtag: 51,
+  //             space: 32
+  //         };
+  
+  //         var input_field = $(this);
+  //         switch (e.which) {
+  //             case arrow.hashtag:
+  //                 input_field.val(input_field.val() + "<span class='name'>");
+  //                 hashtags = true;
+  //                 break;
+  //             case arrow.space:
+  //                 if(hashtags) {
+  //                     input_field.val(input_field.val() + "</span>");
+  //                     hashtags = false;
+  //                 }
+  //                 break;
+  //         }
+  
+  //     });
+  
+  // });
+  // $(function() {
+  
+  //     var hashtags = false;
+  
+  //     $(document).on('keydown', '#myInputField', function (e) {        
+  //         arrow = {
+  //             hashtag: 51,
+  //             space: 32
+  //         };
+  
+  //         var input_field = $(this);
+  //         switch (e.which) {
+  //             case arrow.hashtag:
+  //                 input_field.val(input_field.val() + "<span class='highlight'>");
+  //                 hashtags = true;
+  //                 break;
+  //             case arrow.space:
+  //                 if(hashtags) {
+  //                     input_field.val(input_field.val() + "</span>");
+  //                     hashtags = false;
+  //                 }
+  //                 break;
+  //         }
+  
+  //     });
+  
+  // });
+</script>
+
+
+<!-- ---------------------------------------------------- -->
+
+
+<div class="noticeable alert text-center">
+      <p class="{{noticeClass}}">{{ notice }}</p>
+    </div>
+
+    <ion-list>
+
+      <div class="row">
+        <div class="col">
+          <div class="poop-gui-container">
+          <div class='poop-gui type type-mocha{{newPoop.bristol_score}}'
+                style="height: {{ (newPoop.weight / 100) * 70 }}px; border-radius: {{ (newPoop.weight / 100) * 35 }}px; width: {{ (newPoop.weight / 100) * 70 }}px; margin-bottom: 10px; margin-top: -5px;"></div>
+
+          </div>
+        </div>
+        <div class="col">
+          <div class="poop-gui-container">
+            <h1 class="poop-gui type type-poo">
+              {{newPoop.weight}}g<sup>{{newPoop.bristol_score}}</sup>
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="item type type-poo item-no-border range">
+        BRISTOL
+        <input class="type type-poo" type="range" name="volume" ng-model="newPoop.bristol_score" min="1" max="7">
+      </div>
+
+      <div class="item type type-poo item-no-border range">
+        <span ng-click="showPopup()">WEIGHT</span>
+        <input class="type type-poo" type="range" name="volume" ng-model="newPoop.weight" min="40" max="180">
+      </div>
+
+      <div class="item item-no-border "  >
+
+        <h2 ion-datetime-picker class="text-center type type-positive" ng-model="newPoop.time_of_passage">
+        {{ newPoop.time_of_passage| date: "EEEE, d MMMM @ HH:mm"  }}
+        </h2>
+        <!-- <i  class="button button button-clear button-positive icon ion-ios-reload" ng-click="updateTime()"></i> -->
+      </div>
+
+      <div class="row">
+        <div class="col-50">
+          <ion-checkbox  class="item-no-border" ng-model="newPoop.donated">donated</ion-checkbox>
+        </div>
+        <div class="col-50">
+          <ion-checkbox  class="item-no-border" ng-model="newPoop.processable">processed</ion-checkbox>
+        </div>
+      </div>
+
+      <!-- <div class="padding">
+        <small class="type type-muted">Use <span class="type type-positive">#hashtags</span> to track <span class="type type-positive">#what you ate</span>, what you've <span class="type type-positive">#been doing</span>, and <span class="type type-positive">#where</span> you've been!</small>
+      </div> -->
+
+      <div class="item  item-no-border item-input">
+
+        <style>
+          .thing {
+            color: red;
+          }
+        </style>
+
+        <textarea highlight="format"
+  highlight-onchange="listMarkers($markers)" type="text" placeholder="{{notesPlaceholder}}" col="3" ng-model="newPoop.notes"></textarea>
+      </div>
+    </ion-list>
+
+    <button class="button icon ion-plus button-block button-balanced" ng-click="addPoop()">
+    </button>

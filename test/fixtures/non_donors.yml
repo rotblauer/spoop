@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  message: MyString
+  newsletter_ok: false
+
+two:
+  email: MyString
+  message: MyString
+  newsletter_ok: false

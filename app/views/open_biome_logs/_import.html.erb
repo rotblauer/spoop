@@ -1,0 +1,9 @@
+  <%= form_for :open_biome_log, :html => { :multipart => true }, :url => import_user_open_biome_logs_url(user.id), class:'form-inline' do |f| %>  
+     <div class="field form-group">
+       <%# f.label :csv %>
+       <%= f.file_field :csv, class:'form-control-file' %>
+     </div>
+     <div class="actions">
+       <%= f.submit 'Import CSV', class:'btn btn-sm btn-primary-outline' %>
+     </div>
+   <% end %>

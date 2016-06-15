@@ -1,0 +1,207 @@
+<!-- <style>
+	.roboto-login-info-container {
+		/*position: absolute;
+		top: 10;
+		right: 10;*/
+		/*float: right;*/
+		position: fixed;
+		top: 10;
+		right: 10;
+		z-index: 1000;
+		/*font-size: 0.6rem;*/
+	}
+</style>
+<div class="roboto-login-info-container card bg-info">
+	<div class="roboto-login-info card-block ">
+		<p class="card-title text-xs-right">
+			Take 'er for a test drive:
+		</p>
+		<p class="card-text">
+			<code>mrroboto@spoop.info</code><br>
+			<code>shitshitshit</code>
+		</p>
+	</div>
+</div> -->
+
+<div class="row valign-parent p-a-1" style="height: 100vh;">
+<!-- 	<div class="hidden-sm-down col-md-3 col-lg-offset-1 text-center">
+		<%# image_tag('spoop_icon.png', class: 'img-fluid') %>	
+	</div> -->
+	<div class="valign-child text-xs-center"> <!--  -->
+		
+		<div id="poop-at-home" class="">
+
+		
+		<div class="doormat-img-holder" style="max-width: 10rem; margin-left: auto; margin-right: auto; margin-bottom: 2rem;">
+			<%= image_tag('spoop_icon.png', class: 'img-fluid') %>		
+		</div>
+		
+
+		<p class="lead">
+			Spoop is an unofficial API+app for <a href="http://www.openbiome.org" target='_blank'>Open Biome<!-- <sup><i class="fa fa-external-link"></i></sup> --></a>  donors to track and visualize their donation logs.  
+		</p>
+		</div>
+
+	
+
+		<%= form_for(:user, as: :user, url: session_path(:user)) do |f| %>
+
+		    <%= f.email_field :email, value: 'mrroboto@spoop.info', class:'form-control hidden-xs-up' %>
+
+		    <%= f.password_field :password, value: 'shitshitshit', class:'form-control hidden-xs-up' %>
+
+		    <%= link_to "Sign up", new_user_registration_path, :class => 'btn btn-xl btn-success m-b-1'  %> 
+		    <%= link_to "Login", new_user_session_path, :class => 'btn btn-xl btn-primary m-b-1'  %> <br>
+
+		    <%= f.submit "Demo >", class:'btn btn-warning-outline m-b-1' %>
+		<% end %>
+
+		</div>
+</div>
+
+<div class="container">
+<div class="section">
+	<div class="row m-b-2">
+		<div class="col-sm-5 p-t-2 text-xs-center">
+			<div class="">
+				<h3 class="text-success">
+					Know your shit.
+				</h3>
+				<p class="text-muted lead">
+					As professional poopers, we - and those we benefit - stand to gain by learning about how our habits effect our poo.
+				</p>
+			</div>
+		</div>
+		<div class="col-sm-7" >
+			<%= image_tag('demo_heatmap.png', class:'img-fluid', style:'margin-left: auto; margin-right: auto;') %>
+		</div>
+	</div>
+</div>
+<div class="section p-b-3">
+	<div class="row">
+		<div class="col-sm-12 text-xs-center m-t-3 p-y-2">
+			<div class="">	
+				<h3 class="text-success">
+					You are what you... poop?
+				</h3>
+
+				
+				<div class="row m-t-3">
+					<div class="col-md-4 p-y-2">
+						<a href="https://geo.itunes.apple.com/us/app/spoop/id1121224366?mt=8" style="display:inline-block;overflow:hidden;background:url(https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg) no-repeat;width:165px;height:40px;"></a>
+					</div>
+					<div class="col-md-8 text-xs-center text-md-left ">
+						<p class="text-muted lead">
+							This is what the Spoop iOS app looks like. It connects (securely!) to this website's API, allowing you to track your poos anywhere and then checkout the shiny graphs on the big screen later. <br>
+							<small>
+							<span class="text-info">iOS isn't for you?</span><span style="font-weight: 300;"> Not to worry, this web app is optimized for mobile, and can do everything and more than the iOS app. </small> 
+						</p>	
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	<style>
+		img.screenshot {
+		  /*width: 20%;*/
+		  /*margin: 5px;*/
+		  -webkit-box-shadow: 2px -5px 53px -41px rgba(0,0,0,0.75);
+		  -moz-box-shadow: 2px -5px 53px -41px rgba(0,0,0,0.75);
+		  box-shadow: 2px -5px 53px -41px rgba(0,0,0,0.75);
+
+		}
+	</style>
+	<div class="row">
+		<div class="col-xs-6 col-sm-3 p-a-1">
+			<%= image_tag('demo_mobile_add.jpg', class:'img-fluid screenshot', style:'margin-left: auto; margin-right: auto; max-height: 50vh;') %>
+
+		</div>
+		<div class="col-xs-6 col-sm-3 p-a-1">
+			<%= image_tag('demo_mobile_heatmap.jpg', class:'img-fluid screenshot', style:'margin-left: auto; margin-right: auto; max-height: 50vh;') %>
+
+		</div>
+		<div class="col-xs-6 col-sm-3 p-a-1">
+			<%= image_tag('demo_mobile_logs.jpg', class:'img-fluid screenshot', style:'margin-left: auto; margin-right: auto; max-height: 50vh;') %>
+		</div>
+		<div class="col-xs-6 col-sm-3 p-a-1">
+			<%= image_tag('demo_mobile_stats.jpg', class:'img-fluid screenshot', style:'margin-left: auto; margin-right: auto; max-height: 50vh;') %>
+		</div>
+	</div>
+</div>
+
+<div class="section m-t-3 p-y-2">
+	<div class="row ">
+		<div class="col-sm-4 ">
+			<h3 class="text-success">What goes in<br>must come out.</h3>
+			<p class="text-muted lead">
+				Poo is directly connected to overall health, just like diet.
+			</p>
+		</div>
+		<div class="col-sm-8">
+			<%= image_tag('demo_counters.png', class:'img-fluid', style:'margin-left: auto; margin-right: auto;') %>		</div>
+	</div>
+
+</div>
+
+<div class="sectionp-y-2">
+
+
+	<div class="row text-xs-center">
+
+		<div class="col-sm-6 p-y-2  m-t-3 ">
+			<h3 class="text-success">
+			Understand your body over time.
+			</h3>
+			<p class="text-muted lead">What works? What doesn't?</p>
+			<%= image_tag('demo_scatter.png', class:'img-fluid', style:'margin-left: auto; margin-right: auto;') %>
+		</div>
+		<div class="col-sm-6 p-y-2  m-t-3 ">
+			<h3 class="text-success">
+				Just a regular day.
+			</h3>
+			<p class="text-muted lead">
+				Know what normal means to you, <br>and help yourself get there. 
+			</p>
+			<%= image_tag('demo_punchcard2.png', class:'img-fluid', style:'margin-left: auto; margin-right: auto;') %>
+		</div>
+	</div>
+</div>
+
+
+<div class="section  m-t-3 p-y-2">
+	<div class="row text-xs-center">
+		<h3 class="text-success">Find out what #counts.</h3>
+		<p class="text-muted lead">Life is more than numbers. Use <span class="label label-primary">#hashtags</span> to contextualize your biofeedback.</p>
+		<div class="col-sm-12">
+			<%= image_tag('demo_hashtags.png', class:'img-fluid', style:'margin-left: auto; margin-right: auto;') %>
+		</div>
+	</div>
+</div>
+
+<div class="section m-t-3 p-y-2">
+<hr>
+<i class="fa fa-info-circle text-info"></i>&nbsp;&nbsp;&nbsp;<span class="text-info">A few specifics</span>
+	<div class="row p-t-3 text-xs-center text-muted">
+	
+		<div class="col-sm-4">
+			<i class="fa fa-user-secret fa-5x text-info"></i> 
+			<br><br>
+			<p class="lead">Donor logs are <strong>private by default</strong>, and <em>will not be shared</em> with Open Biome unless you explicity choose to do so.</p>
+		</div>
+		<div class="col-sm-4">
+			<i class="fa fa-key fa-5x text-info"></i>
+			<br><br>
+			<p class="lead">iOS and API access is <strong>key-controlled</strong>, allowing you to enable or disable integration at any time.</p>
+		</div>
+		<div class="col-sm-4">
+			<i class="fa fa-smile-o fa-5x text-info"></i>
+			<br><br>
+			<p class="lead">It's <strong>free</strong>! </p>
+		</div>
+	</div>
+</div>
+
+
+</div>

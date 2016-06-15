@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  passage_at: 2016-05-19 21:06:32
+  bristol: 1
+  weight: 1.5
+  for_sale: false
+  sold: false
+
+two:
+  passage_at: 2016-05-19 21:06:32
+  bristol: 1
+  weight: 1.5
+  for_sale: false
+  sold: false

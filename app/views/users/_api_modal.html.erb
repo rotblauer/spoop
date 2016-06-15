@@ -1,0 +1,43 @@
+<div class="modal fade" id="apiModal" tabindex="-1" role="dialog" aria-labelledby="apiModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Spoop API key</h4>
+      </div>
+      <div class="modal-body">
+
+        <% if @user_api_key %>
+        	<p>
+        		This is your key. There are many like it, but this one is yours. You can use it to connect to the API endpoints namespaced under <code>/api/v1/</code>, or to pair with the <a href="" class="text-primary">iOS mobile app</a>. 
+        	</p>
+        	<p class="text-xs-center text-muted">
+        		<%= @user_api_key.access_token %> <br>
+        	</p>
+        	<p>
+        		If you ever need to disable API access to your Spoop account, just <%= link_to 'destroy this key', destroy_api_key_user_path(@user), class:'text-danger' %>. Don't worry, you can create a new one! 
+        	</p>
+        
+        <% else %>
+        	<p class="text-muted">
+        		none yet! <br>
+        		<small>Create a key to connect the Spoop iOS app.</small>
+        	</p>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+      	<% if @user_api_key %>
+      		
+      	<% else %>
+      		<%= link_to create_api_key_user_path(@user) do %>
+      			<button class="btn btn-primary">Create key</button>
+      		<% end %>
+      	<% end %>
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

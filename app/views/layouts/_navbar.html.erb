@@ -1,0 +1,40 @@
+<nav class="navbar navbar-light" >
+
+
+  <a class="navbar-brand navbar-brand-image" href="/">
+    <%= image_tag('spoop_icon_small.png') %>
+  </a>
+
+
+  <div class="nav navbar-nav ">
+    
+    <% if user_signed_in? %>
+
+    <!-- 
+    `if @user` is working to hide this section from admins because they are unable to access users#show by a before_filter in users_controller, thus there is no @user var defined in their scope of access. TODO: improve/make explicit this permission -->
+    <% if @user %>
+
+      <span class="text-info hidden-xs-down">
+        <%= @user.email %>
+      </span>
+    
+      <div class="pull-xs-right">
+        <!-- toggle api key modal -->
+        <%= link_to user_path(@user), class:'text-info m-r-1' do %>
+          <%= @user.role.capitalize %>&nbsp;<%= @user.donor_id %>
+        <% end %>
+
+        <a href="" id="toggle-donor-options-navbar" class="m-r-1 text-primary"><i class="fa fa-folder-o"></i></a>
+        
+        <% if current_user.is_user(@user) %>
+        <%= link_to '<i class="fa fa-sign-out"></i>'.html_safe, destroy_user_session_path, method: :delete, class:' text-danger' %>
+        <% end %>
+      </div>
+    <% else %>
+
+    <% end %>
+    <% end %>
+  </div>
+
+
+</nav>

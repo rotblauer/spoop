@@ -1,0 +1,80 @@
+<style>
+      rect.bordered {
+        stroke: #fff; //#E6E6E6;
+        stroke-width:1px;   
+      }
+
+      text.mono {
+      	font-size: 0.8rem;
+        /*font-size: 9pt;*/
+        /*font-family: Consolas, courier;*/
+        fill: #aaa; 
+      }
+
+      text.axis-workweek {
+        fill: #000;
+      }
+
+      text.axis-worktime {
+        fill: #000;
+      }
+</style>
+
+
+<!-- Non-mobile d3 punchcard -->
+<div id="us-trulia-testes" class='hidden-xs-down'></div>
+
+<!-- mobile punchcard with manual html -->
+<div id="mobile-punchcard-graph" class="hidden-sm-up">
+
+	<!-- set up the days of the week in their columns -->
+	<div class="row">
+		<div class="col-xs-11 col-xs-offset-1">
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">MON</span></div>
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">TUE</span></div>
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">WED</span></div>
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">THU</span></div>
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">FRI</span></div>
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">SAT</span></div>
+			<div class="col-xs-1-7"><span class="text-muted text-lighter">SUN</span></div>
+		</div>
+	</div>
+
+	<!-- iterate over all hours, each gets a row -->
+	<% (1..24).to_a.each_with_index do |hour| %>
+
+	<div class="row" >
+		
+		<!-- label -->
+		<div class="col-xs-1">
+			<small class="text-muted text-lighter"><%= hour %></small>
+		</div>
+		
+		<!-- days by hour -->
+		<div class="col-xs-11" >
+			<% (1..7).to_a.each do |day| %>
+				
+				<% 
+					val = @punchcard[day][hour]
+					mode = @ds[:mode] == 0 ? 1 : @ds[:mode]
+					if val == 0 
+						q_class = 'bg-muted'
+					elsif val == mode 
+						q_class = 'bg-q1'
+					elsif val == @ds[:max]
+						q_class = 'bg-q4'
+					elsif val > @ds[:q3]
+						q_class = 'bg-q3'
+					else 
+						q_class = 'bg-q2'
+					end
+				%>
+				
+				<!-- and each day gets a nice little 1/7 column -->
+				<div class="col-xs-1-7 <%= q_class %> text-lighter" style='border-right: 1px solid white; border-bottom: 1px solid white;'><%= val > 0 ? val : "&nbsp;".html_safe %></div>
+			<% end %>
+		</div>
+	</div>
+	<% end %>
+	
+</div>

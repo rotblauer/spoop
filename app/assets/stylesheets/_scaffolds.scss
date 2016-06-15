@@ -1,0 +1,101 @@
+
+// https://css-tricks.com/centering-css-complete-guide/
+// Unknonw height + width. 
+// Vertical aligning. 
+@mixin valign-parent() {
+  position: relative;
+}
+@mixin valign-child() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// stole from mobile
+@mixin vertical-align {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.poop-gui-container {
+  height: 150px;
+  width: 100%;
+  text-align: center;
+}
+
+.poop-gui {
+  @include vertical-align();
+  margin-left: auto;
+  margin-right: auto;
+}
+//////
+
+.valign-parent {
+	@include valign-parent();
+}
+.valign-child { 
+	@include valign-child();	
+}
+// Can you use flexbox? 
+@mixin valign-parent-flex() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.valign-parent-flex {
+	@include valign-parent-flex();
+}
+
+
+// /* Mixin */
+// @mixin vertical-align($position: relative) {
+//   position: $position;
+//   top: 50%;
+//   -webkit-transform: translateY(-50%);
+//   -ms-transform: translateY(-50%);
+//   transform: translateY(-50%);
+// }
+
+// .valign {
+// 	@include vertical-align();
+// }
+
+@mixin padding($num: 20px) {
+	padding: $num;
+}
+
+.padding {
+	@include padding();
+}
+.padding-light {
+  @include padding(10px);
+}
+
+@mixin halign() {
+	horizontal-align: center;
+}
+
+.fat-vert {
+	margin-top: 40px;
+	margin-bottom: 40px;
+}	
+
+// http://getbootstrap.com.vn/examples/equal-height-columns/
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.navbar-brand-image > img {
+  height: 1.2rem;
+}

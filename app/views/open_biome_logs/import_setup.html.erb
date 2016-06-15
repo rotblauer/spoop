@@ -1,0 +1,60 @@
+      <div class="row p-y-2">
+      	<div class="col-lg-4 col-lg-offset-4 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
+      		<h2 class="text-primary" id="csv-instructions">
+      			<i class="fa fa-arrow-down"></i> Choose a file!
+      		</h2>
+      		<div class="">
+      			<%= form_for :open_biome_log, :html => { :multipart => true }, :url => import_user_open_biome_logs_url(@user.id) do |f| %>  
+      			   <div class="field form-group">
+      			     <!-- <%# f.label :csv %><br> -->
+      			     <%= f.file_field :csv, id:'upload-csv-selector', class:'form-control-file' %>
+      			   </div>
+    			   <div class="actions">
+      			     <%= f.submit 'Import it!', id:'submit-csv', class:'btn hidden-xs-up btn-lg btn-primary-outline' %>
+      			   </div>
+      			<% end %>
+      		</div>
+
+      		<script>
+      		$(document).ready(
+  			    function(){
+  			        $('input#upload-csv-selector').change(
+
+  			            function(){
+
+  			                if ($(this).val()) {
+
+  			                	var ext = $('#upload-csv-selector').val().split('.').pop().toLowerCase();
+  			                	if ($.inArray(ext, ['csv']) == -1) {
+
+  			                	    alert('It\'s gotta be a .csv!');
+
+  			                	} else {
+
+  			                		 	$('#submit-csv').removeClass('hidden-xs-up btn-primary-outline').addClass('btn-primary');
+
+  			                			$('#csv-instructions').html(
+  			                				'<i class="fa fa-check"></i> ' + 
+  			                				'Good to go!'
+  			                				);
+  			                	}
+
+  			                } 
+  			            }
+  			            );
+  			    });
+      		</script>
+      		
+      	</div>
+
+      </div>
+      <hr>
+			<div class="row p-y-2">
+				<div class="col-sm-10 col-sm-offset-1">
+          
+          <%= render 'open_biome_logs/import_information' %>
+					
+				</div>
+			</div>
+      
+      

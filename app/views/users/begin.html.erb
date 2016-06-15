@@ -1,0 +1,32 @@
+<div class="row text-xs-center m-t-3">
+	<h1 class="text-primary">You're here!</h1>
+	<p class="text-primary">But...😏 what good is a poo tracking application without any poos to track?</p>
+</div>
+
+<div class="row p-y-2 text-xs-center">
+	<div class="col-sm-6">
+			
+		<%= link_to import_user_open_biome_logs_path(@user) do %>
+		<button class="btn btn-lg btn-primary btn-block">
+			<i class="fa fa-cloud-upload"></i>
+			Upload a CSV
+		</button>
+		<% end %>
+
+		<p class="text-muted m-t-1">
+			Ask Kelly 😊 for a log of your poos!
+		</p>
+		
+	</div>
+	<div class="col-sm-6">
+		
+		<%= link_to new_user_donor_log_path(@user) do %>
+		<button class="btn btn-lg btn-success btn-block">
+			<i class="fa fa-calendar-plus-o"></i>
+		</button>
+		<% end %>
+
+		<p class="text-muted m-t-1">Create your very own first donor record!</p>
+	</div>
+</div>
+

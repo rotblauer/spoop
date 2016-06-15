@@ -1,0 +1,64 @@
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Import Open Biome CSV</h4>
+      </div>
+      <div class="modal-body">
+      <div class="row">
+      	<div class="col-sm-12">
+      		<div class="text-xs-center">
+      			<%= form_for :open_biome_log, :html => { :multipart => true }, :url => import_user_open_biome_logs_url(@user.id) do |f| %>  
+      			   <div class="field form-group">
+      			     <!-- <%# f.label :csv %><br> -->
+      			     <%= f.file_field :csv, class:'form-control-file' %>
+      			   </div>
+      			   <div class="actions">
+      			     <%= f.submit 'Import CSV', class:'btn btn-lg btn-primary' %>
+      			   </div>
+      			<% end %>
+      		</div>
+      	</div>
+      </div>
+      <hr>
+			<div class="row">
+				<div class="col-sm-12">
+
+					<p>
+						<i class="fa fa-question-circle-o text-primary"></i> <strong class="text-primary">Handling new and existing data:</strong> The import <strong>will try to match</strong> existing Open Biome log entries by comparing the following 4 attributes: 
+						<% ['User id', 'Donated on', 'Sample', 'Weight'].each do |a| %>
+						<code><%= a.html_safe %></code><% end %>. If a match is found, the existing record will be updated with the new corresponding data; otherwise, a new record will be created. Afterward, you'll be notified how many records were updated and how many created. 
+						
+						<hr>
+						
+						<i class="fa fa-columns text-primary"></i> <strong class="text-primary">Formatting: </strong>Your CSV should <strong>include headers</strong>. Column headers will be automatically downcased and snakecased, so <code>On Site Donation </code> will become <code>on_site_donation</code>.
+						
+						<hr>
+
+						<i class="fa fa-database text-primary"></i> <strong class="text-primary">Data fields: </strong>
+						The <strong>following columns</strong> are available for interaction (any extraneous fields will not be saved):
+						<% OpenBiomeLog.attribute_names.each_with_index do |attri, i| %>
+							<% if i == OpenBiomeLog.attribute_names.to_a.size - 1 %>
+								<code><%= attri %></code>.
+							<% else %>
+								<code><%= attri %></code>, 
+							<% end %>
+						<% end %>
+						
+						<br>	
+						<br>
+					</p>
+				</div>
+			</div>
+      
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

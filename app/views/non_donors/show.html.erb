@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @non_donor.email %>
+</p>
+
+<p>
+  <strong>Message:</strong>
+  <%= @non_donor.message %>
+</p>
+
+<p>
+  <strong>Newsletter ok:</strong>
+  <%= @non_donor.newsletter_ok %>
+</p>
+
+<%= link_to 'Edit', edit_non_donor_path(@non_donor) %> |
+<%= link_to 'Back', non_donors_path %>

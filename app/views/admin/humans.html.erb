@@ -1,0 +1,85 @@
+<ul class="nav nav-pills" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active " data-toggle="tab" href="#donors" role="tab">Donors</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#admins" role="tab">Admins</a>
+  </li>
+  
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane fade in active" id="donors" role="tabpanel">
+  	
+  	<div class="section p-y-2">
+  		<div class="text-info"><p><%= pluralize @donors.count, 'donor' %></p></div>
+  	</div>
+  
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Donor ID</th>
+              <th>Spoop ID</th>
+              <th>Email</th>
+              <th>Donor Logs</th>
+              <th>OB Logs</th>
+              <th><i class="fa fa-clock-o"></i>&nbsp;Latest OB log</th>
+              <th>Import CSV</th>
+            </tr>
+          </thead>
+          <tbody>
+         <!--          <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr>
+        -->
+            <% @donors.each_with_index do |donor, index| %>
+            <tr>
+              <th scope="row"><h3 class="text-info"><%= donor.donor_id %></h3></th>
+              <td><span class="text-muted"><%= donor.id %></span></td>
+              <td><span class="text-muted"><%= donor.email %></span></td>
+              <td><span class="text-warning"><strong><%= donor.donor_logs.count %></strong></span></td>
+              <td><span class="text-primary"><strong><%= donor.open_biome_logs.count %></strong></span></td>
+              <td><span class="text-primary">
+              <% if donor.open_biome_logs.any? %>
+              <%= l donor.open_biome_logs.order('time_of_passage DESC').first.time_of_passage, format: :day_and_month %> <em>(<%=  time_ago_in_words(donor.open_biome_logs.order('time_of_passage DESC').first.time_of_passage) %> ago)</em>
+              <% else %>
+              n/a
+              <% end %>
+              </span></td>
+              <td> <%= render partial: 'open_biome_logs/import', locals: {user: donor} %></td>
+            </tr>
+        
+            <% end %>
+        
+          </tbody>
+        </table>
+      </div>
+
+  
+  	
+
+  		
+  </div>
+  <div class="tab-pane fade" id="admins" role="tabpanel">
+	  <div class="row">
+		<div class="col-sm-4">
+			<div class="section p-y-2">
+        <div class="text-info"><p><%= @admins.count %> admins</p></div>
+      </div>
+			
+			<% @admins.each do |admin| %>
+				<p class="text-success"><%= admin.email %></p>
+			<% end %>
+
+		</div>
+		</div>
+	</div>
+</div>
+
+
+

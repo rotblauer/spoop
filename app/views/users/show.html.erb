@@ -1,0 +1,301 @@
+<!-- cal-heatmap -->
+<div class="row">
+
+	<!-- cal-heatmap demo explanation -->
+	<% if false # @user.demo %>
+
+		<div class="col-xs-10 col-xs-offset-1">
+			<div class="alert alert-warning alert-dismissible fade in  role="alert"text-xs-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+				<i class="fa fa-info-circle"></i>
+				This calendar tracks processed donations, combining (but not duplicating!) your own records with those from Open Biome.
+			</div>
+		</div>
+
+	<% end %>
+
+	<!-- cal-heatmap nav arrow buttons -->
+	<div class="col-xs-10 col-xs-offset-1 p-b-1 hidden-sm-up">
+		    <button id="us-hm-next-xs" class="btn btn-sm btn-success-outline pull-xs-right"><span class="fa fa-angle-double-down"></span></button>
+		    <button id="us-hm-previous-xs" class="btn btn-sm btn-success-outline pull-xs-left"><span class="fa fa-angle-double-up"></span></button>
+	</div>
+	<div class="col-sm-10 col-sm-offset-1 p-b-1 hidden-xs-down">
+    <button id="us-hm-next-bg" class="btn btn-sm btn-success-outline pull-xs-right"><span class="fa fa-angle-double-right"></span></button>
+    <button id="us-hm-previous-bg" class="btn btn-sm btn-success-outline pull-xs-left"><span class="fa fa-angle-double-left"></span></button>
+	</div>
+
+	<!-- cal-heatmap -->
+	<div class="col-xs-12 text-sm-center p-b-2">
+		<div id="us-heatmap-xs"></div>
+	</div>
+
+</div>
+
+<!-- monayyy -->
+<div class="row p-x-2 p-t-1 text-xs-center">
+	<%= render 'show_earnings' %>
+</div>
+
+<!-- mobile add new button -->
+<div class="row p-y-2 p-x-1 hidden-sm-up">
+	<div class="col-xs-12 text-xs-center">
+
+		<% if false # @user.demo %>
+			<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+				<i class="fa fa-info-circle"></i>
+				Try adding a new poo for Mr. Roboto!
+			</div>
+		<% end %>
+
+		<%= link_to new_user_donor_log_path(current_user) do %>
+			<button class="btn btn-success btn-block">
+				<i class="fa fa-calendar-plus-o"></i>
+			</button>
+		<% end %>
+
+	</div>
+	<div class="row p-y-2"></div>
+</div>
+
+
+<div class="row p-t-2 m-t-2">
+
+	<!-- add new button for md+ (offset from bar graph) -->
+	<div class="col-md-4 col-md-offset-1 p-t-2 hidden-sm-down">
+
+		<% if false # @user.demo %>
+			<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+				<i class="fa fa-info-circle"></i>
+				Try adding a new poo for Mr. Roboto!
+			</div>
+		<% end %>
+
+		<%= link_to new_user_donor_log_path(current_user) do %>
+		<button class="btn btn-success btn-block p-y-1">
+			<i class="fa fa-calendar-plus-o"></i>
+		</button>
+		<% end %>
+
+	</div>
+
+	<!-- add new button block for sm -->
+	<div class="col-xs-12 text-xs-center hidden-md-up hidden-xs-down p-b-1" style="z-index: 1000;">
+		
+		<% if false # @user.demo %>
+			<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  		</button>
+				<i class="fa fa-info-circle"></i>
+				Try adding a new poo for Mr. Roboto!
+			</div>
+		<% end %>
+
+		<%= link_to new_user_donor_log_path(current_user) do %>
+			<button class="btn btn-success btn-block">
+				<i class="fa fa-calendar-plus-o"></i>
+			</button>
+		<% end %>
+	</div>
+
+	<div class="col-md-7 text-xs-center">
+
+		<div id="us-stacked-bar"></div>
+		
+		<div class="row hidden-sm-up p-t-3 "></div>
+	</div>
+</div>
+
+
+<!-- bugggss, not rendered -->
+<% if @activities_statisticsable.size > 3 && false %>
+<div class="row p-x-2 p-t-3 m-t-1 text-xs-center ">
+	<%= render 'show_statistics' %>
+</div>
+<% end %>
+
+
+
+
+<!-- ********************************************************** -->
+<!-- TODO: handle user roles, donor vs admin -->
+<!-- ********************************************************** -->
+<% if @user.role == 'donor' || 'admin' %>
+
+<hr>
+
+<!-- tabbed navigation -->
+
+<div class="row p-x-1 text-xs-center">
+	<ul id="graphs-nav" class="nav nav-pills" role="tablist">
+	  <li class="nav-item">
+	    <a class="nav-link active" data-toggle="tab" href="#scatterplop" role="tab">Scatterplop</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" id="punchcard-link" data-toggle="tab" href="#punchcard" role="tab">Punchcard</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" data-toggle="tab" href="#tag-clouds" role="tab">Tag Clouds</a>
+	  </li>
+	  <li class="nav-item">
+	    <a id="link-poo-pies" class="nav-link" data-toggle="tab" href="#poo-pies" role="tab">OB Poo Pies</a>
+	  </li>
+
+	  <script>
+	  //https://github.com/ankane/chartkick/issues/28
+	  	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	  	   var ev = document.createEvent('Event');
+	  	   ev.initEvent('resize', true, true);
+	  	   window.dispatchEvent(ev);
+	  	 });
+	  </script>
+	</ul>
+</div>
+
+<script>
+	$(function () {
+		if (getResponsiveBreakpoint() == 'xs') {
+			$('ul#graphs-nav').addClass('nav-stacked');
+		} else {
+			$('ul#graphs-nav').removeClass('nav-stacked');
+		}
+	});
+</script>
+
+<!-- Tab panes -->
+<div class="tab-content row p-y-3">
+
+	<!-- tab pane scatterplop -->
+	<div class="tab-pane fade in active" id="scatterplop" role="tabpanel">
+		<div class="col-sm-12 text-xs-center">
+		
+			<% if false # @user.demo %>
+				<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+					<i class="fa fa-info-circle"></i>
+					Your poos by bristol and mass over time. The bigger the circle, the bigger the poo. The guidelines mark the range of processable bristol scores.
+				</div>
+			<% end %>
+		
+		  <p class="text-muted">Bristol & weight / time <br>
+			  <em  style="font-weight: lighter;">
+			  	<i class="fa fa-mobile-phone"></i> pinch to zoom / 
+			  	<i class="fa fa-desktop"></i> click and drag sideways to zoom</em>
+		  </p>
+		
+		  <div id="us-timebristolweight" ></div>
+		</div>
+	</div> <!-- end tab pane scatterplop -->
+
+	
+	<!-- tab pane punchcard -->
+	<div class="tab-pane fade" id="punchcard" role='tabpanel'>
+		<div class="col-sm-12 text-xs-center">
+		  
+		  <% if false # @user.demo %>
+		  	<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+		  		<i class="fa fa-info-circle"></i>
+		  		When do you usually poo during the day? Are weekends different?
+		  	</div>
+		  <% end %>
+		
+		  <p class="text-muted">Poos / weekday / hour <br>
+		  <em style="font-weight: lighter;">in aggregate</em></p>
+		
+		  <%= render 'show_punchcard' %>
+		
+		</div>
+	</div> <!-- end tab punchcard pane -->
+
+
+	<!-- tag clouds panel -->
+	<div class="tab-pane fade" id="tag-clouds" role="tabpanel">
+		<div class="col-xs-12 text-xs-center">
+
+			<% if false # @user.demo %>
+				<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+					<i class="fa fa-info-circle"></i>
+					Tags can help you connect where you've been, what you've eaten, and what you've been doing with the quality of your poo.
+				</div>
+			<% end %>
+			
+			<!-- title -->
+			<p class="text-xs-center text-muted">Tags by processing/donation status <br>
+			<em style="font-weight: lighter;">bigger is more frequent</em></p>
+	
+			<!-- partial show_tag_clouds -->
+			<%= render 'show_tag_clouds' %>
+
+		</div>
+	</div> <!-- end tab tag clouds panel -->
+
+	<div class="tab-pane fade" id="poo-pies" role='tabpanel'>
+
+		<div class="col-xs-12 text-xs-center">
+			<div class="text-warning p-y-1"><i class="fa fa-info-circle"></i> These graphs represent <strong>only Open Biome data</strong>.</div>
+
+			<div class="poopie col-sm-4">
+				<p class="text-muted">Bristol scores</p>
+				<%= pie_chart @open_biome_logs.where.not(bristol_score: nil).order('bristol_score ASC').group(:bristol_score).count, colors: [
+						"#5C2E00",
+						"#703800", 
+						'#854200', 
+						'#9A4D00', 
+						'#AB5500', 
+						'#BC5D00', 
+						'#CD6600'] %>
+			</div>
+
+			<div class="poopie col-sm-4">
+				<p class="text-muted">Processing rate</p>
+				<%= pie_chart @open_biome_logs.group(:processing_state).count, colors: ['#5cb85c', '#d9534f']
+					%>	
+			</div>
+
+			<div class="poopie col-sm-4">
+				<p class="text-muted">Products yielded</p>
+				<%= pie_chart @open_biome_logs.processed.order('product ASC').group(:product).count, colors: [
+					
+					'#5bc0de', #250
+					'#804000', #enema
+					'#f0ad4e', # gelatin caps
+					'#0275d8' # screening
+					
+					] %>
+			</div>
+
+		</div>	
+
+	</div>
+
+</div>
+
+<div class="row p-y-2"></div>
+
+
+
+<!-- index side by side logs -->
+<div class="section">
+
+	<%= render 'show_logs_index' %>
+
+</div>
+
+
+
+<% end %> <!-- ! role decision -->
+
+
+
+
+<%= render 'show_js' %>
+

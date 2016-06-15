@@ -1,0 +1,68 @@
+<div class="col-xs-3 infogram">
+	<p>Mean</p>
+	<h5 class="text-success">
+		<small class='text-muted' style="font-weight: lighter;"><sup>wk</sup></small>
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.week}.extend(DescriptiveStatistics).mean(&:weight).round if @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.week}.any? %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<small class='text-muted' style="font-weight: lighter;"><sup>mo</sup></small>
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.month}.extend(DescriptiveStatistics).mean(&:weight).round if @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.month}.any? %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<small class='text-muted' style="font-weight: lighter;"><sup>2m</sup></small>
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 2.months}.extend(DescriptiveStatistics).mean(&:weight).round if @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 2.months}.any? %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<small class='text-muted' style="font-weight: lighter;"><sup>∞&nbsp;</sup></small>
+		<%= @activities_statisticsable.extend(DescriptiveStatistics).mean(&:weight).round %><small>g</small>
+	</h5>
+	
+</div>
+<div class="col-xs-3 infogram">
+	<p>Mode</p>
+	<h5 class="text-success">
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.week}.extend(DescriptiveStatistics).mode(&:weight).round %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+			<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.month}.extend(DescriptiveStatistics).mode(&:weight).round %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+			<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 2.months}.extend(DescriptiveStatistics).mode(&:weight).round %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<%= @activities_statisticsable.extend(DescriptiveStatistics).mode(&:weight).round %><small>g</small>
+	</h5>
+	
+</div>
+<div class="col-xs-3 infogram">
+	<p>Sum</p>
+	<h5 class="text-success">
+		<%= (@activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.week}.extend(DescriptiveStatistics).sum(&:weight) / 452.591).round(1) %><small>lbs</small>
+	</h5>
+	<h5 class="text-success">
+		<%= (@activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.month}.extend(DescriptiveStatistics).sum(&:weight) / 452.591).round(1) %><small>lbs</small>
+	</h5>
+	<h5 class="text-success">
+		<%= (@activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 2.months}.extend(DescriptiveStatistics).sum(&:weight) / 452.591).round(1) %><small>lbs</small>
+	</h5>
+	<h5 class="text-success">
+		<%= (@activities_statisticsable.extend(DescriptiveStatistics).sum(&:weight) / 453.592).round(1) %><small>lbs</small>
+	</h5>
+
+</div>
+<div class="col-xs-3 infogram">
+	<p>SD</p>
+	<h5 class="text-success">
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.week}.extend(DescriptiveStatistics).standard_deviation(&:weight).round(2) %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 1.month}.extend(DescriptiveStatistics).standard_deviation(&:weight).round(2) %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<%= @activities_statisticsable.select{|a| a.time_of_passage > Time.zone.now - 2.months}.extend(DescriptiveStatistics).standard_deviation(&:weight).round(2) %><small>g</small>
+	</h5>
+	<h5 class="text-success">
+		<%= @activities_statisticsable.extend(DescriptiveStatistics).standard_deviation(&:weight).round(2) %><small>g</small>
+	</h5>
+	
+</div>

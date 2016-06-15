@@ -1,0 +1,27 @@
+<p class="text-warning"><strong>
+	<i class="fa fa-info-circle"></i>
+		Donor Open Biome log data may be imported by both/either donors and Open Biome admins. </strong></p>
+<p>
+	<i class="fa fa-question-circle-o text-primary"></i> <strong class="text-primary">Handling new and existing data:</strong> The import <strong>will try to match</strong> your existing Open Biome log entries by comparing <code>donated_on</code>, <code>sample</code>, and <code>weight</code>.  If a match is found, the existing record will be updated with the new corresponding data; otherwise, a new record will be created. Afterward, you'll be notified how many records were updated and how many created. 
+	
+	<hr>
+	
+	<i class="fa fa-columns text-primary"></i> <strong class="text-primary">Formatting: </strong>Your CSV should include headers. Column header names will be automatically trimmed (extraneous beginning or ending whitespace removed), downcased, and snakecased; so <code>On Site Donation&nbsp;&nbsp;&nbsp;&nbsp;</code> will become <code>on_site_donation</code>.
+	
+	<hr>
+
+	<i class="fa fa-database text-primary"></i> <strong class="text-primary">Data fields: </strong>
+	The following columns are available for interaction; any extraneous fields will not be saved:
+	<% OpenBiomeLog.attribute_names.each_with_index do |attri, i| %>
+		<% unless ['id','user_id'].include?(attri) %> 
+		<% if i == OpenBiomeLog.attribute_names.to_a.size - 1 %>
+			<code><%= attri %></code>.
+		<% else %>
+			<code><%= attri %></code>, 
+		<% end %>
+		<% end %>
+	<% end %>
+	
+	<br>	
+	<br>
+</p>

@@ -1,0 +1,109 @@
+<div class="row">
+  <div class="col-md-6 col-sm-8 col-sm-offset-2 col-md-offset-3">
+  <h2 class='text-success'>Sign up</h2>
+  <hr>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  
+      <%= devise_error_messages! %>
+      
+
+      <div class="field form-group">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, class:'form-control' %>
+        <p class="text-muted"><small>We'll send you a confirmation email at this address.</small></p>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-5">
+          <div class="field form-group">
+            <%= f.label :role %> <br>
+            <%= f.select :role, ['donor', 'admin'], class: 'form-control' %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :group, value: 'open_biome' %>
+
+        <div id="donor-id-input" class="col-xs-7">
+          <div class="field form-group">
+            <%= f.label :donor_id %>
+            <%= f.telephone_field :donor_id, class:'form-control' %>
+          </div>
+        </div>
+
+        <div id="admin-secret-input" class="col-xs-7" style="display: none;">
+          <div class="field form-group">
+            <%= f.label :admin_secret %> <!-- <br> -->
+            <%= f.password_field :admin_secret, class: 'form-control' %>
+          </div>
+        </div>
+
+      </div>
+
+      
+
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="field form-group">
+            <label>
+              <span>
+                <%= t('activerecord.attributes.user.read_the_fine_print_with_link', href: link_to(t('activerecord.attributes.user.fine_print_link'), terms_and_conditions_path)).html_safe %>
+              
+              </span>
+            </label>
+              
+            <%= f.check_box :read_the_fine_print, checked: false, class: 'form-control' %> <!-- as: :boolean, -->
+          </div>
+        </div>
+      </div>
+
+      
+    
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="field form-group">
+            <%= f.label :password %>
+            <% if @minimum_password_length %>
+            <em>(<%= @minimum_password_length %>+ characters)</em>
+            <% end %>
+            <%= f.password_field :password, class:'form-control' %>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="field form-group">
+            <%= f.label :password_confirmation %>
+            <%= f.password_field :password_confirmation, class:'form-control' %>
+          </div>
+        </div>
+      </div>
+    
+      <div class="actions">
+        <%= f.submit "Sign up", class:'btn btn-success' %>
+      </div>
+    <% end %>
+    
+    <%= render "devise/shared/links" %></div>
+</div>
+
+
+<script>
+  
+  $(function () {
+    if ($('select#user_role').val() == 'admin') {
+      $('#admin-secret-input').show();
+      $('#donor-id-input').hide();
+    } else {
+      $('#admin-secret-input').hide();
+      $('#donor-id-input').show();
+    }
+    $('select#user_role').on('change', function () {
+      // alert(this.value);
+      if (this.value === 'admin') {
+        $('#admin-secret-input').show();
+        $('#donor-id-input').hide();
+      } else {
+        $('#admin-secret-input').hide();
+        $('#donor-id-input').show();
+      }
+    })
+  });
+</script>

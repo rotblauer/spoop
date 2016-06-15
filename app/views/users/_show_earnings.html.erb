@@ -1,0 +1,30 @@
+<div class="col-xs-6 col-sm-2 infogram">
+	<p>Today</p>
+	<h5 class="text-success">
+		$<%= (@count_today['processable'] || 0)* 40 %>
+	</h5>
+</div>
+<div class="col-xs-6 col-sm-2 infogram">
+	<p>Week</p>
+	<h5 class="text-success">
+		$<%= (@count_week['processable'] || 0)* 40 %>
+	</h5>
+</div>
+<div class="col-xs-4 col-sm-2 infogram">
+	<p>Month</p>
+	<h5 class="text-success">
+		$<%= (@count_month['processable'] || 0) * 40 %>
+	</h5>
+</div>
+<div class="col-xs-4 col-sm-3 infogram">
+	<p>2 Mo.</p>
+	<h5 class="text-success">
+		$<%= (@count_two_months['processable'] || 0) * 40 %>
+	</h5>
+</div>
+<div class="col-xs-4 col-sm-3 infogram">
+	<p>∞</p>
+	<h5 class="text-success">
+		$<%= (@count_all_time['processable'] || 0) * 40 %>
+	</h5>
+</div>

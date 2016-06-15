@@ -1,0 +1,136 @@
+<script>
+  $('#admin-nav').find('a').removeClass('active');
+  $('#di-tab').addClass('active');
+</script>
+
+<p class="text-warning"> <i class="fa fa-info-circle"></i> All data below reflects only Donor Logs which have been <strong>explicity shared with Open Biome</strong>.</p>
+
+<div ng-controller="DonorInsightsController" >
+
+	<div class="row">
+		<div class="col-xs-12">
+			<p>
+				<span class="text-danger">Results: <span class="text-muted">{{ filtered.length }}</span> &nbsp;</span>
+				<span ng-if="search.donor_number">Donor number: <span class="text-muted">{{ search.donor_number }}</span> &nbsp;</span>
+				<span ng-if="search.bristol_score">Bristol: <span class="text-muted">{{ search.bristol_score }}</span> &nbsp;</span>
+				<span ng-if="search.notes">Notes: <span class="text-muted">{{ search.notes }}</span> &nbsp;</span>
+				<span class="text-primary" ng-if="sortType">Sorting by: <span class="text-muted">{{ sortType }}</span> &nbsp;</span>
+				<!-- <span class="text-primary" ng-if="sortReverse">Sorting reversed.</span> -->
+			</p>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-xs-12">
+			<form>
+			   <div class="form-group"><div class="row">
+			   	  <div class="col-sm-3">
+			   	  	<div class="input-group">
+			   	  	  <div class="input-group-addon"><i class="fa fa-search"></i></div>
+			   	  	  <input type="text" class="form-control" placeholder="Donor number" ng-model="search.donor_number">
+			   	  	  <div class="input-group-addon text-danger" ng-show="search.donor_number" ng-click="search.donor_number = ''"><i class="fa fa-close"></i></div>
+			   	  	</div>
+			   	  </div>
+			   	  <div class="col-sm-3">
+			   	  	<div class="input-group">
+			   	  	  <div class="input-group-addon"><i class="fa fa-search"></i></div>
+			   	  	  <input type="text" class="form-control" placeholder="Bristol" ng-model="search.bristol_score">
+			   	  	  <div class="input-group-addon text-danger" ng-show="search.bristol_score" ng-click="search.bristol_score = ''"><i class="fa fa-close"></i></div>
+			   	  	</div>
+			   	  </div>
+			   	  <div class="col-sm-6">
+			   	  	<div class="input-group">
+			   	  	  <div class="input-group-addon"><i class="fa fa-search"></i></div>
+			   	  	  <input type="text" class="form-control" placeholder="Notes" ng-model="search.notes">
+			   	  	  <div class="input-group-addon text-danger" ng-show="search.notes" ng-click="search.notes = ''"><i class="fa fa-close"></i></div>
+			   	  	</div>
+			   	  </div>
+			   	</div></div>
+			 </form>
+		</div>
+	</div>
+
+	<style>
+		.p-x-tiny { 
+			margin-left: 0.2rem; 
+			margin-right: 0.2rem; 
+		}
+	</style>
+
+	<div class="row text-xs-center p-a-1" style="max-height: 40vh; overflow: scroll;">
+		<div class="col-sm-4" >
+			<span  ng-repeat="tagObj in data.tags | filter:{ donated: true, processable: true, donor_number: search.donor_number, bristol_score: search.bristol_score, notes: search.notes}"><span class="p-x-tiny label label-success" ng-repeat="tag in tagObj.tag_list">{{ tag }}</span></span>
+		</div>
+		<div class="col-sm-4" >
+			<span  ng-repeat="tagObj in data.tags | filter:{ donated: false, processable: false, donor_number: search.donor_number, bristol_score: search.bristol_score, notes: search.notes}"><span class="p-x-tiny label label-warning" ng-repeat="tag in tagObj.tag_list">{{ tag }}</span></span>
+		</div>
+		<div class="col-sm-4" >
+			<span  ng-repeat="tagObj in data.tags | filter:{ donated: true, processable: false, donor_number: search.donor_number, bristol_score: search.bristol_score, notes: search.notes}"><span class="p-x-tiny label label-danger" ng-repeat="tag in tagObj.tag_list">{{ tag }}</span></span>
+		</div>
+
+	</div>
+
+	<div class="table-responsive">
+		<table class="table">
+
+			<thead>
+				<tr>
+					<th ng-click="sortType = 'donor_number'; sortReverse = !sortReverse"><span>Donor ID
+						<i class="fa fa-caret-down" ng-show="sortType == 'donor_number' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'donor_number' && sortReverse"></i></span>
+					</th>
+					<th ng-click="sortType = 'time_of_passage'; sortReverse = !sortReverse"><span>TOP
+						<i class="fa fa-caret-down" ng-show="sortType == 'time_of_passage' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'time_of_passage' && sortReverse"></i></span>
+					</th>
+					<th ng-click="sortType = 'donated'; sortReverse = !sortReverse"><span>Donated
+						<i class="fa fa-caret-down" ng-show="sortType == 'donated' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'donated' && sortReverse"></i></span>
+					</th>
+					<th ng-click="sortType = 'processable'; sortReverse = !sortReverse"><span>Processable
+						<i class="fa fa-caret-down" ng-show="sortType == 'processable' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'processable' && sortReverse"></i></span>
+					</th>
+					<th ng-click="sortType = 'bristol_score'; sortReverse = !sortReverse"><span>B
+						<i class="fa fa-caret-down" ng-show="sortType == 'bristol_score' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'bristol_score' && sortReverse"></i></span>
+					</th>
+					<th ng-click="sortType = 'weight'; sortReverse = !sortReverse"><span>Weight
+						<i class="fa fa-caret-down" ng-show="sortType == 'weight' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'weight' && sortReverse"></i></span>
+					</th>
+					<th ng-click="sortType = 'notes'; sortReverse = !sortReverse"><span>Notes
+						<i class="fa fa-caret-down" ng-show="sortType == 'notes' && !sortReverse"></i>
+						<i class="fa fa-caret-up" ng-show="sortType == 'notes' && sortReverse"></i></span>
+					</th>
+					<th>Matching OBL?</th>
+				</tr>
+			</thead>
+
+			<tbody>
+
+					<tr ng-repeat="log in data.donorLogs | orderBy:sortType:sortReverse | filter:{ donor_number: search.donor_number, bristol_score: search.bristol_score, notes: search.notes} as filtered">
+						<th scope="row">
+							<h3 class="text-info" ng-click="search.donor_number = log.donor_number">
+								{{ log.donor_number }}
+							</h3>
+						</th>
+						<td><span class="text-primary">{{ log.time_of_passage |date:'short'}}</span></td>
+						<td><i ng-class="{'fa fa-circle text-success': log.donated, 'fa fa-circle text-warning': !log.donated}"></i></td>
+						<td><i ng-class="{'fa fa-circle text-success': log.processable, 'fa fa-circle text-danger': (log.donated && !log.processable)}"></i></td>
+						<td><span class="bristol bristol-bg{{log.bristol_score}}" ng-click="search.bristol_score = log.bristol_score" style="color: white;">&nbsp;{{ log.bristol_score }}&nbsp;</span></td>
+						<td><span class="text-primary">{{ log.weight }}</span></td>
+						<td><span class="text-primary">{{ log.notes }}</span></td>
+						<td>
+							<i ng-class="{'fa fa-circle text-success': log.has_match, 'fa fa-circle-o text-danger': !log.has_match}"></i>
+						</td>
+					</tr>
+				
+			</tbody>
+		</table>
+	</div>
+
+
+</div>
+
+

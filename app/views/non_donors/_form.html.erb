@@ -1,0 +1,34 @@
+
+    <%= form_for(@non_donor) do |f| %>
+      <% if @non_donor.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@non_donor.errors.count, "error") %> prohibited this non_donor from being saved:</h2>
+    
+          <ul>
+          <% @non_donor.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+    
+      <div class="field form-group">
+        <%= f.label :email %><br>
+        <%= f.text_field :email, class:'form-control' %>
+      </div>
+      <div class="field form-group">
+        <%= f.label :message %><br>
+
+        <%= f.text_area :message, placeholder: 'something on your mind?',class:'form-control' %>
+        <small class="text-muted">( Yep, I will actually read your messages. Late at night with glass of wine by the warm glow of the fireplace. That's how we do. Seriously. I might even respond, so check yourself. )</small>
+      </div>
+      <div class="field form-group">
+        <p><%= t('activerecord.attributes.non_donor.newsletter_ok') %></p>
+        <%= f.check_box :newsletter_ok, class:'form-control' %>
+      </div>
+      <br>
+      <div class="actions">
+        <%= f.submit 'Sign me up!', class:'btn  btn-success' %>
+      </div>
+    <% end %>
+  

@@ -1,0 +1,38 @@
+tr.log-match-first {
+	border-left: 0.5rem solid $q3;
+}
+tr.log-match-second {
+	border-left: 0.5rem solid $q2;
+	font-size: 0.9rem;
+	td {
+		// padding-top: 0.1rem;
+		line-height: 1rem;
+	}
+}
+
+
+.moment-picker-container {
+	position: relative !important;
+  top: 5vh !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+// span.moment-picker {
+// 		position: relative !important;
+// 	  top: -50vh !important;
+// 	  margin-left: auto !important;
+// 	  margin-right: auto !important;
+// }
+
+.rzslider .rz-bar {
+	background: white ;
+	height: 0.2rem !important;
+}
+
+.rzslider .rz-bubble {
+	bottom: 1.5rem !important;
+}
+
+.form-control.rzslider {
+	border: none !important;
+}

@@ -1,0 +1,44 @@
+<div class="row"><div class="col-sm-10 col-sm-offset-1">
+		<div class="card card-block">
+				
+				<p class="card-text">
+					Your API key will allow you to connect to the API endpoints namespaced under <code>/api/v1/</code>, or to pair with the <a href="" class="text-primary">iOS mobile app</a>. 
+				</p>
+	
+				<% unless @user.demo %>
+				<% if @user_api_key %>
+	
+			  	<p class="text-xs-center text-muted">
+			  		<%= @user_api_key.access_token unless @user.demo %> <br>
+			  	</p>
+	
+			  	<p>
+			  		If you ever need to disable API access to your Spoop account, just <%= link_to 'destroy this key', destroy_api_key_user_path(@user), class:'text-danger' %>. Don't worry, you can create a new one! 
+			  	</p>
+			  
+			  <% else %>
+	
+					
+			  	<%= link_to create_api_key_user_path(@user) do %>
+			  		<button class="btn btn-primary">Create key</button>
+			  	<% end %>
+	
+	
+			  <% end %>
+			  <% else %> <!-- user is demo -->
+					<p class="text-xs-center text-muted">
+						your-real-api-key-will-be-here
+					</p>
+					<p>
+						If you ever need to disable API access to your Spoop account, just <span class="text-danger">destroy this key</span>. Don't worry, you can create a new one! 
+					</p>
+			  <% end %>
+	
+			</div> <!-- !.card -->
+	
+		<!-- <div class="row m-t-2">
+			<h3>Wait, the endpoints?</h3>
+	
+		</div> -->
+	
+	</div> <!-- !.col-sm-10 --></div>
