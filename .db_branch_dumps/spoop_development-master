@@ -375,13 +375,12 @@ ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 CREATE TABLE users (
     id integer NOT NULL,
-    donor_id integer,
+    donor_id character varying NOT NULL,
     role character varying,
     name character varying,
     donor_since timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    email character varying DEFAULT ''::character varying NOT NULL,
     encrypted_password character varying DEFAULT ''::character varying NOT NULL,
     reset_password_token character varying,
     reset_password_sent_at timestamp without time zone,
@@ -402,7 +401,9 @@ CREATE TABLE users (
     read_the_fine_print boolean DEFAULT false NOT NULL,
     demo boolean DEFAULT false NOT NULL,
     admin_secret character varying,
-    "group" character varying
+    "group" character varying,
+    encrypted_email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_email_iv character varying DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -8144,6 +8145,7 @@ COPY ahoy_events (id, visit_id, user_id, name, properties, "time") FROM stdin;
 7580	29	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 00:12:11.586512
 7581	29	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 00:26:31.33588
 7582	29	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 00:26:33.028851
+7769	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:45:12.853807
 7583	29	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 00:26:33.130992
 7584	29	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 00:30:02.429392
 7585	29	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 00:30:04.178753
@@ -8171,6 +8173,356 @@ COPY ahoy_events (id, visit_id, user_id, name, properties, "time") FROM stdin;
 7607	29	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 00:51:55.440088
 7608	29	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 00:51:57.263032
 7609	29	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 00:51:57.336735
+7610	\N	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 11:10:45.763278
+7611	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 11:10:59.946772
+7612	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 11:50:58.789995
+7613	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 11:51:01.723303
+7614	30	1	sessions#create	{"utf8":"✓","authenticity_token":"WrYkF5OGAo0EQpyIOeHjaQ8YUSXkEcd1KjYZ8M+cT5QTRqNb8Sw6Swo46Cj1Nl7aSb8aAiQrErYliNm3rda5JA==","user":{"donor_id":"438","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 11:51:05.512823
+7615	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 11:51:06.898984
+7616	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 11:51:08.032051
+7617	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 11:51:08.300794
+7618	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 11:51:25.193093
+7619	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"8d9VBlKqHAihaCr1/Z07TcK/HWQuhcU85ZxmS9Bfz5Lfrm4dwpFyo1ffvTetGtVxeUu+NQS3YRZfzOnnDQm/ZQ==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 11:51:53.228547
+7620	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"okTau31WlWDvzsNbPQXo1+foRx1DBSHem8Jco+2UjYCMNeGg7W37yxl5VJltggbrXBzkTGk3hfQhktMPMML9dw==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 11:52:03.487704
+7621	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 11:56:44.053546
+7622	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 11:56:52.667142
+7623	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"l37IgN1ZEqEStsSs5ux8nwHOqJmp3WkG60xnnyihwHK5D/ObTWJ8CuQBU262a5KjujoLyIPvzSxRHOgz9fewhQ==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 11:57:04.279042
+7624	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 12:07:06.010307
+7625	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 12:07:11.622491
+7626	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"3nCQZ9s8mmrsHm2Cob/jDAqxDohZW8oOIvE+STNBwtDwAat8Swf0wRqp+kDxOA0wsUWt2XNpbiSYobHl7heyJw==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 12:07:25.299006
+7627	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 12:15:01.380563
+7628	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:15:03.349477
+7629	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 12:15:07.125353
+7630	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"sh40ff1ykNc/Y5HYYYy0UpR6qv6szy0W+R58cBda19ucbw9mbUn+fMnUBhoxC1puL44Jr4b9iTxDTvPcygynLA==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 12:15:15.392731
+7631	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 12:17:00.13675
+7632	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:17:02.247439
+7633	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:17:02.291683
+7634	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 12:17:13.856682
+7635	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:17:15.870144
+7636	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:17:15.945333
+7637	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 12:17:19.40613
+7638	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 12:31:30.009297
+7639	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:31:32.078064
+7640	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:31:32.124209
+7641	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 12:31:35.972662
+7642	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"B3JxEnEsfrF73ZHcDVd0tKbknERVdSJ4VMAaLaYcG4EpA0oJ4RcQGo1qBh5d0JqIHRA/FX9HhlLukJWBe0prdg==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 12:31:47.525064
+7643	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 12:44:02.976195
+7644	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"wgGS14ndu/CaxD3hzOhh8/DSzHjuNV3bopPj/iWByQDscKnMGebVW2xzqiOcb4/PSyZvKcQH+fEYw2xS+Ne59w==","user":{"email":"[FILTERED]","donor_id":"438a","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 12:44:17.501935
+7645	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 12:49:52.345168
+7646	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:49:54.299642
+7647	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 12:49:54.356115
+7648	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 12:49:59.708585
+7649	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"O7/yUUVRyh5aBxljzknMS2Spk6TM8KNklNQgs3Q6RFwVzslK1WqktaywjqGeziJ3310w9ebCB04uhK8fqWw0qw==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 12:50:09.592072
+7650	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 13:00:00.765392
+7651	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:00:02.721963
+7652	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:00:07.50085
+7653	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"1B5lnTUZGKNfOWyZvVZacKY4gffcMwZ98GQ1SOM1aSL6b16GpSJ2CKmO+1vt0bRMHcwipvYBoldKNLrkPmMZ1Q==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 13:00:17.05223
+7654	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 13:47:10.442401
+7655	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:47:12.331804
+7656	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:47:12.410553
+7657	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:47:17.326417
+7658	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"YctkeR58VgWJM0OnjD8vupU/wxGXr7RceNUG84WzAaVPul9ijkc4rn+E1GXcuMGGLstgQL2dEHbChYlfWOVxUg==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 13:47:25.48596
+7659	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 13:51:03.318195
+7660	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:51:05.477522
+7661	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:51:05.518755
+7662	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:51:09.807851
+7663	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:51:24.935458
+7664	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"TwS5aqfIUN3QFWnbB3mWVMo7aMaBX2OmXbSwsNe0bixhdYJxN/M+diai/hlX/nhocc/Ll6ttx4zn5D8cCuIe2w==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 13:51:32.475832
+7665	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:52:34.495314
+7666	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"XS/u/MTLYnJ05Np7JRVwsmGwMm0qO81Z4rNbq7b14DFzXtXnVPAM2YJTTbl1kp6O2kSRPAAJaXNY49QHa6OQxg==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 13:52:41.587347
+7667	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:53:31.45218
+7668	30	1	registrations#update	{"utf8":"✓","_method":"put","authenticity_token":"DPX5Ch+ZvLYwEZuxvTRVA5x02nFfZiG/ke+nuY2iSTcihMIRj6LSHcamDHPts7s/J4B5IHVUhZUrvygVUPQ5wA==","user":{"email":"[FILTERED]","donor_id":"438","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"commit":"Update","controller":"registrations","action":"update"}	2016-06-15 13:53:38.56719
+7669	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 13:53:39.571367
+7670	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:53:40.611572
+7671	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:53:40.728676
+7672	30	1	confirmations#show	{"confirmation_token":"cunUt_UJjdRKc6GtJtd7","controller":"devise/confirmations","action":"show"}	2016-06-15 13:54:41.230358
+7673	30	1	index#home	{"controller":"index","action":"home"}	2016-06-15 13:54:41.316006
+7674	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 13:54:42.195967
+7675	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:54:43.936509
+7676	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 13:54:43.973045
+7677	30	1	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 13:55:32.364692
+7678	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"R9/z49U1SvbSZfhuvUFMTlf2aebsgV0amQj/gBgzwrJprsj4RQ4kXSTSb6ztxqJy7ALKt8az+TAjWHAsxWWyRQ==","controller":"devise/sessions","action":"destroy"}	2016-06-15 13:57:43.472843
+7679	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 13:57:43.746374
+7680	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 13:58:24.903986
+7681	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 13:59:39.427547
+7682	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:00:54.390205
+7683	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:02:05.550078
+7684	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:02:41.435362
+7685	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:02:48.531397
+7686	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:03:28.50242
+7687	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:04:47.402673
+7688	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:05:08.487369
+7689	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:05:19.124765
+7690	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:05:27.262124
+7691	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:05:38.648252
+7692	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:07:03.824316
+7693	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:09:05.231639
+7695	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:09:44.056612
+7696	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:10:12.526259
+7697	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:10:28.261919
+7698	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:10:41.457406
+7699	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:10:57.878234
+7700	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"yFEzO/2czcZsZhxjlfI6Ua5H+7QzL1In4t4XieHxv6w9PfTFauS6uv0uERhqxhyCnVbEcRbsaaxDgvYuFsd7gg==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 14:18:41.62364
+7703	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:19:19.231052
+7705	30	81	users#show	{"controller":"users","action":"show","id":"81"}	2016-06-15 14:20:22.034554
+7708	30	81	donor_logs#create	{"utf8":"✓","authenticity_token":"qBJl85Os6jwrsen0rbCA09EbFFhd2Mqs2915Pj1BgQoyDZnD3bESmOjhfDSiFzFzGnlYKsl0QDJPOfSa/PBbhQ==","donor_log":{"time_of_passage":"June 15, 2016 10:20 AM","notes":"#miccheck","bristol_score":"4","weight":"99","donated":"true","processable":"true"},"button":"","controller":"donor_logs","action":"create","user_id":"81"}	2016-06-15 14:20:43.559621
+7710	30	81	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:20:44.11899
+7712	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:22:57.813725
+7713	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:23:56.049494
+7714	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:23:57.562976
+7715	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:24:15.997907
+7716	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:24:28.186408
+7717	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:25:24.878427
+7718	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:25:55.70886
+7719	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:26:08.39855
+7720	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:27:34.851187
+7721	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:27:42.396638
+7722	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:27:52.672164
+7723	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:28:13.337979
+7724	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:28:26.328932
+7725	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:28:39.479606
+7726	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:29:15.043796
+7727	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:29:27.462415
+7728	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:30:11.332111
+7729	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:30:56.114043
+7730	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:32:24.442465
+7731	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:32:40.241043
+7732	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:32:50.842153
+7733	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:33:28.609728
+7734	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:33:40.534624
+7735	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:34:04.666715
+7736	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:34:46.457078
+7737	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:35:34.106301
+7738	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"c+3ZilqKqTryxW4Gv42PvyU2zzLwXKcQl6xgqIFaiCHp8iW6FJdRnjGV+8awKj4f7lSDQGTwLY4DSO0MQOtSrg==","controller":"devise/sessions","action":"destroy"}	2016-06-15 14:35:36.534237
+7745	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:40:29.633506
+7747	30	\N	sessions#new	{"utf8":"✓","authenticity_token":"9gvrzPeU3d9ng8cG86bEpv0GRBhQw22tnzTOfaY/tqqx+Bx/EDpc3I1gEVPyX8in4xQL/f2ZthNeLTfhSZH1/Q==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:40:40.034676
+7749	30	\N	confirmations#show	{"confirmation_token":"ys7Hs6dn6zu2vmSFrfEv","controller":"devise/confirmations","action":"show"}	2016-06-15 14:40:58.79631
+7751	30	\N	confirmations#create	{"utf8":"✓","authenticity_token":"gsOqO2XEbJd4rz2t00A2E/ruGFq0D1o1l+IrWbC2purFMF2IgmrtlJJM6/jSuToS5PxXvxlVgYtW+9LFXxjlvQ==","user":{"email":"[FILTERED]"},"commit":"Resend confirmation instructions","controller":"devise/confirmations","action":"create"}	2016-06-15 14:41:42.725298
+7754	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:42:19.32665
+7756	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:42:30.076007
+7758	30	\N	sessions#new	{"utf8":"✓","authenticity_token":"1/B5sCLtI5cCAbCT6iIfGPVUPmwIjr396QUfJHhbaBaQA44DxUOilOjiZsbr2xMZ60ZxiaXUZkMoHOa4l/UrQQ==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:42:42.996822
+7760	30	\N	passwords#new	{"controller":"devise/passwords","action":"new"}	2016-06-15 14:44:18.351196
+7763	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:44:44.551917
+7765	30	82	passwords#update	{"utf8":"✓","_method":"put","authenticity_token":"Cokar7TDb4+AcdghkgRhq4tSXZRqfTPDvF618IYPpH5Neu0cU23ujGqSDnST/W2qlUAScccn6H19R0xsaaHnKQ==","user":{"reset_password_token":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]"},"commit":"Change my password","controller":"devise/passwords","action":"update"}	2016-06-15 14:45:07.319321
+7694	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:09:08.380947
+7701	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:18:42.166265
+7702	30	\N	confirmations#show	{"confirmation_token":"ys7Hs6dn6zu2vmSFrfEv","controller":"devise/confirmations","action":"show"}	2016-06-15 14:19:18.939251
+7704	30	81	sessions#create	{"utf8":"✓","authenticity_token":"nuCIRBZ3Q65ZWLsCMGlPMtsoM512T2lhAtFMC1XwwnxrjE+6gQ800sgQtnnPXWnh6DkMWFOMUuqjja2sosYGUg==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:19:37.080116
+7706	30	81	users#begin	{"controller":"users","action":"begin","id":"81"}	2016-06-15 14:20:22.358606
+7707	30	81	donor_logs#new	{"controller":"donor_logs","action":"new","user_id":"81"}	2016-06-15 14:20:36.002939
+7709	30	81	users#show	{"controller":"users","action":"show","id":"81"}	2016-06-15 14:20:43.811527
+7711	30	81	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:22:15.303615
+7739	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:35:36.991264
+7740	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:36:37.068838
+7741	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:36:44.757402
+7742	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:37:18.147007
+7743	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:38:10.485027
+7744	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"ANXzZuH92uRzy/u7j+37COBWVO7qR7bUkhHqFeEfiFtHJgTVBlNb55koLe6OFPcJ/kQbC0cdbWpTCBOJDrHLDA==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 14:40:29.397851
+7746	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:40:34.150277
+7748	30	\N	sessions#new	{"utf8":"✓","authenticity_token":"ldND4gOrDVZn7dF7SKj2FKQaEQzdXUa7Ut7e7SUGpvHSILRR5AWMVY0OBy5JUfoVughe6XAHnQWTxydxyqjlpg==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:40:47.428619
+7750	30	\N	confirmations#show	{"confirmation_token":"ys7Hs6dn6zu2vmSFrfEv","controller":"devise/confirmations","action":"show"}	2016-06-15 14:40:59.209123
+7752	30	\N	confirmations#show	{"confirmation_token":"ys7Hs6dn6zu2vmSFrfEv","controller":"devise/confirmations","action":"show"}	2016-06-15 14:42:14.288923
+7753	30	\N	confirmations#create	{"utf8":"✓","authenticity_token":"E37slizNhLRcvUsthA5MjZm+gNkbHyJCQRFAbRtXFhhUjRsly2MFt7ZenXiF90CMh6zPPLZF+fyACLnx9PlVTw==","user":{"donor_id":"106"},"commit":"Resend confirmation instructions","controller":"devise/confirmations","action":"create"}	2016-06-15 14:42:19.023575
+7755	30	\N	confirmations#show	{"confirmation_token":"de6VbDDAV9M6u6ghiyRZ","controller":"devise/confirmations","action":"show"}	2016-06-15 14:42:29.784995
+7757	30	\N	sessions#new	{"utf8":"✓","authenticity_token":"XuESFq/HcDEuX88WNFzczXldf6FUI1YPBTOKpSzfk8YZEuWlSGnxMsS8GUM1pdDMZ08wRPl5jbHEKnM5w3HQkQ==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:42:37.45252
+7759	30	\N	sessions#new	{"utf8":"✓","authenticity_token":"PEPpLVl0uZQUJJnWvwmzpMmlyfb4s9PnXOe5ghJBJvJ7sB6evto4l/7HT4O+8L+l17eGE1XpCFmd/kAe/e9lpQ==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:43:47.82362
+7761	30	\N	passwords#new	{"controller":"devise/passwords","action":"new"}	2016-06-15 14:44:37.496153
+7762	30	\N	passwords#create	{"utf8":"✓","authenticity_token":"ZlxZHpgf82/zpQZp4ZFva1v8hYpW3oiYqkZ0oLWit+shr66tf7FybBlG0DzgaGNqRe7Kb/uEUyZrX408Wgz0vA==","user":{"donor_id":"106"},"commit":"Send me reset password instructions","controller":"devise/passwords","action":"create"}	2016-06-15 14:44:44.336943
+7764	30	\N	passwords#edit	{"reset_password_token":"[FILTERED]","controller":"devise/passwords","action":"edit"}	2016-06-15 14:45:00.313349
+7766	30	82	users#show	{"controller":"users","action":"show","id":"82"}	2016-06-15 14:45:07.401
+7768	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"LMRYSiEFOcF6qUzaBJZZfuloqGHIrXwQDWEVoZVU6fNrN6/5xqu4wpBKmo8Fb1V/93rnhGX3p67MeOw9evqqpA==","controller":"devise/sessions","action":"destroy"}	2016-06-15 14:45:12.545991
+7770	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:45:22.932538
+7772	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"/IDDqlSWz2My+uHwND/y501o3zLzCGxaOMrBouqIfaw7/M1JhEwgES80V1EqD4FWCdSsK2hTCtczxmIqe0nUJg==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"1","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 14:45:44.494864
+7774	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:46:01.530424
+7777	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"4hvBDE3tw9G/EcUzTwWMa7AQsDl8CApHMHjQqUOU7X4lZ8/vnTcso6Lfc5JRNf/a9KzDIOdTbMo7dHMh0lVE9A==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 14:46:43.276317
+7779	30	\N	confirmations#show	{"confirmation_token":"fsp7xkxRBtXu6BHMPJt9","controller":"devise/confirmations","action":"show"}	2016-06-15 14:47:18.89102
+7781	30	84	sessions#create	{"utf8":"✓","authenticity_token":"+8BA3R0bhcVgaCIAQkYhK3GN6wy9/9Eder5AlWZfyME8vE4+zcFqt32mlKFcdlKaNTGYFSakt5BxsuMd955hSw==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:47:23.66099
+7783	30	84	users#begin	{"controller":"users","action":"begin","id":"84"}	2016-06-15 14:47:24.015001
+7786	30	84	users#begin	{"controller":"users","action":"begin","id":"84"}	2016-06-15 14:48:00.230122
+7788	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:48:23.177663
+7789	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:48:52.1338
+7791	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:49:04.581369
+7792	30	84	users#show	{"controller":"users","action":"show","id":"84"}	2016-06-15 14:49:06.492876
+7794	30	84	users#begin	{"controller":"users","action":"begin","id":"84"}	2016-06-15 14:49:25.391013
+7795	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:49:29.356307
+7797	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:49:37.667313
+7798	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:49:59.814929
+7799	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:50:10.886359
+7800	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:50:27.952163
+7767	30	82	users#begin	{"controller":"users","action":"begin","id":"82"}	2016-06-15 14:45:07.639661
+7771	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:45:25.632232
+7773	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:45:44.734074
+7775	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:46:16.420573
+7776	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"Y7MTtfhoSQ1lXXqB2nKPWUMVszne9IV8c5HPoMtfpTCkzx1WKLKmf3iTzCDEQvzoB6nAIEWv4/F4nWwoWp4Mug==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"1","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 14:46:26.531368
+7778	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:46:43.535556
+7780	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:47:19.159306
+7782	30	84	users#show	{"controller":"users","action":"show","id":"84"}	2016-06-15 14:47:23.761362
+7784	30	84	users#begin	{"controller":"users","action":"begin","id":"84"}	2016-06-15 14:47:52.984807
+7785	30	84	users#show	{"controller":"users","action":"show","id":"84"}	2016-06-15 14:48:00.012447
+7787	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:48:03.373551
+7790	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:48:54.043329
+7793	30	84	users#begin	{"controller":"users","action":"begin","id":"84"}	2016-06-15 14:49:06.696683
+7796	30	84	registrations#edit	{"controller":"registrations","action":"edit"}	2016-06-15 14:49:31.024377
+7802	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:51:06.97391
+7804	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"/qnwI3EOAHkDXZSboYaFo23Y8QerDLzT+PD1eY1Kkaug70HtynUyofleyxBvqPPFUppyG5bhiRAXKkTM6nriJQ==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 14:51:44.496352
+7806	30	\N	confirmations#show	{"confirmation_token":"KtC5HWjtb9zrecjhJcyL","controller":"devise/confirmations","action":"show"}	2016-06-15 14:51:57.690483
+7808	30	85	sessions#create	{"utf8":"✓","authenticity_token":"3JxHDxPIoXY7be+oA22ZKho8w2NzX1EWAEXh+DuHnxyC2vbBqLOTrsFusCPNQ+9MJX5Af06yZNXvn1BNXLfskg==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 14:52:05.223002
+7810	30	85	users#begin	{"controller":"users","action":"begin","id":"85"}	2016-06-15 14:52:05.558675
+7812	30	85	donor_logs#create	{"utf8":"✓","authenticity_token":"U0923b01oRDV+nrRACO1NB8Nopvso8efbNBEtSQNHX87HZv5hHnYUnhz9h+zs80Min+E0b7WaKL195sZskRfNQ==","donor_log":{"time_of_passage":"June 15, 2016 10:52 AM","notes":"#stuff","bristol_score":"4","weight":"112","donated":"true","processable":"true"},"button":"","controller":"donor_logs","action":"create","user_id":"85"}	2016-06-15 14:52:15.232318
+7814	30	85	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:52:15.996366
+7816	30	85	users#show	{"controller":"users","action":"show","id":"85"}	2016-06-15 14:52:55.035952
+7819	30	85	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:53:36.22635
+7822	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:54:00.818702
+7824	30	\N	sessions#new	{"utf8":"✓","authenticity_token":"qAZaCxmLTzyXllpYO5k0BBT66e/LnSoVt7tcWNyAF+QM00RxRtwkM9qkSx8NigY6ESqdF4ASA7rUcF6EpnyVag==","user":{"email":"[FILTERED]","password":"[FILTERED]"},"commit":"Demo \\u003e","controller":"devise/sessions","action":"create"}	2016-06-15 14:56:23.974206
+7826	30	62	sessions#create	{"utf8":"✓","authenticity_token":"9dppCf1dsCRPiGFBHZMD85Z9wE7ZatQcsyDyyuY/dTBRD3dzogrbKwK6cAYrgDHNk620tpLl/bPQ6/AWnMP3vg==","user":{"donor_id":"9999","password":"[FILTERED]"},"commit":"Demo \\u003e","controller":"devise/sessions","action":"create"}	2016-06-15 14:57:28.6801
+7828	30	62	users#begin	{"controller":"users","action":"begin","id":"62"}	2016-06-15 14:57:28.960184
+7830	30	62	donor_logs#create	{"utf8":"✓","authenticity_token":"dSqilpEZBVFhNKz3lOn2nj3vQ0IOTTffoHi2Mm+XzXm4vgZnSl4MVJLPVqSQ9vBPDDpEgfvdriPQD1XQJ/RF3Q==","donor_log":{"time_of_passage":"June 15, 2016 10:57 AM","notes":"","bristol_score":"4","weight":"98","donated":"true","processable":"true"},"button":"","controller":"donor_logs","action":"create","user_id":"62"}	2016-06-15 14:57:55.545691
+7832	30	62	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:57:56.233156
+7835	30	62	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:58:13.29019
+7838	30	62	users#show	{"controller":"users","action":"show","id":"62"}	2016-06-15 14:58:18.486272
+7839	30	62	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:58:19.476256
+7841	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 15:01:07.938099
+7843	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:01:09.778033
+7846	30	80	admin#donations	{"controller":"admin","action":"donations"}	2016-06-15 15:01:56.012389
+7848	30	80	admin#logs	{"controller":"admin","action":"logs"}	2016-06-15 15:01:57.894518
+7850	30	80	admin#humans	{"controller":"admin","action":"humans"}	2016-06-15 15:03:24.738818
+7851	30	80	admin#humans	{"controller":"admin","action":"humans"}	2016-06-15 15:07:39.448953
+7852	30	80	admin#humans	{"controller":"admin","action":"humans"}	2016-06-15 15:09:01.886069
+7853	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"E4U1pjwrhSSE3VJdVsnGHvWWl3CQbURJWNU3wcS3Rs3Lahbe688B6FmQV+HVcr7dipG6trrlQuoss3cnz/Dcnw==","controller":"devise/sessions","action":"destroy"}	2016-06-15 15:11:27.901504
+7855	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:11:31.67118
+7857	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"LJI3jlnEBJrad6UgVJ1mr6QgF6gB0F57bOLyW/QtpO8ZEi0WCoPGtUPpFj5dLS+n2vCr4zNF9Qm6FXTAVO1RmQ==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:11:57.931935
+7859	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:12:23.4975
+7860	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"y4R3SMlcZiP0ZP0oA6pfXuOy1h/DKn+phBnwP/5QF0X+BG3QmhukDG36TjYKGhZWnWJqVPG/1NtS7nakXpDiMw==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:12:32.382471
+7862	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:13:14.676571
+7863	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:13:17.538286
+7874	30	\N	confirmations#show	{"confirmation_token":"f4S2WuM_re1gAPxaR6zx","controller":"devise/confirmations","action":"show"}	2016-06-15 15:22:00.494137
+7920	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:35:05.005434
+7801	30	\N	registrations#destroy	{"utf8":"✓","_method":"delete","authenticity_token":"9j1GQ0s7Jo52lgrf4MxoyLa0X0c33TFEaQI4I4tY5rvCBNaOahnOqDoUw32pnfPV1FFaOKzw58+ODyHOe21aQA==","user":{"email":"[FILTERED]","donor_id":"106","password":"[FILTERED]","password_confirmation":"[FILTERED]","current_password":"[FILTERED]"},"controller":"registrations","action":"destroy"}	2016-06-15 14:51:06.716427
+7803	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:51:32.193756
+7805	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 14:51:44.751469
+7807	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 14:51:57.986235
+7809	30	85	users#show	{"controller":"users","action":"show","id":"85"}	2016-06-15 14:52:05.31641
+7811	30	85	donor_logs#new	{"controller":"donor_logs","action":"new","user_id":"85"}	2016-06-15 14:52:08.947629
+7813	30	85	users#show	{"controller":"users","action":"show","id":"85"}	2016-06-15 14:52:15.602893
+7815	30	85	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:52:16.027913
+7817	30	85	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:52:56.14422
+7818	30	85	users#show	{"controller":"users","action":"show","id":"85"}	2016-06-15 14:53:34.949439
+7820	30	85	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:53:36.256499
+7821	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"i9NYvYe3bX1wxqvrslx6fx8RVO6sMaLHFvKGJiZfoyrjgbWZvvsUP91PJyUBzAJHimNypP5EDfqP1VmKsBbhYA==","controller":"devise/sessions","action":"destroy"}	2016-06-15 14:54:00.625255
+7823	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:55:09.282146
+7825	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 14:57:26.86185
+7827	30	62	users#show	{"controller":"users","action":"show","id":"62"}	2016-06-15 14:57:28.747561
+7829	30	62	donor_logs#new	{"controller":"donor_logs","action":"new","user_id":"62"}	2016-06-15 14:57:52.321834
+7831	30	62	users#show	{"controller":"users","action":"show","id":"62"}	2016-06-15 14:57:55.867712
+7833	30	62	users#show	{"controller":"users","action":"show","id":"62"}	2016-06-15 14:58:12.220323
+7834	30	62	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:58:13.241822
+7836	30	62	users#show	{"controller":"users","action":"show","id":"62"}	2016-06-15 14:58:14.720456
+7837	30	62	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 14:58:15.881755
+7840	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"w89W8QEQgKj92TZo+TEnG70SoVMJfUJask4xxtXtmzYOW/IA2leJrQ4izDv9LiHKjMemkPzt26bCOdIknY4Tkg==","controller":"devise/sessions","action":"destroy"}	2016-06-15 15:01:07.679551
+7842	30	\N	confirmations#show	{"confirmation_token":"kSsF2hMkjaQ_zCCpaALT","controller":"devise/confirmations","action":"show"}	2016-06-15 15:01:09.575271
+7844	30	80	sessions#create	{"utf8":"✓","authenticity_token":"L4c8GAWFlIQMvO01P/u1EJI+Bn2UwPYGAzsEwXaGRfTHjA30NKnXFiPh7FR2HW+DoybqJyjqbjqFJD5b+5GEjA==","user":{"donor_id":"10024","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 15:01:27.937928
+7845	30	80	admin#humans	{"controller":"admin","action":"humans"}	2016-06-15 15:01:28.366324
+7847	30	80	admin#ob_logs_by_donor_daily	{"controller":"admin","action":"ob_logs_by_donor_daily"}	2016-06-15 15:01:56.192748
+7849	30	80	admin#humans	{"controller":"admin","action":"humans"}	2016-06-15 15:02:00.974647
+7854	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 15:11:28.103408
+7856	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"AlNEhrr90bG+qNMEZ08Nzay6nbV5FdMDSkvgHX5VQO83014e6boTnic2YBpu/0TF0moh/kuAeHGcvGaG3pW1mQ==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:11:46.97613
+7858	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:11:58.20398
+7861	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:12:32.641901
+7865	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:13:26.417861
+7869	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"QVfjTQ6S2O7qzDQ74S0Fer1KBPimwB+jwQAbIquonX101/nVXdUawXNShyXonUxyw5q4s5RVtNEX9525C2hoCw==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:15:38.681593
+7873	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:21:49.477339
+7875	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:22:00.807186
+7877	30	89	users#show	{"controller":"users","action":"show","id":"89"}	2016-06-15 15:22:06.790685
+7879	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"yxZpBND0zInRsl3gKLLsXfrKiLiiuw9Fa1NOKCqzATRBMHVrJfHwXw2WFw0u+bmnYaSrK2km2emywNg3YsDmtQ==","controller":"devise/sessions","action":"destroy"}	2016-06-15 15:22:25.853364
+7864	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"MQZXywz2/6ScnPYn708lqD7iqlTH3osHVSb7gz8YT2IEhk1TX7E9iwUCRTnm/2ygQDIWH/VLIHWD0X0Yn9i6FA==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:13:26.157736
+7866	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:15:01.433638
+7867	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:15:23.434021
+7868	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:15:30.839561
+7870	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"QVfjTQ6S2O7qzDQ74S0Fer1KBPimwB+jwQAbIquonX101/nVXdUawXNShyXonUxyw5q4s5RVtNEX9525C2hoCw==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:16:15.672055
+7871	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"QVfjTQ6S2O7qzDQ74S0Fer1KBPimwB+jwQAbIquonX101/nVXdUawXNShyXonUxyw5q4s5RVtNEX9525C2hoCw==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:18:27.93647
+7872	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"WiZgZDCIDwvBUZ46sfbRNLztIC8h8TcNMk2mF9vxuB5vpnr8Y8/NJFjPLSS4Rpg8wj2cZBNknH/kuiCMezFNaA==","user":{"email":"[FILTERED]","role":"donor","group":"open_biome","donor_id":"106","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:21:49.158856
+7876	30	89	sessions#create	{"utf8":"✓","authenticity_token":"mlEwG0GOsnAgfMr0MC+XqUMQy8ODTmFTQWy0Jmw3Rkav0SqDEslwX7nieeo5n96hPcB3iLHbyiGXmzK9zPezMA==","user":{"donor_id":"106","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 15:22:06.632929
+7878	30	89	users#begin	{"controller":"users","action":"begin","id":"89"}	2016-06-15 15:22:07.059801
+7880	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 15:22:26.13152
+7881	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 15:26:39.278958
+7882	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:26:44.703766
+7883	30	\N	confirmations#new	{"controller":"devise/confirmations","action":"new"}	2016-06-15 15:26:53.720706
+7884	30	\N	confirmations#create	{"utf8":"✓","authenticity_token":"q9ViIXSpR7NbuXK1yKlK+DhKV6B4aqVP93/oI3K9ojqJ+GIyK5tKIOQFS91NjkvLTKJXXHXfQJdj7+zU3e7/nw==","user":{"donor_id":"438"},"commit":"Resend confirmation instructions","controller":"devise/confirmations","action":"create"}	2016-06-15 15:26:58.669273
+7885	30	\N	confirmations#create	{"utf8":"✓","authenticity_token":"q9ViIXSpR7NbuXK1yKlK+DhKV6B4aqVP93/oI3K9ojqJ+GIyK5tKIOQFS91NjkvLTKJXXHXfQJdj7+zU3e7/nw==","user":{"donor_id":"438"},"commit":"Resend confirmation instructions","controller":"devise/confirmations","action":"create"}	2016-06-15 15:27:24.561933
+7886	30	\N	confirmations#create	{"utf8":"✓","authenticity_token":"P/awtpIULkc/5uhZ1kUcze6TCa51DrLQeHn3aS6w1zUd27ClzSYj1IBa0TFTYh3+mnsJUni7Vwjs6fOegeOKkA==","user":{"donor_id":"438"},"commit":"Resend confirmation instructions","controller":"devise/confirmations","action":"create"}	2016-06-15 15:27:29.672781
+7887	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:27:40.974115
+7888	30	1	sessions#create	{"utf8":"✓","authenticity_token":"65qDmE9bJIcd4zA/KbaNJajWp5vCq6EycV51i0ImQPPJt4OLEGkpFKJfCVeskYwW3D6nZ88eROrlznF87XUdVg==","user":{"donor_id":"438","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 15:27:46.092491
+7889	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 15:27:47.007708
+7890	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 15:27:48.506397
+7891	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 15:27:48.891395
+7892	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 15:29:04.328116
+7893	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 15:29:06.032651
+7894	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 15:29:06.148309
+7895	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"zSHZ3mERKT8wCU7BCOij5iVcFQVRJ5jrZsPnDynFhlohUFlVEvkAzhUMgJOJo6Cv0bIVwdsMOwLH0qn6AEnkYA==","controller":"devise/sessions","action":"destroy"}	2016-06-15 15:29:10.358821
+7896	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 15:29:10.573813
+7897	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:29:14.184769
+7898	30	\N	confirmations#new	{"controller":"devise/confirmations","action":"new"}	2016-06-15 15:29:17.442437
+7899	30	\N	confirmations#create	{"utf8":"✓","authenticity_token":"TPW3MlMjG0lekkbf9dbqVBmD4hXwtZWQW0N5SZylYuZLQf6MgHwr/fJ9/KLT0eFUZfeIdGBSpeAt4VEiT62A8A==","user":{"donor_id":"438"},"commit":"Resend confirmation instructions","controller":"devise/confirmations","action":"create"}	2016-06-15 15:29:20.716026
+7900	30	\N	passwords#new	{"controller":"devise/passwords","action":"new"}	2016-06-15 15:29:38.949345
+7901	30	\N	passwords#create	{"utf8":"✓","authenticity_token":"Q6jQj5yk6Shm85cGcXBvHALhxC6IM5Vgng7Ok41o3B5EHJkxT/vZnMocLXtXd2QcfpWuTxjUpRDorOb4XmA+CA==","user":{"donor_id":"438"},"commit":"Send me reset password instructions","controller":"devise/passwords","action":"create"}	2016-06-15 15:29:42.913447
+7902	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:29:43.113234
+7903	30	\N	passwords#edit	{"reset_password_token":"[FILTERED]","controller":"devise/passwords","action":"edit"}	2016-06-15 15:29:57.709304
+7904	30	\N	passwords#update	{"utf8":"✓","_method":"put","authenticity_token":"O9GfsJlR0gfact/Kae8v7YHMX7mgxafYeyuZH0oThgM8ZdYOSg7is3adZbdP6CTt/bg12DAil6gNibF0mRtkFQ==","user":{"reset_password_token":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]"},"commit":"Change my password","controller":"devise/passwords","action":"update"}	2016-06-15 15:30:04.976513
+7905	30	\N	passwords#update	{"utf8":"✓","_method":"put","authenticity_token":"Y++LE8P2xjH+SH360lCjTG/wRpyJaDFV/opkHhUb/TlkW8KtEKn2hVKnx4f0V6hME4Qs/RmPASWIKEx1xhMfLw==","user":{"reset_password_token":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]"},"commit":"Change my password","controller":"devise/passwords","action":"update"}	2016-06-15 15:30:19.089564
+7906	30	\N	passwords#edit	{"reset_password_token":"[FILTERED]","controller":"devise/passwords","action":"edit"}	2016-06-15 15:32:30.090412
+7907	30	\N	passwords#update	{"utf8":"✓","_method":"put","authenticity_token":"VZjR5HBCjfl0ADw0r94f/Zoor/UxZgPBEYxrjkb+DB9SLJhaox29TdjvhkmJ2RT95lzFlKGBM7FnLkPllfbuCQ==","user":{"reset_password_token":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]"},"commit":"Change my password","controller":"devise/passwords","action":"update"}	2016-06-15 15:32:36.190795
+7908	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:32:55.505915
+7909	30	\N	passwords#new	{"controller":"devise/passwords","action":"new"}	2016-06-15 15:32:58.800502
+7910	30	\N	passwords#create	{"utf8":"✓","authenticity_token":"tk1XekC3CP10ANUBBqx4+8lbh6A+CJVr6mL/R02yhASx+R7Ek+g4Sdjvb3wgq3P7tS/twa7vpRucwNcsnrpmEg==","user":{"donor_id":""},"commit":"Send me reset password instructions","controller":"devise/passwords","action":"create"}	2016-06-15 15:33:00.556789
+7911	30	\N	passwords#create	{"utf8":"✓","authenticity_token":"5to/QMXb/R+Ari4CgOQ8pW15i5raJjobxK2Gh2GAxybhbnb+FoTNqyxBlH+m4zelEQ3h+0rBCmuyD67ssoglMA==","user":{"donor_id":"438"},"commit":"Send me reset password instructions","controller":"devise/passwords","action":"create"}	2016-06-15 15:33:05.048649
+7912	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:33:05.330444
+7913	30	\N	passwords#edit	{"reset_password_token":"[FILTERED]","controller":"devise/passwords","action":"edit"}	2016-06-15 15:33:13.183103
+7914	30	1	passwords#update	{"utf8":"✓","_method":"put","authenticity_token":"b/gvfbqrD7ixLUUYI9BNP+51k9BYa+TZMJhjtdMo17xoTGbDafQ/DB3C/2UF10Y/kgH5sciM1KlGOkveACA1qg==","user":{"reset_password_token":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]"},"commit":"Change my password","controller":"devise/passwords","action":"update"}	2016-06-15 15:33:18.916068
+7915	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 15:33:20.035281
+7916	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 15:33:21.207337
+7917	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 15:33:21.266383
+7918	30	\N	sessions#destroy	{"_method":"delete","authenticity_token":"tv60qEytJJTKSM/lQRxQ6APmSO1Asgppi92MXWDzPLOxSv0Wn/IUIGandZhnG1vof5IijNBVOhn9f6Q2s/vepQ==","controller":"devise/sessions","action":"destroy"}	2016-06-15 15:33:25.699207
+7919	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 15:33:26.024774
+7921	30	\N	passwords#new	{"controller":"devise/passwords","action":"new"}	2016-06-15 15:35:07.354674
+7922	30	\N	passwords#new	{"controller":"devise/passwords","action":"new"}	2016-06-15 15:35:24.14319
+7923	30	\N	passwords#create	{"utf8":"✓","authenticity_token":"uZOuWBd5+4VoQlOXx2gnPQHT/avvwrjC5NS5LVm5ML9GL1LeN+SFe1gdi5Pj54b9zzbODidutiHFAXMqyY+ubw==","user":{"donor_id":"10024"},"commit":"Send me reset password instructions","controller":"devise/passwords","action":"create"}	2016-06-15 15:35:29.274061
+7924	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:35:29.524323
+7925	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:35:47.271177
+7926	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:36:18.168493
+7927	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:36:37.927569
+7928	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:36:44.80089
+7929	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:37:00.663814
+7930	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:37:13.266465
+7931	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:37:44.569131
+7932	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:40:18.429649
+7933	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:40:22.839474
+7934	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:40:26.296898
+7935	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:41:05.625863
+7936	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"ULAvc5fJ2Xc/LwC1CnFuYvDx5HvBbDPUHPje4tKvavuvDNP1t1SniQ9w2LEu/s+iPhTX3gnAPTc9LRTlQpn0Kw==","user":{"email":"[FILTERED]","role":"admin","group":"open_biome","donor_id":"","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:41:36.68206
+7937	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:43:26.890875
+7938	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"jkPcbLdGFvBa2xNQLWKSwxSpRsKvpI6B36q2RBByFsxx/yDql9toDmqEy1QJ7TMD2kx1Z2cIgGL+f3xDgESIHA==","user":{"email":"[FILTERED]","role":"admin","group":"open_biome","donor_id":"","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:43:46.426133
+7939	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:45:26.606717
+7940	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:46:43.052757
+7941	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:47:53.030463
+7942	30	\N	registrations#create	{"utf8":"✓","authenticity_token":"JzO4imFX8c2Tf/m5iqTgCsjs2iUSt5iYr5iqppOVQ0jYj0QMQcqPM6MgIb2uK0HKBgnpgNoblnuOTWChA6PdmA==","user":{"email":"[FILTERED]","role":"admin","group":"open_biome","donor_id":"","admin_secret":"[FILTERED]","password":"[FILTERED]","password_confirmation":"[FILTERED]","read_the_fine_print":"1"},"commit":"Sign up","controller":"registrations","action":"create"}	2016-06-15 15:48:10.269102
+7943	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:48:10.506352
+7944	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:48:58.347821
+7945	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 15:50:36.505186
+7946	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 15:50:56.51114
+7947	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 16:03:58.681942
+7948	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 16:04:49.630921
+7949	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 16:05:05.237911
+7950	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 16:05:07.610541
+7951	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 16:05:23.286877
+7952	30	\N	index#home	{"controller":"index","action":"home"}	2016-06-15 16:06:06.837629
+7953	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 16:09:58.587761
+7954	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 16:10:03.907945
+7955	30	\N	registrations#new	{"controller":"registrations","action":"new"}	2016-06-15 17:47:53.944613
+7956	30	\N	sessions#new	{"controller":"devise/sessions","action":"new"}	2016-06-15 17:49:17.308966
+7958	30	1	users#show	{"controller":"users","action":"show","id":"1"}	2016-06-15 17:49:35.620127
+7960	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 17:49:36.751741
+7957	30	1	sessions#create	{"utf8":"✓","authenticity_token":"uiffmLO1R1GlACUbG6IR7p+SOexM/gQEAoW+3LqwigdFmyMekyg5r5Vf/R8/LbAuUXcKSYRSCucjUHTbKoYU1w==","user":{"donor_id":"438","password":"[FILTERED]","remember_me":"0"},"commit":"Log in","controller":"devise/sessions","action":"create"}	2016-06-15 17:49:34.682927
+7959	30	1	donor_logs#heatmap	{"controller":"api/v1/donor_logs","action":"heatmap"}	2016-06-15 17:49:36.677744
 \.
 
 
@@ -8178,7 +8530,7 @@ COPY ahoy_events (id, visit_id, user_id, name, properties, "time") FROM stdin;
 -- Name: ahoy_events_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('ahoy_events_id_seq', 7609, true);
+SELECT pg_catalog.setval('ahoy_events_id_seq', 7960, true);
 
 
 --
@@ -8212,6 +8564,7 @@ COPY api_keys (id, user_id, access_token, role, expires_at, created_at, updated_
 75	59	groovy-sea-green-plaid-lazy-susan	donor	2019-05-31 12:54:49.614979	2016-05-31 12:54:49.546212	2016-05-31 12:54:49.546212
 76	60	sugarfilled-onyx-argyle-suit	donor	2019-05-31 12:54:50.315197	2016-05-31 12:54:50.251688	2016-05-31 12:54:50.251688
 77	61	splendid-lime-houndstooth-chandelier	donor	2019-05-31 12:54:51.087081	2016-05-31 12:54:51.016658	2016-05-31 12:54:51.016658
+108	92	strong-tangello-matte-president	admin	2019-06-15 15:48:09.933035	2016-06-15 15:48:09.842417	2016-06-15 15:48:09.842417
 \.
 
 
@@ -8219,7 +8572,7 @@ COPY api_keys (id, user_id, access_token, role, expires_at, created_at, updated_
 -- Name: api_keys_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('api_keys_id_seq', 96, true);
+SELECT pg_catalog.setval('api_keys_id_seq', 108, true);
 
 
 --
@@ -8269,6 +8622,7 @@ COPY donor_logs (id, user_id, bristol_score, weight, donated, processable, notes
 798	1	4	44	t	t	does this make a #metalog?	2016-06-12 16:47:00	2016-06-12 04:00:00	2016-06-12 16:47:37.940136	2016-06-12 18:27:07.475571	t	438
 794	1	2	99	t	f	Skateboard jean shorts bespoke mustache. #tacos #leggings	2016-06-07 13:50:00	2016-06-07 04:00:00	2016-06-07 13:54:09.744	2016-06-12 18:27:07.557966	f	438
 795	1	5	111	t	t	Tilde seitan wayfarers squid thundercats. #try-hard #knausgaard #chillwave  and but what if i keep belaroing i=on and on about the fixity of hte incasdfinve	2016-06-07 13:54:00	2016-06-07 04:00:00	2016-06-07 13:55:03.172303	2016-06-12 18:27:07.698392	f	438
+828	62	4	98	t	t		2016-06-15 14:57:00	2016-06-15 04:00:00	2016-06-15 14:57:55.52939	2016-06-15 14:57:55.52939	t	9999
 \.
 
 
@@ -8276,7 +8630,7 @@ COPY donor_logs (id, user_id, bristol_score, weight, donated, processable, notes
 -- Name: donor_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('donor_logs_id_seq', 825, true);
+SELECT pg_catalog.setval('donor_logs_id_seq', 828, true);
 
 
 --
@@ -8410,6 +8764,7 @@ COPY meta_logs (id, user_id, donor_log_id, open_biome_log_id, time_of_passage, d
 3327	1	813	\N	1970-01-01 00:00:00	1970-01-01 05:00:00
 3338	1	824	\N	2016-06-14 18:39:00	2016-06-14 04:00:00
 3339	1	825	\N	2016-06-14 18:40:00	2016-06-14 04:00:00
+3342	62	828	\N	2016-06-15 14:57:00	2016-06-15 04:00:00
 \.
 
 
@@ -8417,7 +8772,7 @@ COPY meta_logs (id, user_id, donor_log_id, open_biome_log_id, time_of_passage, d
 -- Name: meta_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('meta_logs_id_seq', 3339, true);
+SELECT pg_catalog.setval('meta_logs_id_seq', 3342, true);
 
 
 --
@@ -8569,6 +8924,12 @@ COPY schema_migrations (version) FROM stdin;
 20160612143700
 20160612152822
 20160612170021
+20160615101608
+20160615111404
+20160615111716
+20160615124839
+20160615135003
+20160615152518
 \.
 
 
@@ -8636,7 +8997,7 @@ COPY taggings (id, tag_id, taggable_id, taggable_type, tagger_id, tagger_type, c
 -- Name: taggings_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('taggings_id_seq', 406, true);
+SELECT pg_catalog.setval('taggings_id_seq', 408, true);
 
 
 --
@@ -8653,7 +9014,6 @@ COPY tags (id, name, taggings_count) FROM stdin;
 53	cold	0
 86	testes	1
 26	poutine	1
-88	stuff	1
 89	were	0
 10	good	0
 9	more	0
@@ -8733,6 +9093,8 @@ COPY tags (id, name, taggings_count) FROM stdin;
 64	bitters	0
 29	leggings	2
 39	celiac	2
+90	miccheck	0
+88	stuff	1
 \.
 
 
@@ -8740,40 +9102,41 @@ COPY tags (id, name, taggings_count) FROM stdin;
 -- Name: tags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('tags_id_seq', 89, true);
+SELECT pg_catalog.setval('tags_id_seq', 90, true);
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: ia
 --
 
-COPY users (id, donor_id, role, name, donor_since, created_at, updated_at, email, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, confirmation_token, confirmed_at, confirmation_sent_at, unconfirmed_email, failed_attempts, unlock_token, locked_at, donor_logs_are_private_by_default, read_the_fine_print, demo, admin_secret, "group") FROM stdin;
-45	503	donor	alverta	\N	2016-05-31 12:54:39.060424	2016-06-08 11:59:13.92317	eddie.hahn@gmail.com	$2a$11$UM1IswvQrzFDSCHGpoxyMuTxvKU1DFtLFtqN6iHJ5u48wdZo7LjeK	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:39.057623	\N	\N	0	\N	\N	t	t	f	\N	\N
-46	2111	donor	cornelius_spinka	\N	2016-05-31 12:54:39.616342	2016-06-08 11:59:13.941481	emilie_gibson@yahoo.com	$2a$11$nZ2nkd9RLSQmqFLTccedjeOA09o9yRENe5YxCKubcmaIkmcIshjV.	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:39.612556	\N	\N	0	\N	\N	t	t	f	\N	\N
-47	4244	donor	odie	\N	2016-05-31 12:54:40.478347	2016-06-08 11:59:13.946276	jarret.runte@hotmail.com	$2a$11$rqKlwlbjDicUzn3/0/WuP.nJXfyxYAH.aS994f82N/0DkpHRlYy4i	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:40.475505	\N	\N	0	\N	\N	t	t	f	\N	\N
-48	5840	donor	alverta	\N	2016-05-31 12:54:41.019189	2016-06-08 11:59:13.95115	hadley@gmail.com	$2a$11$di3h0MbdEPsrE1Z3QPm/PePZte.UjeDZX.CrPUrutDjtmtSG7wJGG	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:41.014756	\N	\N	0	\N	\N	t	t	f	\N	\N
-49	4531	donor	darrell.schowalter	\N	2016-05-31 12:54:41.981569	2016-06-08 11:59:13.955073	cynthia.romaguera@yahoo.com	$2a$11$ABKP8d3QRbv2sV6UyEHoouroJ1zIFS8yuwnSQfY6D8S0OyYtltOBO	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:41.97801	\N	\N	0	\N	\N	t	t	f	\N	\N
-50	7997	donor	herman.cruickshank	\N	2016-05-31 12:54:42.466678	2016-06-08 11:59:13.972126	aurore@yahoo.com	$2a$11$AQS4XHs2IAkqrNau/Jn88.wbgs9Nhe.CcaRscRxYutzQgwm2.AL.W	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:42.462567	\N	\N	0	\N	\N	t	t	f	\N	\N
-51	3185	donor	janelle.feest	\N	2016-05-31 12:54:43.03543	2016-06-08 11:59:13.977341	pearlie_mcclure@hotmail.com	$2a$11$58E1yAkfrH9eWbuogJggCek/uFdACq.GgVPk7omv6cqG1q.LrDSRy	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:43.03175	\N	\N	0	\N	\N	t	t	f	\N	\N
-52	9094	donor	maye	\N	2016-05-31 12:54:43.596203	2016-06-08 11:59:13.981589	trea.hane@hotmail.com	$2a$11$A8228sXSwC24rGl9TEFJYuSTdQzM5sLwQtiC9OJQHXWRV1l0goVAa	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:43.590957	\N	\N	0	\N	\N	t	t	f	\N	\N
-53	8314	donor	brennan_daugherty	\N	2016-05-31 12:54:44.149543	2016-06-08 11:59:13.987347	lizzie.zulauf@hotmail.com	$2a$11$FQz.YqtaviPqe0b2Nf.Y0O3y9PaGZDunAqWQgNN7JK9ji0AQiq2f6	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:44.145968	\N	\N	0	\N	\N	t	t	f	\N	\N
-54	9937	donor	josie	\N	2016-05-31 12:54:45.249153	2016-06-08 11:59:13.99126	eunice.mcglynn@yahoo.com	$2a$11$lodvlLByTdmAmK/G6y8Y1uZLecsAj7pm.nAe3MvPswJe90qb004Zm	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:45.246014	\N	\N	0	\N	\N	t	t	f	\N	\N
-55	1947	donor	heloise	\N	2016-05-31 12:54:45.825613	2016-06-08 11:59:13.995319	stephon@yahoo.com	$2a$11$pNiXz1LlGLyyXpUH5t.kTOtSdAwcmZn1EEUzCDqtUYhoGpjnn3U42	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:45.820686	\N	\N	0	\N	\N	t	t	f	\N	\N
-56	1574	donor	madalyn	\N	2016-05-31 12:54:46.964381	2016-06-08 11:59:13.999209	eino@gmail.com	$2a$11$y1AaAQ4SV6F6SDyznSo7IeVCDAt2U.PsO1bSMMhHPrulqS4sjjZL6	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:46.96124	\N	\N	0	\N	\N	t	t	f	\N	\N
-57	6780	donor	nayeli	\N	2016-05-31 12:54:47.842242	2016-06-08 11:59:14.003111	marianne@yahoo.com	$2a$11$B0pTOhKPjfHXsQ2c8ZA07efiJIoRpYG0hiiU9X.7jVOw0Dm9WjhLa	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:47.839033	\N	\N	0	\N	\N	t	t	f	\N	\N
-58	1362	donor	johan	\N	2016-05-31 12:54:48.65327	2016-06-08 11:59:14.007455	marshall@hotmail.com	$2a$11$TujTuuO7AeeFM53YA9NoF.GUV71LtMi5WvUIJ/AI3q6zBfmlYFJga	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:48.650451	\N	\N	0	\N	\N	t	t	f	\N	\N
-59	6391	donor	tiara.rowe	\N	2016-05-31 12:54:49.543968	2016-06-08 11:59:14.024131	destini.wuckert@gmail.com	$2a$11$Fg6uXM8uYkEBOpt4K.MjOOTu4WquUC8pOZojWKfUi9ah5vpT4pD1S	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:49.541097	\N	\N	0	\N	\N	t	t	f	\N	\N
-60	6287	donor	weston	\N	2016-05-31 12:54:50.249491	2016-06-08 11:59:14.028488	vesta@gmail.com	$2a$11$fGi0Yt4v1CdXjSVGct7VMuWC1udhptoym8Fz.UjeLjg9W1i9KQC2y	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:50.246425	\N	\N	0	\N	\N	t	t	f	\N	\N
-61	9092	donor	anabel	\N	2016-05-31 12:54:51.014429	2016-06-08 11:59:14.032643	jayde.schuppe@gmail.com	$2a$11$9eJQqQspsRH2GyVNrynLCuDUi2U.kjXYys8LkV6dUzPo488UxaMva	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:51.011484	\N	\N	0	\N	\N	t	t	f	\N	\N
-44	4335	donor	tiffany.effertz	\N	2016-05-31 12:54:38.373673	2016-06-08 11:59:14.037634	sofia.hartmann@yahoo.com	$2a$11$js6KuAAsLLDvl9pmIaVsJ.Q7ZzWyoKNzfGAfecSmI5/klXoHIwJiu	\N	\N	\N	1	2016-05-31 12:57:46.39827	2016-05-31 12:57:46.39827	::1	::1	\N	2016-05-31 12:54:38.349286	\N	\N	0	\N	\N	t	t	f	\N	\N
-63	71	donor	\N	\N	2016-06-02 11:43:46.900445	2016-06-11 14:10:15.997332	z@z.com	$2a$11$3GgnMgjlj/Q/4xtCLxWTcuML26gvM.fwDhJkSsRYbkyPcGHuCNeaq	\N	\N	\N	0	\N	\N	\N	\N	D7zs2az8cEK-CrV2-Ndu	\N	2016-06-02 11:43:46.900973	\N	0	\N	\N	t	t	f	\N	open_biome
-67	\N	admin	\N	\N	2016-06-08 18:08:31.687173	2016-06-14 17:41:16.593544	kelly@openbiome.org	$2a$11$EMDXMUjtcjLkO9VmzeO0nO4kSRveGlt5bmNj7YEEtQZsE3DL60NdS	\N	\N	\N	4	2016-06-14 17:41:16.590885	2016-06-14 17:07:11.137398	::1	::1	T8y2aUC3jCmsoKhWKLk1	2016-06-08 18:09:05.691711	2016-06-08 18:08:31.687557	\N	0	\N	\N	t	t	f	MlduTDltL1BBV2dVOGd1c25DeEZuZkt1UW5lWG9mV1FhOW9vcmxJZGlwdkx2MDVRM1JRUUtaZkxiQVd3LzY0Uy0tdU9Fa0c0UUhGSHVBdzZ5cGtHWER0QT09--da20d22ced5813dc5a29a2495df5118d218e46f8	open_biome
-78	\N	admin	\N	\N	2016-06-14 17:22:55.985365	2016-06-14 17:25:35.793142	majdi@openbiome.org	$2a$11$F3595j17BhRduaX.aKgWoelPHf.pB8/TcKkRU8o.yo6l20K7jw2Qe	\N	\N	\N	1	2016-06-14 17:25:35.791687	2016-06-14 17:25:35.791687	::1	::1	ryxACahZiyQPmn9yG8_w	2016-06-14 17:25:18.392561	2016-06-14 17:22:55.985811	\N	0	\N	\N	t	t	f	VUVjUlZaYmdlTkFIN1ArdHJMb3AwVXlBN0Y0Z09JMUd6WkNTcjJkZHdmUStIK0xsd25JSE9Da0NvU3VUWXBjZC0tWVdKQi9ROUZwVHhZZ1JLUVhmeVlBZz09--1db53b07fdbf9a8fd26475a20f585123f7330900	open_biome
-62	9999	donor	\N	\N	2016-06-02 00:21:45.441772	2016-06-12 10:46:11.081725	mrroboto@spoop.info	$2a$11$hD45hFhdGEt1TSfLbF/KwuuhBbcgRfgEldvVNlDgh/OEzh/0gQ9zu	\N	\N	\N	22	2016-06-12 10:46:11.076827	2016-06-11 14:41:05.99659	::1	::1	M9TCo1BKRFGpfJ6Vp1ap	2016-06-02 00:21:58.798889	2016-06-02 00:21:45.442362	\N	0	\N	\N	t	t	t	\N	open_biome
-1	438	donor	Isaac	\N	2016-05-21 22:33:09.72656	2016-06-15 00:02:45.572684	isaac.ardis@gmail.com	$2a$11$8G6H6zS6G2ccm8ejEVZmROPXYLu1plpK6D09WriCIMb3HfmDIM4yC	\N	\N	\N	65	2016-06-15 00:02:45.56612	2016-06-14 18:32:48.876764	::1	::1	BcxpssMnmygviA1eBk-q	2016-05-21 22:33:17.747175	2016-05-21 22:33:09.727018	\N	0	\N	\N	t	t	f	\N	open_biome
-65	\N	admin	\N	\N	2016-06-08 16:51:39.134094	2016-06-11 14:13:51.563041	ryan.elliot@gmail.com	$2a$11$3oT42.3jo103uJCeMcaleO/mqpCDN4Km9TUI6wy6X8FUxEqC3fNbi	\N	\N	\N	3	2016-06-11 14:13:51.560057	2016-06-08 16:57:37.981782	::1	::1	\N	2016-06-08 16:51:37.095302	\N	\N	0	\N	\N	t	t	f	\N	open_biome
-80	\N	admin	\N	\N	2016-06-14 17:28:42.493374	2016-06-14 17:28:42.493374	zac@openbiome.org	$2a$11$OkfVd9wE.4y9kd0jSANw/uIFH6aLtaQ0Qv4Cezm1n7qTj09ibb0gi	\N	\N	\N	0	\N	\N	\N	\N	SAjZvUJTCsoc_RyZnM7r	\N	2016-06-14 17:28:42.493863	\N	0	\N	\N	t	t	f	Qk1TRFhReFc5V29tT2htVG1tQkxZL25hZTdpWldGVTRGeWxoN0trOHUyTWZHQ2FrWXFiYndkaTdDUVZnSGI2Qy0tZWJaZlJ4Z2xyOG1xRitlZTkvREYyZz09--b27735f8153a222f31f6fa0fe1d2e00bf0e1729b	open_biome
-76	\N	admin	\N	\N	2016-06-09 11:13:05.146675	2016-06-14 18:32:34.51443	rotblauer@gmail.com	$2a$11$CZZuqAATajIva6Q6vC5GBO/9uBMZAVtV.I64F1/RFobeLl9MxJhOG	\N	\N	\N	18	2016-06-14 18:32:34.511778	2016-06-14 17:45:06.551072	::1	::1	VavZP8kVAC3sTpUGStVU	2016-06-09 11:15:17.169475	2016-06-09 11:13:05.147035	\N	0	\N	\N	t	t	f	OTF3bjJvOWhBS0dHdnZBVzJ3WS9xU2wrVmdvaUl5YVBCcVBUdW9wMXNRZ2JSK0MxZzNjdWlHSzBuOW1GWTdRRi0tY21rckgwWEwyclB4bGlhSEF4T1hWdz09--b72200e53fc21da57a6ff9435d14f2ebf37b3d8c	site
+COPY users (id, donor_id, role, name, donor_since, created_at, updated_at, encrypted_password, reset_password_token, reset_password_sent_at, remember_created_at, sign_in_count, current_sign_in_at, last_sign_in_at, current_sign_in_ip, last_sign_in_ip, confirmation_token, confirmed_at, confirmation_sent_at, unconfirmed_email, failed_attempts, unlock_token, locked_at, donor_logs_are_private_by_default, read_the_fine_print, demo, admin_secret, "group", encrypted_email, encrypted_email_iv) FROM stdin;
+45	503	donor	alverta	\N	2016-05-31 12:54:39.060424	2016-06-15 10:37:31.449385	$2a$11$UM1IswvQrzFDSCHGpoxyMuTxvKU1DFtLFtqN6iHJ5u48wdZo7LjeK	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:39.057623	\N	\N	0	\N	\N	t	t	f	\N	\N		
+46	2111	donor	cornelius_spinka	\N	2016-05-31 12:54:39.616342	2016-06-15 10:37:31.465305	$2a$11$nZ2nkd9RLSQmqFLTccedjeOA09o9yRENe5YxCKubcmaIkmcIshjV.	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:39.612556	\N	\N	0	\N	\N	t	t	f	\N	\N		
+47	4244	donor	odie	\N	2016-05-31 12:54:40.478347	2016-06-15 10:37:31.468106	$2a$11$rqKlwlbjDicUzn3/0/WuP.nJXfyxYAH.aS994f82N/0DkpHRlYy4i	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:40.475505	\N	\N	0	\N	\N	t	t	f	\N	\N		
+48	5840	donor	alverta	\N	2016-05-31 12:54:41.019189	2016-06-15 10:37:31.470407	$2a$11$di3h0MbdEPsrE1Z3QPm/PePZte.UjeDZX.CrPUrutDjtmtSG7wJGG	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:41.014756	\N	\N	0	\N	\N	t	t	f	\N	\N		
+49	4531	donor	darrell.schowalter	\N	2016-05-31 12:54:41.981569	2016-06-15 10:37:31.472847	$2a$11$ABKP8d3QRbv2sV6UyEHoouroJ1zIFS8yuwnSQfY6D8S0OyYtltOBO	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:41.97801	\N	\N	0	\N	\N	t	t	f	\N	\N		
+50	7997	donor	herman.cruickshank	\N	2016-05-31 12:54:42.466678	2016-06-15 10:37:31.475378	$2a$11$AQS4XHs2IAkqrNau/Jn88.wbgs9Nhe.CcaRscRxYutzQgwm2.AL.W	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:42.462567	\N	\N	0	\N	\N	t	t	f	\N	\N		
+51	3185	donor	janelle.feest	\N	2016-05-31 12:54:43.03543	2016-06-15 10:37:31.477651	$2a$11$58E1yAkfrH9eWbuogJggCek/uFdACq.GgVPk7omv6cqG1q.LrDSRy	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:43.03175	\N	\N	0	\N	\N	t	t	f	\N	\N		
+52	9094	donor	maye	\N	2016-05-31 12:54:43.596203	2016-06-15 10:37:31.480565	$2a$11$A8228sXSwC24rGl9TEFJYuSTdQzM5sLwQtiC9OJQHXWRV1l0goVAa	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:43.590957	\N	\N	0	\N	\N	t	t	f	\N	\N		
+53	8314	donor	brennan_daugherty	\N	2016-05-31 12:54:44.149543	2016-06-15 10:37:31.48283	$2a$11$FQz.YqtaviPqe0b2Nf.Y0O3y9PaGZDunAqWQgNN7JK9ji0AQiq2f6	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:44.145968	\N	\N	0	\N	\N	t	t	f	\N	\N		
+54	9937	donor	josie	\N	2016-05-31 12:54:45.249153	2016-06-15 10:37:31.48578	$2a$11$lodvlLByTdmAmK/G6y8Y1uZLecsAj7pm.nAe3MvPswJe90qb004Zm	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:45.246014	\N	\N	0	\N	\N	t	t	f	\N	\N		
+55	1947	donor	heloise	\N	2016-05-31 12:54:45.825613	2016-06-15 10:37:31.488932	$2a$11$pNiXz1LlGLyyXpUH5t.kTOtSdAwcmZn1EEUzCDqtUYhoGpjnn3U42	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:45.820686	\N	\N	0	\N	\N	t	t	f	\N	\N		
+56	1574	donor	madalyn	\N	2016-05-31 12:54:46.964381	2016-06-15 10:37:31.491581	$2a$11$y1AaAQ4SV6F6SDyznSo7IeVCDAt2U.PsO1bSMMhHPrulqS4sjjZL6	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:46.96124	\N	\N	0	\N	\N	t	t	f	\N	\N		
+57	6780	donor	nayeli	\N	2016-05-31 12:54:47.842242	2016-06-15 10:37:31.494294	$2a$11$B0pTOhKPjfHXsQ2c8ZA07efiJIoRpYG0hiiU9X.7jVOw0Dm9WjhLa	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:47.839033	\N	\N	0	\N	\N	t	t	f	\N	\N		
+58	1362	donor	johan	\N	2016-05-31 12:54:48.65327	2016-06-15 10:37:31.497082	$2a$11$TujTuuO7AeeFM53YA9NoF.GUV71LtMi5WvUIJ/AI3q6zBfmlYFJga	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:48.650451	\N	\N	0	\N	\N	t	t	f	\N	\N		
+59	6391	donor	tiara.rowe	\N	2016-05-31 12:54:49.543968	2016-06-15 10:37:31.500372	$2a$11$Fg6uXM8uYkEBOpt4K.MjOOTu4WquUC8pOZojWKfUi9ah5vpT4pD1S	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:49.541097	\N	\N	0	\N	\N	t	t	f	\N	\N		
+60	6287	donor	weston	\N	2016-05-31 12:54:50.249491	2016-06-15 10:37:31.502665	$2a$11$fGi0Yt4v1CdXjSVGct7VMuWC1udhptoym8Fz.UjeLjg9W1i9KQC2y	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:50.246425	\N	\N	0	\N	\N	t	t	f	\N	\N		
+61	9092	donor	anabel	\N	2016-05-31 12:54:51.014429	2016-06-15 10:37:31.505482	$2a$11$9eJQqQspsRH2GyVNrynLCuDUi2U.kjXYys8LkV6dUzPo488UxaMva	\N	\N	\N	0	\N	\N	\N	\N	\N	2016-05-31 12:54:51.011484	\N	\N	0	\N	\N	t	t	f	\N	\N		
+44	4335	donor	tiffany.effertz	\N	2016-05-31 12:54:38.373673	2016-06-15 10:37:31.507697	$2a$11$js6KuAAsLLDvl9pmIaVsJ.Q7ZzWyoKNzfGAfecSmI5/klXoHIwJiu	\N	\N	\N	1	2016-05-31 12:57:46.39827	2016-05-31 12:57:46.39827	::1	::1	\N	2016-05-31 12:54:38.349286	\N	\N	0	\N	\N	t	t	f	\N	\N		
+63	71	donor	\N	\N	2016-06-02 11:43:46.900445	2016-06-15 15:25:57.141416	$2a$11$3GgnMgjlj/Q/4xtCLxWTcuML26gvM.fwDhJkSsRYbkyPcGHuCNeaq	\N	\N	\N	0	\N	\N	\N	\N	41eBG7_WBm2XVSzwgpJX	\N	2016-06-15 15:25:57.142776	z@z.com	0	\N	\N	t	t	f	\N	open_biome		TopCaYcRi5xd1M0j\n
+67	10019	admin	\N	\N	2016-06-08 18:08:31.687173	2016-06-15 15:25:57.153925	$2a$11$EMDXMUjtcjLkO9VmzeO0nO4kSRveGlt5bmNj7YEEtQZsE3DL60NdS	\N	\N	\N	4	2016-06-14 17:41:16.590885	2016-06-14 17:07:11.137398	::1	::1	JZyQPzzmP2t3YRbqf6eU	2016-06-08 18:09:05.691711	2016-06-15 15:25:57.154919	kelly@openbiome.org	0	\N	\N	t	t	f	MlduTDltL1BBV2dVOGd1c25DeEZuZkt1UW5lWG9mV1FhOW9vcmxJZGlwdkx2MDVRM1JRUUtaZkxiQVd3LzY0Uy0tdU9Fa0c0UUhGSHVBdzZ5cGtHWER0QT09--da20d22ced5813dc5a29a2495df5118d218e46f8	open_biome		WoXIKQ5FJ5VjqEUT\n
+65	10023	admin	\N	\N	2016-06-08 16:51:39.134094	2016-06-15 15:25:57.16491	$2a$11$3oT42.3jo103uJCeMcaleO/mqpCDN4Km9TUI6wy6X8FUxEqC3fNbi	\N	\N	\N	3	2016-06-11 14:13:51.560057	2016-06-08 16:57:37.981782	::1	::1	MZMCSUjHDdWmpsVukxPd	2016-06-08 16:51:37.095302	2016-06-15 15:25:57.16604	ryan.elliot@gmail.com	0	\N	\N	t	t	f	\N	open_biome		3oNLH8IsAB8sDb36\n
+1	438	donor	Isaac	\N	2016-05-21 22:33:09.72656	2016-06-15 17:49:34.665255	$2a$11$eHeGfvMhvyzT23bs0YjayuYR3HM4z2M.xH9crBYpc0yWUyMsBw0PW	\N	\N	\N	69	2016-06-15 17:49:34.66157	2016-06-15 15:33:18.851079	::1	::1	cunUt_UJjdRKc6GtJtd7	2016-06-15 13:54:41.21191	2016-06-15 13:53:38.068702	\N	0	\N	\N	t	t	f	\N	open_biome	63RhgVHwyghhJWbQ/CqIOo497hc0HxOC82716LyyTyShXqsGmw==\n	tfm+9ZyXcL3zl886\n
+78	10020	admin	\N	\N	2016-06-14 17:22:55.985365	2016-06-15 15:25:57.158696	$2a$11$F3595j17BhRduaX.aKgWoelPHf.pB8/TcKkRU8o.yo6l20K7jw2Qe	\N	\N	\N	1	2016-06-14 17:25:35.791687	2016-06-14 17:25:35.791687	::1	::1	ksZyzu69_6SEi61ZkHvc	2016-06-14 17:25:18.392561	2016-06-15 15:25:57.159649	majdi@openbiome.org	0	\N	\N	t	t	f	VUVjUlZaYmdlTkFIN1ArdHJMb3AwVXlBN0Y0Z09JMUd6WkNTcjJkZHdmUStIK0xsd25JSE9Da0NvU3VUWXBjZC0tWVdKQi9ROUZwVHhZZ1JLUVhmeVlBZz09--1db53b07fdbf9a8fd26475a20f585123f7330900	open_biome		StRMZ5mXb18IlsZ7\n
+76	10025	admin	\N	\N	2016-06-09 11:13:05.146675	2016-06-15 15:25:57.17045	$2a$11$CZZuqAATajIva6Q6vC5GBO/9uBMZAVtV.I64F1/RFobeLl9MxJhOG	\N	\N	\N	18	2016-06-14 18:32:34.511778	2016-06-14 17:45:06.551072	::1	::1	diVq9Mc1koUtySehEbDe	2016-06-09 11:15:17.169475	2016-06-15 15:25:57.171621	rotblauer@gmail.com	0	\N	\N	t	t	f	OTF3bjJvOWhBS0dHdnZBVzJ3WS9xU2wrVmdvaUl5YVBCcVBUdW9wMXNRZ2JSK0MxZzNjdWlHSzBuOW1GWTdRRi0tY21rckgwWEwyclB4bGlhSEF4T1hWdz09--b72200e53fc21da57a6ff9435d14f2ebf37b3d8c	site		hzanGKdbmts2BEM0\n
+62	9999	donor	\N	\N	2016-06-02 00:21:45.441772	2016-06-15 15:25:57.178547	$2a$11$hD45hFhdGEt1TSfLbF/KwuuhBbcgRfgEldvVNlDgh/OEzh/0gQ9zu	\N	\N	\N	23	2016-06-15 14:57:28.657997	2016-06-12 10:46:11.076827	::1	::1	PhZg6TDMysMx8vr8-HVp	2016-06-02 00:21:58.798889	2016-06-15 15:25:57.179555	mrroboto@spoop.info	0	\N	\N	t	t	t	\N	open_biome		YvegvgljT12Z0qEX\n
+80	10024	admin	\N	\N	2016-06-14 17:28:42.493374	2016-06-15 15:35:29.191835	$2a$11$OkfVd9wE.4y9kd0jSANw/uIFH6aLtaQ0Qv4Cezm1n7qTj09ibb0gi	c16a8b0e9ad316d14ad87db970499bccf40879ea350446dd6c97e6ce2e1af8fc	2016-06-15 15:35:29.190663	\N	1	2016-06-15 15:01:27.903848	2016-06-15 15:01:27.903848	::1	::1	Bx9UPy7vxqfcCitFimcG	2016-06-15 15:01:09.552603	2016-06-15 15:25:57.184102	zac@openbiome.org	0	\N	\N	t	t	f	Qk1TRFhReFc5V29tT2htVG1tQkxZL25hZTdpWldGVTRGeWxoN0trOHUyTWZHQ2FrWXFiYndkaTdDUVZnSGI2Qy0tZWJaZlJ4Z2xyOG1xRitlZTkvREYyZz09--b27735f8153a222f31f6fa0fe1d2e00bf0e1729b	open_biome	7gj7c8ExOs/gCW1KJuDZOv9L9qCFZysbUXmakb+upyYU\n	vbIQOVhX1f4kO9Sy\n
+92	81	admin	\N	\N	2016-06-15 15:48:09.801656	2016-06-15 15:48:09.801656	$2a$11$Z6tpB3KyTcZSfUuo2BPXgeub0sF0J2FJzbjoiTyeSBo.dNtiu41QO	\N	\N	\N	0	\N	\N	\N	\N	pk_cpVVeLuAq3wMwaTNG	\N	2016-06-15 15:48:09.802153	\N	0	\N	\N	t	t	f	VkZQNXZjS3VVRDRPYlJ4Rzk1dnNldEJtUlZObmVQUGpBakxmc2JobTRuRVhTMmd4MEJwL2JjYTBUMnZrTnBROC0tMC9NbjI0ek91cjBIN0dkUXRDamorUT09--3839414c64d50dcb71b0801128e8cb13df6f7bd2	open_biome	rgUBsh0swPmtBRsMbb2HU9p8gBceDnUds8JxrQ9/Ww==\n	/lTBXKBfSqKS1/J2\n
 \.
 
 
@@ -8781,7 +9144,7 @@ COPY users (id, donor_id, role, name, donor_since, created_at, updated_at, email
 -- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('users_id_seq', 80, true);
+SELECT pg_catalog.setval('users_id_seq', 92, true);
 
 
 --
@@ -8818,6 +9181,7 @@ COPY visits (id, visit_token, visitor_token, ip, user_agent, referrer, landing_p
 27	53a9ac9a-347c-48bc-ba8e-e9e8ea51d225	e099fb31-6247-44c9-a50a-f189a4830616	::1	Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17	\N	http://localhost:3002/	\N	\N	\N	Safari	Mac OS X	Desktop	900	1440	Reserved	\N	\N	\N	0.0	0.0	\N	\N	\N	\N	\N	2016-06-14 08:38:02.886012
 28	5ad377cc-156f-4b42-a8a0-a92c201d6ba5	e099fb31-6247-44c9-a50a-f189a4830616	::1	Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17	\N	http://localhost:3002/	67	\N	\N	Safari	Mac OS X	Desktop	900	1440	Reserved	\N	\N	\N	0.0	0.0	\N	\N	\N	\N	\N	2016-06-14 15:05:53.7027
 29	6da64b65-5244-48ad-9c08-9b9bbaefdc87	e099fb31-6247-44c9-a50a-f189a4830616	::1	Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17	\N	http://localhost:3002/	1	\N	\N	Safari	Mac OS X	Desktop	900	1440	Reserved	\N	\N	\N	0.0	0.0	\N	\N	\N	\N	\N	2016-06-15 00:02:30.066331
+30	fcbd3c69-fd57-484a-8e43-4f3ba6dc772f	e099fb31-6247-44c9-a50a-f189a4830616	::1	Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/601.5.17 (KHTML, like Gecko) Version/9.1 Safari/601.5.17	\N	http://localhost:3002/	1	\N	\N	Safari	Mac OS X	Desktop	900	1440	Reserved	\N	\N	\N	0.0	0.0	\N	\N	\N	\N	\N	2016-06-15 11:10:46.56951
 \.
 
 
@@ -8825,7 +9189,7 @@ COPY visits (id, visit_token, visitor_token, ip, user_agent, referrer, landing_p
 -- Name: visits_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ia
 --
 
-SELECT pg_catalog.setval('visits_id_seq', 29, true);
+SELECT pg_catalog.setval('visits_id_seq', 30, true);
 
 
 --
@@ -9007,10 +9371,10 @@ CREATE UNIQUE INDEX index_users_on_donor_id ON users USING btree (donor_id);
 
 
 --
--- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: ia
+-- Name: index_users_on_encrypted_email; Type: INDEX; Schema: public; Owner: ia
 --
 
-CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
+CREATE INDEX index_users_on_encrypted_email ON users USING btree (encrypted_email);
 
 
 --
