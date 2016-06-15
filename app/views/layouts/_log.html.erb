@@ -6,11 +6,11 @@
 	
 <li class="list-group-item list-group-item-<%= processing_label(log)[:css] %> <%= log.class == OpenBiomeLog ? 'log-ob' : '' %> log-entry padding-light m-b-1" >
 
-	<div class="bristol bristol-bg<%= log.bristol_score %>" style="z-index: 1000; float: top; width: <%= "#{log.weight / @ds[:max]}%" %>; height: 0.3rem; border-radius: 0.15rem 0.15rem 0.15rem 0rem; margin-top: -10px; margin-left: -10px;" ></div>
+	<div class="bristol bristol-bg<%= log.bristol_score %>" style="z-index: 1000; float: top; width: <%= "#{log.weight / @ds[:max] * 0.9}%" %>; height: 0.3rem; border-radius: 0.15rem 0.15rem 0.15rem 0rem; margin-top: -10px; margin-left: -10px;" ></div>
 	
 
 	<% 
-			sides_ratio = (log.weight.to_f / @ds[:max].to_f ).round # is ratio
+			sides_ratio = (log.weight.to_f / @ds[:max].to_f * 0.9 ).round # is ratio
 			border_radius = sides_ratio / 2
 	%>
 

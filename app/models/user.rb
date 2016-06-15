@@ -83,8 +83,8 @@ class User < ActiveRecord::Base
 
 	validates :group, inclusion: { in: GROUPS }
 	
-	# VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a }  
-	# validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
+	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a }  
+	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
 	validates :donor_id, presence: true
 	validates :donor_id, uniqueness: true
 	
