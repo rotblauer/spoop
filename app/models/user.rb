@@ -73,8 +73,8 @@ class User < ActiveRecord::Base
 	# validates :email, uniqueness: true
 	# 
 	# validate :validate_email_uniqueness #validates_uniqueness_of :email, allow_blank: true, if: :email_changed?
-	# validates :email_encrypted, presence: true
-	validates_format_of :email, with: Devise.email_regexp, if: :email_changed? #, allow_blank: true,
+	validates :email, presence: true
+	validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
 	
 	validates :read_the_fine_print, inclusion: {in: [true]}
 	
