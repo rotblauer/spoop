@@ -1,9 +1,11 @@
+
 # Moving from :email -based setup to :donor_id is denoted by
 # MIGRATE TO DONOR ID --->
 # MIGRATE TO DONOR ID ---> (turn on and change)
 # 'change' means have made :email -> :donor_id.
 # 'turn on' means it was commented and I have uncommented it. 
 
+require 'confirmations_mailer'
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -22,6 +24,7 @@ Devise.setup do |config|
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
+  config.mailer = 'ConfirmationsMailer'
 
   # Configure the parent class responsible to send e-mails.
   # config.parent_mailer = 'ActionMailer::Base'

@@ -4,9 +4,7 @@ class ConfirmationsMailer < Devise::Mailer
 
   def confirmation_instructions(record, token, opts={})
    @token = token
-   #you can add your instance variables here
-   @role = record.role 
-   @donor_id = record.donor_id
+   @record = record
    devise_mail(record, :confirmation_instructions, opts)
   end
 end

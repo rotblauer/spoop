@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 	
 	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a }  
 	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
-	validates :donor_id, presence: true
+	validates :donor_id, presence: true, if: :donor?
 	validates :donor_id, uniqueness: true
 	
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
@@ -51,6 +51,7 @@ class User < ActiveRecord::Base
 
 
 	before_create :set_default_values
+	before_create :set_admin_number, if: :admin?
 	after_create :create_user_api_key
 	after_save :sync_api_key_role, if: :role_changed?
 
@@ -67,6 +68,10 @@ class User < ActiveRecord::Base
     self.role ||= 'donor'
     self.group ||= 'open_biome'
     self.donor_logs_are_private_by_default ||= true
+  end
+  def set_admin_number
+  	last_admin_number = User.admins.maximum(:donor_id)
+  	self.donor_id = last_admin_number.to_i + 1
   end
 
   # encrypt the admin secret before writing.

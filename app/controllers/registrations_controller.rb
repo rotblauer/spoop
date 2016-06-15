@@ -12,14 +12,6 @@ class RegistrationsController < Devise::RegistrationsController
       end
     end
 
-    # def sign_up_params
-    #   params.require(:user).permit(:email, :donor_id, :password, :password_confirmation, :read_the_fine_print, :role, :group, :admin_secret)
-    # end
-
-    # def account_update_params
-    #   params.require(:user).permit(:email, :donor_id, :password, :password_confirmation, :current_password)
-    # end
-
     def after_update_path_for(resource)
       current_user
     end

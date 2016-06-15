@@ -27,7 +27,7 @@
 
         <div id="donor-id-input" class="col-xs-7">
           <div class="field form-group">
-            <%= f.label :donor_id %>
+            <label>Donor number</label>
             <%= f.telephone_field :donor_id, class:'form-control' %>
             <p class="text-muted"><small>You'll use your donor number to log in once you're registered.</small></p>
           </div>
@@ -37,7 +37,7 @@
           <div class="field form-group">
             <%= f.label :admin_secret %> <!-- <br> -->
             <%= f.password_field :admin_secret, class: 'form-control' %>
-            <p class="text-muted"><small>Your admin number will be <strong><%= 10000 + User.admins.last.id + 1 %></strong>.</small></p>
+            <p class="text-muted"><small>You'll receive your admin number in the confirmation email.</small></p>
           </div>
         </div>
 
@@ -81,7 +81,7 @@
         <%= f.submit "Sign up", class:'btn btn-success' %>
       </div>
 
-      <div class="row p-y-1"><div class="col-xs-12">
+      <div class="row p-t-1"><div class="col-xs-12">
         
           <p class="text-info">
           <small>

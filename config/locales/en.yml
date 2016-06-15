@@ -28,7 +28,7 @@ en:
         other: Spoopers
     attributes:
       user: 
-        donor_id: 'Donor number'
+        donor_id: 'Donor or admin number'
         read_the_fine_print_with_link: 'I agree with %{href}'
         fine_print_link: 'the lawyers'
         read_the_fine_print: 'I agree with the lawyers'

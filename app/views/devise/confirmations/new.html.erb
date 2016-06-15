@@ -9,7 +9,7 @@
 	
 	  <div class="field form-group">
 	    <%= f.label :donor_id %><br />
-	    <%= f.telephone_field :donor_id, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class:'form-control' %>
+	    <%= f.telephone_field :donor_id, autofocus: true, value: (resource.pending_reconfirmation? ? resource.donor_id : resource.donor_id), class:'form-control' %>
 	  </div>
 	
 	  <div class="actions">
