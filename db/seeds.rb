@@ -6,6 +6,55 @@
 
 #########################################################
 
+isaac = User.new({
+    donor_id: 438,
+    email: 'isaac.ardis@gmail.com',
+    password: 'fluffy',
+    password_confirmation: 'fluffy',
+    read_the_fine_print: true,
+    group: 'open_biome',
+    role: 'donor'
+    })
+isaac.skip_confirmation!
+isaac.save
+
+roboto = User.new({
+    donor_id: 438,
+    email: 'mrroboto@spoop.info',
+    password: 'shitshitshit',
+    password_confirmation: 'shitshitshit',
+    read_the_fine_print: true,
+    group: 'open_biome',
+    role: 'donor'
+    })
+roboto.skip_confirmation!
+roboto.save
+
+kelly = User.new({
+    donor_id: 438,
+    email: 'kelly@openbiome.org',
+    password: 'shitshit',
+    password_confirmation: 'shitshit',
+    read_the_fine_print: true,
+    group: 'open_biome',
+    role: 'admin'
+    })
+kelly.skip_confirmation!
+kelly.save
+
+
+rb = User.new({
+    donor_id: 438,
+    email: 'rotblauer@gmail.com',
+    password: 'fluffier',
+    password_confirmation: 'fluffier',
+    read_the_fine_print: true,
+    group: 'site',
+    role: 'admin'
+    })
+rb.skip_confirmation!
+rb.save
+
 # Create approximately 18 users. 
 18.times do |t|
 	donor = User.new(	
@@ -216,7 +265,7 @@ DonorLog.all.each do |dl|
 end
 
 
-User.find_by_donor_id(438).donor_logs.create([
+isaac.donor_logs.create([
   {
     bristol_score: 4,
     weight: 72,
