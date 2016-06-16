@@ -11,10 +11,10 @@ class User < ActiveRecord::Base
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
 
-
-	has_many :open_biome_logs#, dependent: :destroy
-	has_many :donor_logs#, dependent: :destroy
-	has_many :meta_logs#, dependent: :destroy 
+  # TODO: destroy, really? 
+	has_many :open_biome_logs, dependent: :destroy
+	has_many :donor_logs, dependent: :destroy
+	has_many :meta_logs, dependent: :destroy 
 	has_many :visits
 	has_one :api_key, dependent: :destroy
 	

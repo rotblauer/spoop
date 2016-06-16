@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160616111802) do
+ActiveRecord::Schema.define(version: 20160616114042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,7 +131,7 @@ ActiveRecord::Schema.define(version: 20160616111802) do
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.integer  "donor_id",                                          null: false
+    t.string   "donor_id"
     t.string   "role"
     t.string   "name"
     t.datetime "donor_since"
@@ -162,6 +162,9 @@ ActiveRecord::Schema.define(version: 20160616111802) do
     t.string   "encrypted_email_iv",                default: "",    null: false
     t.string   "liame"
     t.string   "email"
+    t.string   "encrypted_donor_id",                default: "",    null: false
+    t.string   "encrypted_donor_id_iv",             default: "",    null: false
+    t.integer  "di_ronod"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
