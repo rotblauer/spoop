@@ -10,8 +10,7 @@
       <div class="field form-group">
         <%= f.label :email %>
         <%= f.email_field :email, autofocus: true, class:'form-control' %>
-        <p class="text-muted"><small>We'll send you a confirmation email at this address. </small> <br>
-        <span class="text-info"><small><i class="fa fa-user-secret"></i>&nbsp;Your email address is encrypted before saving. <sup>1</sup></small></span>
+        <p class="text-muted"><small>We'll send you a confirmation email at this address. </small>
         </p>
       </div>
 
@@ -27,9 +26,8 @@
 
         <div id="donor-id-input" class="col-xs-7">
           <div class="field form-group">
-            <label>Donor number</label>
+            <%= f.label :donor_id %>
             <%= f.telephone_field :donor_id, class:'form-control' %>
-            <p class="text-muted"><small>You'll use your donor number to log in once you're registered.</small></p>
           </div>
         </div>
 
@@ -37,7 +35,6 @@
           <div class="field form-group">
             <%= f.label :admin_secret %> <!-- <br> -->
             <%= f.password_field :admin_secret, class: 'form-control' %>
-            <p class="text-muted"><small>You'll receive your admin number in the confirmation email.</small></p>
           </div>
         </div>
 
@@ -81,15 +78,6 @@
         <%= f.submit "Sign up", class:'btn btn-success' %>
       </div>
 
-      <div class="row p-t-1"><div class="col-xs-12">
-        
-          <p class="text-info">
-          <small>
-          1. That means your email address is saved as something like <span class="text-muted">GEwl7t0ebHcprt2d3tbfLnc7du+VH1</span>, which makes it completely anonymous, even for the site admins.
-          
-          </small>
-          </p>
-        </div></div>
     <% end %>
     
     <%= render "devise/shared/links" %></div>
