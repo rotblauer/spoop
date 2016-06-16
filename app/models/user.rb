@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable,
          :confirmable, :lockable, :timeoutable, :validatable
 
-  # attr_encrypted :email, key: Rails.application.secrets.secret_key_base
+  # attr_encrypted :donor_id, key: Rails.application.secrets.secret_key_base, if: :donor?
 
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
@@ -31,9 +31,9 @@ class User < ActiveRecord::Base
 	validates :group, inclusion: { in: GROUPS }
 	
 	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }  
-	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
+	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor?
 	validates :donor_id, presence: true, if: :donor?
-	validates :donor_id, uniqueness: true
+	validates :donor_id, uniqueness: true, if: :donor?
 	
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
 	validate :knows_admin_secret_if_admin, on: :create
