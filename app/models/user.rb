@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable,
          :confirmable, :lockable, :timeoutable #, :validatable
 
-  attr_encrypted :email, key: Rails.application.secrets.secret_key_base
+  # attr_encrypted :email, key: Rails.application.secrets.secret_key_base
 
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
