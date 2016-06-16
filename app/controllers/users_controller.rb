@@ -10,8 +10,6 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:api_info, :begin, :show, :edit, :update, :destroy, :create_api_key, :destroy_api_key]
   
     # --> @user = User.find(params[:id])
-  
-  # before_filter :require_identity_strict, only: [:show, :edit, :update]
 
   def create_api_key
     if @user.api_key.nil?

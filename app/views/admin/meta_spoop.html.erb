@@ -130,7 +130,7 @@
 		<% User.order('sign_in_count desc').first(10).each do |p| %>
 			<tr>
 				<td><%= p.sign_in_count %> </td>
-				<td><%# favicon_for(p.school_primary, 14, 14, "") %> <%= link_to p.email , p %> stuff </td>
+				<td><%# favicon_for(p.school_primary, 14, 14, "") %> <%= link_to p.donor_id , p %></td>
 			</tr>
 		<% end %>
 		</table>

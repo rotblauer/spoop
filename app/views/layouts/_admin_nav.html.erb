@@ -24,7 +24,7 @@
 
   <%= link_to '<i class="fa fa-sign-out"></i>'.html_safe, destroy_user_session_path, method: :delete, class:'pull-sm-right nav-item text-danger',style:"padding: 0.5em 1.0em;" %>
   <span id="testes" class="nav-item pull-sm-right text-primary" style="padding: 0.5em 1.0em;">
-    <%= current_user.role.capitalize %> - <%= current_user.email %>
+    <%= current_user.role.capitalize %> <%= current_user.email %>
   </span>
   
 

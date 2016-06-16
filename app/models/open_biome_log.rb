@@ -15,7 +15,7 @@ class OpenBiomeLog < ActiveRecord::Base
 
   validate :donor_number_matches_donor
   def donor_number_matches_donor
-    unless donor_number == User.find(self.user_id).donor_id
+    unless donor_number == User.find(self.user_id).donor_id.to_i
       errors.add(:donor_number, 'does not match donor.')
     end
   end

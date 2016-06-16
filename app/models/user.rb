@@ -7,18 +7,6 @@ class User < ActiveRecord::Base
          :confirmable, :lockable, :timeoutable #, :validatable
 
   attr_encrypted :email, key: Rails.application.secrets.secret_key_base
-  
-  
-  def email_required?
-    true
-  end
-  def email_changed?
-    encrypted_email_changed? #self.
-  end
-  def password_required?
-  	true
-  end
-  
 
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
