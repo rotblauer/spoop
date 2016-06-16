@@ -4,17 +4,17 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
-         :confirmable, :lockable, :timeoutable #, :validatable
+         :confirmable, :lockable, :timeoutable, :validatable
 
   # attr_encrypted :email, key: Rails.application.secrets.secret_key_base
 
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
 
-  # TODO: dependent, really?
-	has_many :open_biome_logs, dependent: :destroy
-	has_many :donor_logs, dependent: :destroy
-	has_many :meta_logs, dependent: :destroy 
+
+	has_many :open_biome_logs#, dependent: :destroy
+	has_many :donor_logs#, dependent: :destroy
+	has_many :meta_logs#, dependent: :destroy 
 	has_many :visits
 	has_one :api_key, dependent: :destroy
 	
@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
 
 
 	before_create :set_default_values
-	before_create :set_admin_number, if: :admin?
+	# before_create :set_admin_number, if: :admin?
 	after_create :create_user_api_key
 	after_save :sync_api_key_role, if: :role_changed?
 
@@ -57,10 +57,10 @@ class User < ActiveRecord::Base
     self.group ||= 'open_biome'
     self.donor_logs_are_private_by_default ||= true
   end
-  def set_admin_number
-  	last_admin_number = User.admins.maximum(:donor_id)
-  	self.donor_id = last_admin_number.to_i + 1
-  end
+  # def set_admin_number
+  # 	last_admin_number = User.admins.maximum(:donor_id)
+  # 	self.donor_id = last_admin_number.to_i + 1
+  # end
 
   # encrypt the admin secret before writing.
   def admin_secret=(adminsecret)
