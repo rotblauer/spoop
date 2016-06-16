@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
 	
 
 	validates :email, presence: true
+	validates :email, uniqueness: true
 	validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
 	
 	validates :read_the_fine_print, inclusion: {in: [true]}
@@ -29,7 +30,7 @@ class User < ActiveRecord::Base
 
 	validates :group, inclusion: { in: GROUPS }
 	
-	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a }  
+	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }  
 	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
 	validates :donor_id, presence: true, if: :donor?
 	validates :donor_id, uniqueness: true
