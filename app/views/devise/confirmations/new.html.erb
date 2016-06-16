@@ -8,8 +8,8 @@
 	  <%= devise_error_messages! %>
 	
 	  <div class="field form-group">
-	    <%= f.label :donor_id %><br />
-	    <%= f.telephone_field :donor_id, autofocus: true, value: (resource.pending_reconfirmation? ? resource.donor_id : resource.donor_id), class:'form-control' %>
+	    <%= f.label :email %><br />
+	    <%= f.telephone_field :email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class:'form-control' %>
 	  </div>
 	
 	  <div class="actions">

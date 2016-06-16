@@ -4,14 +4,14 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable,
-         :confirmable, :lockable, :timeoutable #, :validatable
+         :confirmable, :lockable, :timeoutable, :validatable
 
-  attr_encrypted :email, key: Rails.application.secrets.secret_key_base
+  # attr_encrypted :donor_id, key: Rails.application.secrets.secret_key_base, if: :donor?
 
   ROLES = ['donor', 'admin', 'open']
   GROUPS = ['open_biome', 'site', 'open']
 
-  # TODO: dependent, really?
+  # TODO: destroy, really? 
 	has_many :open_biome_logs, dependent: :destroy
 	has_many :donor_logs, dependent: :destroy
 	has_many :meta_logs, dependent: :destroy 
@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
 	
 
 	validates :email, presence: true
+	validates :email, uniqueness: true
 	validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
 	
 	validates :read_the_fine_print, inclusion: {in: [true]}
@@ -29,17 +30,17 @@ class User < ActiveRecord::Base
 
 	validates :group, inclusion: { in: GROUPS }
 	
-	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a }  
-	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor? 
+	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }  
+	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor?
 	validates :donor_id, presence: true, if: :donor?
-	validates :donor_id, uniqueness: true
+	validates :donor_id, uniqueness: true, if: :donor?
 	
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
 	validate :knows_admin_secret_if_admin, on: :create
 
 
 	before_create :set_default_values
-	before_create :set_admin_number, if: :admin?
+	# before_create :set_admin_number, if: :admin?
 	after_create :create_user_api_key
 	after_save :sync_api_key_role, if: :role_changed?
 
@@ -57,10 +58,10 @@ class User < ActiveRecord::Base
     self.group ||= 'open_biome'
     self.donor_logs_are_private_by_default ||= true
   end
-  def set_admin_number
-  	last_admin_number = User.admins.maximum(:donor_id)
-  	self.donor_id = last_admin_number.to_i + 1
-  end
+  # def set_admin_number
+  # 	last_admin_number = User.admins.maximum(:donor_id)
+  # 	self.donor_id = last_admin_number.to_i + 1
+  # end
 
   # encrypt the admin secret before writing.
   def admin_secret=(adminsecret)
