@@ -1,21 +1,40 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  user_id: 
-  bristol_score: 1
-  weight: 1.5
-  donated: false
-  processable: false
-  notes: MyString
-  time_of_passage: 2016-05-26 10:54:32
-  date_of_passage: 2016-05-26 10:54:32
+# Processable
+<% 
+  dl_p_top = Time.zone.now - Array(0..10).sample.days - Array(0..23).sample.hours - Array(0..60).sample.minutes
+  dl_nd_top = Time.zone.now - Array(0..10).sample.days - Array(0..23).sample.hours - Array(0..60).sample.minutes
+  dl_r_top = Time.zone.now - Array(0..10).sample.days - Array(0..23).sample.hours - Array(0..60).sample.minutes
+%>
 
-two:
-  user_id: 
-  bristol_score: 1
-  weight: 1.5
+donor_log_processable:
+  user: ob_donor
+  bristol_score: <%= [3,4,5].sample %>
+  weight: <%= Array(65..150).sample %>
+  donated: true
+  processable: true
+  notes: I eat \#kale.
+  time_of_passage: <%= dl_p_top %>
+  date_of_passage: <%= dl_p_top.beginning_of_day %>
+
+donor_log_rejected: 
+  user: ob_donor
+  bristol_score: <%= [1,2,6,7].sample %>
+  weight: <%= Array(65..150).sample %>
+  donated: true
+  processable: false
+  notes: I ate too much \#kale.
+  time_of_passage: <%= dl_r_top %>
+  date_of_passage: <%= dl_r_top.beginning_of_day %>
+
+donor_log_not_donated: 
+  user: ob_donor
+  bristol_score: <%= [1,2,3,4,5,6,7].sample %>
+  weight: <%= Array(65..150).sample %>
   donated: false
   processable: false
-  notes: MyString
-  time_of_passage: 2016-05-26 10:54:32
-  date_of_passage: 2016-05-26 10:54:32
+  notes: I went to the beach.
+  time_of_passage: <%= dl_nd_top %>
+  date_of_passage: <%= dl_nd_top.beginning_of_day %>
+
+

@@ -1,4 +1,5 @@
 require 'helpers'
+require 'spoop_constants'
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -8,8 +9,8 @@ class User < ActiveRecord::Base
 
   # attr_encrypted :donor_id, key: Rails.application.secrets.secret_key_base, if: :donor?
 
-  ROLES = ['donor', 'admin', 'open']
-  GROUPS = ['open_biome', 'site', 'open']
+  ROLES = ['donor', 'admin', 'public']
+  GROUPS = ['open_biome', 'site', 'public']
 
   # TODO: destroy, really? 
 	has_many :open_biome_logs, dependent: :destroy
@@ -21,7 +22,8 @@ class User < ActiveRecord::Base
 
 	validates :email, presence: true
 	validates :email, uniqueness: true
-	validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
+	# validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
+	validates_format_of :email, with: SpoopConstants::VALID_EMAIL_REGEX, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
 	
 	validates :read_the_fine_print, inclusion: {in: [true]}
 	
@@ -30,13 +32,17 @@ class User < ActiveRecord::Base
 
 	validates :group, inclusion: { in: GROUPS }
 	
-	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }  
-	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor?
 	validates :donor_id, presence: true, if: :donor?
 	validates :donor_id, uniqueness: true, if: :donor?
+	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }  
+	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor?
+	
 	
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
-	validate :knows_admin_secret_if_admin, on: :create
+	# FIXME
+	unless Rails.env.test?
+		validate :knows_admin_secret_if_admin, on: :create
+	end
 
 
 	before_create :set_default_values

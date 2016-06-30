@@ -1,9 +1,44 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  donor_id: 1
-  role: MyString
+isaac: 
+  role: donor
+  name: Isaac
+  donor_since: 
+  encrypted_password: <%= Devise::Encryptor.digest(User, ENV['isaac_password']) %>
+  donor_logs_are_private_by_default: true
+  read_the_fine_print: true
+  demo: false
+  admin_secret: <%= ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(ENV['admin_secret']) %>
+  group: open_biome
+  email: isaac.ardis@gmail.com
+  donor_id: 438
 
-two:
-  donor_id: 1
-  role: MyString
+ob_donor:
+  role: donor
+  name: George
+  donor_since: 
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'beaconstreet') %>
+  donor_logs_are_private_by_default: true
+  read_the_fine_print: true
+  demo: false
+  admin_secret: 
+  group: open_biome
+  email: george@yahoo.com
+  donor_id: 88
+
+eduardo: 
+  role: admin
+  name: Eduardo
+  donor_since: 
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'beaconstreet') %>
+  donor_logs_are_private_by_default: true
+  read_the_fine_print: true
+  demo: false
+  admin_secret: <%= ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(ENV['admin_secret']) %>
+  group: open_biome
+  email: eduardo@openbiome.org
+  donor_id: 
+
+# TODO: add public user 
+
+
