@@ -63,11 +63,17 @@ module Helpers
 	# ie 12/3/15
 	# useful for :donated_on field from csv 
 	def Helpers.parse_date_from_backwards_string(string)
-		n = string.split('/')
-		year = '20' + n[2]
+		puts string
+		n = string.split('/').map{|a| a.to_i}
+		puts n
+		if n[2] < 2000
+			year = 2000 + n[2]
+		else 
+			year = n[2]
+		end
 		month = n[0]
 		day = n[1]
-		Time.zone.local(year.to_i, month.to_i, day.to_i)
+		Time.zone.local(year, month, day)
 	end 
 
 	def Helpers.get_date_of_passage(time_of_passage)
@@ -92,6 +98,19 @@ module Helpers
 	  end
 	  # if nil
 	  val
+	end
+
+	def Helpers.make_a_time_from_a_strange_number(d)
+		# puts "Cell type: #{d.cell_type}  Cell value: #{d.cell_value}"
+		possible_time_ratio_of_day =  (d.to_f / (24 * 60 * 60)).to_f
+		ratio_in_hours = (24.0 * possible_time_ratio_of_day).to_f #xtraneous to_fs but who cares
+		hours = ratio_in_hours.floor # int
+		ratio_of_remaining_hour = (ratio_in_hours - hours.to_f).to_f
+		minutes = (ratio_of_remaining_hour * 60.0).to_f
+		return {
+			hours: hours,
+			minutes: minutes
+		}
 	end
 
 	# deprecated. use in matching donor_logs with ob_logs. 

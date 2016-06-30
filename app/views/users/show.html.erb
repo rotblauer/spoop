@@ -273,6 +273,16 @@
 					] %>
 			</div>
 
+			<div class="poopie col-sm-4">
+				<p class="text-muted">Quarantine State</p>
+				<%= pie_chart @open_biome_logs.processed.order('quarantine_state ASC').group(:quarantine_state).count, colors: ['#5cb85c', '#d9534f'] %>
+			</div>
+
+			<div class="poopie col-sm-4">
+				<p class="text-muted">On Site Donation?</p>
+				<%= pie_chart @open_biome_logs.processed.order('on_site_donation ASC').group(:on_site_donation).count %>
+			</div>
+
 		</div>	
 
 	</div>

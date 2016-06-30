@@ -26,6 +26,7 @@ module UsersHelper
 		affirmative = {text: '$40', css: 'success'}
 		negative = {text: 'REJ', css: 'danger'}
 		did_not_donate = {text: 'ND', css: 'warning'}
+		screening = {text: 'Screening', css: 'info'}
 		
 		if log.class == DonorLog
 			if log.donated?
@@ -34,6 +35,7 @@ module UsersHelper
 				return did_not_donate
 			end
 		elsif log.class == OpenBiomeLog
+			return screening if log.processing_state.include?('screen')
 			return log.processing_state == 'processed' ? affirmative : negative	
 		else
 			return {text:'wtf', css: 'primary'}

@@ -6,7 +6,7 @@
 	
 <li class="list-group-item list-group-item-<%= processing_label(log)[:css] %> <%= log.class == OpenBiomeLog ? 'log-ob' : '' %> log-entry padding-light m-b-1" >
 
-	<div class="bristol bristol-bg<%= log.bristol_score %>" style="z-index: 1000; float: top; width: <%= "#{log.weight / @ds[:max] * 0.9}%" %>; height: 0.3rem; border-radius: 0.15rem 0.15rem 0.15rem 0rem; margin-top: -10px; margin-left: -10px;" ></div>
+	<div class="bristol bristol-bg<%= log.bristol_score || 4 %>" style="z-index: 1000; float: top; width: <%= "#{log.weight / @ds[:max] * 0.9}%" %>; height: 0.3rem; border-radius: 0.15rem 0.15rem 0.15rem 0rem; margin-top: -10px; margin-left: -10px;" ></div>
 	
 
 	<% 
@@ -75,6 +75,10 @@
 		<div class="">
 			<p class="" style="margin-bottom: 0;">
 				<%= highlight_hashtags(log.notes) if log.class == DonorLog %>
+				<%= log.rejection_reason if log.class == OpenBiomeLog %>
+				<% if log.class == OpenBiomeLog && log.rejection_reason_other.present? %>
+					<em><%= log.rejection_reason_other %></em>
+				<% end %>
 			</p>
 		</div>
 		

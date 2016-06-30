@@ -50,7 +50,6 @@ class UsersController < ApplicationController
   # TODO - get rid of all this shit. 170 lines of code should be more like 20, max. 
   def show
     @meta_logs = @user.meta_logs.order('time_of_passage DESC').all.includes(:donor_log, :open_biome_log)
-    # @open_biome_logs = @meta_logs.map(&:open_biome_log) #@user.open_biome_logs.all
     
     # If there are no resources for the user yet...
     redirect_to begin_user_path(@user) if !@meta_logs.any?

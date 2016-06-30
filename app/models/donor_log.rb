@@ -5,7 +5,7 @@ require 'hashtag_parser'
 class DonorLog < ActiveRecord::Base
   
   belongs_to :user
-  has_many :meta_logs
+  has_many :meta_logs, dependent: :nullify
   has_many :open_biome_logs, through: :meta_logs
 
   before_save :set_default_values
@@ -13,26 +13,54 @@ class DonorLog < ActiveRecord::Base
   before_save :date_of_passage_depends_on_time_of_passage
 
   after_create :parse_tags_from_notes
-  # after_create Helpers.establish_meta_log(self, SpoopConstants::LOG_MATCH_MINUTES_WINDOW)
-  after_save :establish_meta_log
-  def establish_meta_log
-    match = OpenBiomeLog.where(donor_number: self.donor_number).where('time_of_passage > ?', self.time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW).where('time_of_passage < ?', self.time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW)
-    m = MetaLog.find_or_initialize_by(user_id: user_id, donor_log_id: id)
-    if match.any?
-      m.open_biome_log_id = match.first.id
+  
+  # Create. 
+  # - look for meta_log in time frame
+  # - add self id to meta_log or create meta_log
+  # Update.
+  # - if time_of_passage_changed?
+  # - if > 10.minutes diff from existing meta_log
+  # - - create new meta_log
+  # - - remove self.id from old meta_log
+  # - if < 10.minutes diff from existing meta_log
+  # - - do nothing
+  after_create :find_and_update_or_initialize_meta_log
+  after_update :find_and_update_or_initialize_meta_log_on_change, if: :time_of_passage_changed?
+  def find_and_update_or_initialize_meta_log
+    meta = MetaLog.where('time_of_passage > ?', time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW).where('time_of_passage < ?', time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW).first #only is one
+    if meta.present?
+      #IMPROVE this assumes that poops are unique to within the time frame -- ie if you have two poops within 20 minutes of each other, they'll disappear (not deleted, but 'opposite-orphaned')
+      meta.update_attributes(donor_log_id: id) 
+    else 
+      meta_logs.create(time_of_passage: time_of_passage)
     end
-    m.save
   end
-
-  before_destroy :update_and_maybe_remove_meta_log
-  def update_and_maybe_remove_meta_log
-    m = MetaLog.find_by(user_id: self.user_id, donor_log_id: self.id)
-    if m.open_biome_log_id
-      m.donor_log_id = nil
-      m.save
-    else
-      m.destroy
+  def find_and_update_or_initialize_meta_log_on_change
+    meta = self.meta_logs.first
+    #if meta ISN'T still within time frame
+    unless meta.time_of_passage < time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW || meta.time_of_passage > time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW
+      # remove self from old meta_log
+      meta.donor_log_id = nil
+      # same as on create
+      find_and_update_or_initialize_meta_log
     end
+  end
+  # after_save :establish_meta_log
+  # def establish_meta_log
+    # if !meta_logs.any? || 
+    #   match = OpenBiomeLog.where(donor_number: self.donor_number).where('time_of_passage > ?', self.time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW).where('time_of_passage < ?', self.time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW).first
+    #   if match.present?
+    #     m = MetaLog.find_by(user_id: user_id, open_biome_log_id: match.id)
+    #     m.update_attributes(donor_log_id: id) 
+    #   else 
+    #     MetaLog.create!(user_id: user_id, donor_log_id: id)
+    #   end
+  #   end
+  # end
+
+  after_destroy :update_and_maybe_remove_meta_log
+  def update_and_maybe_remove_meta_log
+    MetaLog.orphans.each(&:destroy)
   end
   
   after_update :parse_tags_from_notes

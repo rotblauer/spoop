@@ -51,7 +51,13 @@ class Api::V1::DonorLogsController < Api::ApiController
   #
    def heatmap
     heaters = {}
-    @api_user.meta_logs.each{ |x| heaters[x.time_of_passage.to_i] = 1 }
+    @api_user.meta_logs.each do |x| 
+      if x.open_biome_log.present? && x.open_biome_log.processable
+        heaters[x.time_of_passage.to_i] = 1
+      elsif x.donor_log.present? && x.donor_log.processable
+        heaters[x.time_of_passage.to_i] = 1
+      end
+    end
     render json: heaters
   end
 

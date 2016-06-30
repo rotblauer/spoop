@@ -6,266 +6,275 @@
 
 #########################################################
 
-isaac = User.new({
-    donor_id: 438,
-    email: 'isaac.ardis@gmail.com',
-    password: 'fluffy',
-    password_confirmation: 'fluffy',
-    read_the_fine_print: true,
-    group: 'open_biome',
-    role: 'donor'
-    })
-isaac.skip_confirmation!
-isaac.save
+# isaac = User.new({
+#     donor_id: 438,
+#     email: 'isaac.ardis@gmail.com',
+#     password: 'fluffy',
+#     password_confirmation: 'fluffy',
+#     read_the_fine_print: true,
+#     group: 'open_biome',
+#     role: 'donor'
+#     })
+# isaac.skip_confirmation!
+# isaac.save!
 
-roboto = User.new({
-    donor_id: 438,
-    email: 'mrroboto@spoop.info',
-    password: 'shitshitshit',
-    password_confirmation: 'shitshitshit',
-    read_the_fine_print: true,
-    group: 'open_biome',
-    role: 'donor'
-    })
-roboto.skip_confirmation!
-roboto.save
+# roboto = User.new({
+#     donor_id: 9999,
+#     email: 'mrroboto@spoop.info',
+#     password: 'shitshitshit',
+#     password_confirmation: 'shitshitshit',
+#     read_the_fine_print: true,
+#     group: 'open_biome',
+#     role: 'donor'
+#     })
+# roboto.skip_confirmation!
+# roboto.save!
 
-kelly = User.new({
-    donor_id: 438,
-    email: 'kelly@openbiome.org',
-    password: 'shitshit',
-    password_confirmation: 'shitshit',
-    read_the_fine_print: true,
-    group: 'open_biome',
-    role: 'admin'
-    })
-kelly.skip_confirmation!
-kelly.save
+# kelly = User.new({
+#     donor_id: nil,
+#     email: 'kelly@openbiome.org',
+#     password: 'shitshit',
+#     password_confirmation: 'shitshit',
+#     read_the_fine_print: true,
+#     group: 'open_biome',
+#     role: 'admin',
+#     admin_secret: ENV['admin_secret']
+#     })
+# kelly.skip_confirmation!
+# kelly.save!
 
 
-rb = User.new({
-    donor_id: 438,
-    email: 'rotblauer@gmail.com',
-    password: 'fluffier',
-    password_confirmation: 'fluffier',
-    read_the_fine_print: true,
-    group: 'site',
-    role: 'admin'
-    })
-rb.skip_confirmation!
-rb.save
+# rb = User.new({
+#     donor_id: nil,
+#     email: 'rotblauer@gmail.com',
+#     password: 'fluffier',
+#     password_confirmation: 'fluffier',
+#     read_the_fine_print: true,
+#     group: 'site',
+#     role: 'admin',
+#     admin_secret: ENV['admin_secret']
+#     })
+# rb.skip_confirmation!
+# rb.save!
 
-# Create approximately 18 users. 
-18.times do |t|
-	donor = User.new(	
-		name: Faker::Internet.user_name,
-		email: Faker::Internet.free_email,
-		donor_id: Faker::Number.between(65, 10000),
-		password: 'fluffy',
-		password_confirmation: 'fluffy',
-		role: 'donor',
-		)
-	donor.skip_confirmation!
+# # Create approximately 18 users. 
+# available_donor_numbers = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }
+# available_donor_numbers.delete(9999)
+# available_donor_numbers.delete(438)
+
+# 10.times do |t|
+# 	donor = User.new(	
+# 		email: Faker::Internet.free_email,
+# 		donor_id: available_donor_numbers.shift,
+# 		password: 'fluffy',
+# 		password_confirmation: 'fluffy',
+# 		role: 'donor',
+#         group: 'open_biome',
+#         read_the_fine_print: true
+# 		)
+# 	donor.skip_confirmation!
 	
-	if donor.save!
+# 	if donor.save!
 
-		# Save some donor logs.
-		donor_logs_num = Faker::Number.between(4,24)
-		donor_logs_num.times do |t|
-			# Sometime last two weeks ish.
-			ta_min = Faker::Number.between(1, 60)
-			ta_hour = Faker::Number.between(1, 24)
-			ta_day = Faker::Number.between(0, 14)
+# 		# Save some donor logs.
+# 		donor_logs_num = Faker::Number.between(4,24)
+# 		donor_logs_num.times do |t|
+# 			# Sometime last two weeks ish.
+# 			ta_min = Faker::Number.between(1, 60)
+# 			ta_hour = Faker::Number.between(1, 24)
+# 			ta_day = Faker::Number.between(0, 14)
 
-			bristol_score = rand < 0.2 ? [2,6].sample : (3..5).to_a.sample
-			weight = Faker::Number.between(40, 200)
+# 			bristol_score = rand < 0.2 ? [2,6].sample : (3..5).to_a.sample
+# 			weight = Faker::Number.between(40, 200)
 
-			l = donor.donor_logs.new(
-				bristol_score: bristol_score,
-				weight: weight,
-				time_of_passage: Time.zone.now - ta_day.days - ta_hour.hours - ta_min.minutes,
-				donated: rand > 0.25, 
-				processable: (bristol_score < 6 && bristol_score > 2) && weight >= 55 ? true : false,
-				notes: Faker::Hipster.sentence
-				)
+# 			l = donor.donor_logs.new(
+# 				bristol_score: bristol_score,
+# 				weight: weight,
+# 				time_of_passage: Time.zone.now - ta_day.days - ta_hour.hours - ta_min.minutes,
+# 				donated: rand > 0.25, 
+# 				processable: (bristol_score < 6 && bristol_score > 2) && weight >= 55 ? true : false,
+# 				notes: Faker::Hipster.sentence,
+#                 is_private: (rand < 0.2) ? false : true
+# 				)
 
-			l.save!
-		end
+# 			l.save!
+# 		end
 
-		# Save this many OBLs/person.
-		open_biome_logs_num = Faker::Number.between(12, 48)
+# 		# Save this many OBLs/person.
+# 		open_biome_logs_num = Faker::Number.between(12, 48)
 
-		# Beautiful humans. 
-		def lab_techs 
-			lab_techs = []
-			8.times do |l|
-				lab_techs.append(Faker::Name.name)
-			end
-			lab_techs
-		end
-
-
-		open_biome_logs_num.times do |t|
-
-			## CONSTANTS
-
-			# Weight limits.
-			min_weight = 40
-			max_weight = 215
-
-			# Bristol limits.
-			min_bristol = 2
-			max_bristol = 6
-
-			# Release first x percent.
-			portion_to_release = 0.2
-
-			# Screen x percent
-			portion_to_screen = 0.05
-
-			# Reject x percent for reason besides bristol. 
-			portion_to_reject = 0.03
-
-			# Some inventory stuff. 
-			bio_safety_cabinet_number = [2,3,4].sample
-			biologics_master_file_version_number = 5
-
-			# How much water to add. 
-			buffer_multiplier_scale = {
-				'fmp_enema': 2.5,
-				'fmp_250': 10.0,
-				'gelatin_capsules': 1.0
-			}
-
-			# Poop on site usuality. 
-			on_site_donation_rate = 0.1
+# 		# Beautiful humans. 
+# 		def lab_techs 
+# 			lab_techs = []
+# 			8.times do |l|
+# 				lab_techs.append(Faker::Name.name)
+# 			end
+# 			lab_techs
+# 		end
 
 
-			## CALCULATORS
-			# Set bristol_score & weight.
-			bristol_score = rand < 0.2 ? [min_bristol,max_bristol].sample : Faker::Number.between(min_bristol + 1, max_bristol - 1) 
-			weight = Faker::Number.between(min_weight, max_weight)
+# 		open_biome_logs_num.times do |t|
 
-			# Sometime last two months ish.
-			ta_min = Faker::Number.between(1, 60)
-			ta_hour = Faker::Number.between(1, 24)
-			ta_day = Faker::Number.between(0, 14)
-			ta_week = Faker::Number.between(0, 8)
+# 			## CONSTANTS
 
-			# Determine usage.
-			usage = rand < portion_to_screen ? 'screening' : 'treatment'
+# 			# Weight limits.
+# 			min_weight = 40
+# 			max_weight = 215
 
-			def decide_processing(bristol, weight, portion_to_reject)
-				# Reject for weird reason.
-				if rand < portion_to_reject
-					processing_state = 'rejected' 
-					rejection_reason = nil
-					rejection_reason_other = Faker::Lorem.sentence
+# 			# Bristol limits.
+# 			min_bristol = 2
+# 			max_bristol = 6
+
+# 			# Release first x percent.
+# 			portion_to_release = 0.2
+
+# 			# Screen x percent
+# 			portion_to_screen = 0.05
+
+# 			# Reject x percent for reason besides bristol. 
+# 			portion_to_reject = 0.03
+
+# 			# Some inventory stuff. 
+# 			bio_safety_cabinet_number = [2,3,4].sample
+# 			biologics_master_file_version_number = 5
+
+# 			# How much water to add. 
+# 			buffer_multiplier_scale = {
+# 				'fmp_enema': 2.5,
+# 				'fmp_250': 10.0,
+# 				'gelatin_capsules': 1.0
+# 			}
+
+# 			# Poop on site usuality. 
+# 			on_site_donation_rate = 0.1
+
+
+# 			## CALCULATORS
+# 			# Set bristol_score & weight.
+# 			bristol_score = rand < 0.2 ? [min_bristol,max_bristol].sample : Faker::Number.between(min_bristol + 1, max_bristol - 1) 
+# 			weight = Faker::Number.between(min_weight, max_weight)
+
+# 			# Sometime last two months ish.
+# 			ta_min = Faker::Number.between(1, 60)
+# 			ta_hour = Faker::Number.between(1, 24)
+# 			ta_day = Faker::Number.between(0, 14)
+# 			ta_week = Faker::Number.between(0, 8)
+
+# 			# Determine usage.
+# 			usage = rand < portion_to_screen ? 'screening' : 'treatment'
+
+# 			def decide_processing(bristol, weight, portion_to_reject)
+# 				# Reject for weird reason.
+# 				if rand < portion_to_reject
+# 					processing_state = 'rejected' 
+# 					rejection_reason = nil
+# 					rejection_reason_other = Faker::Lorem.sentence
 					
-				# Reject for bristol reason.
-				elsif (bristol == 6 || bristol == 2)
-					processing_state = 'rejected'
-					rejection_reason = 'bristol_score'
-					rejection_reason_other = nil
+# 				# Reject for bristol reason.
+# 				elsif (bristol == 6 || bristol == 2)
+# 					processing_state = 'rejected'
+# 					rejection_reason = 'bristol_score'
+# 					rejection_reason_other = nil
 
-				elsif weight < 55
-					processing_state = 'rejected'
-					rejection_reason = 'too_small'
-					rejection_reason_other = nil					
+# 				elsif weight < 55
+# 					processing_state = 'rejected'
+# 					rejection_reason = 'too_small'
+# 					rejection_reason_other = nil					
 				
-				# Accept. 
-				else 
-					processing_state = 'processed'
-					rejection_reason = nil
-					rejection_reason_other = nil
-				end
-				return {
-					processing_state: processing_state,
-					rejection_reason: rejection_reason,
-					rejection_reason_other: rejection_reason_other
-				}
-			end
+# 				# Accept. 
+# 				else 
+# 					processing_state = 'processed'
+# 					rejection_reason = nil
+# 					rejection_reason_other = nil
+# 				end
+# 				return {
+# 					processing_state: processing_state,
+# 					rejection_reason: rejection_reason,
+# 					rejection_reason_other: rejection_reason_other
+# 				}
+# 			end
 
-			def decide_product(weight, bristol_score, max_weight)
-				# If it's a big solid poop, make it an enema.
-				if weight > max_weight * 0.9 && bristol_score == (4 || 3)
-					product = 'fmp_enema'
-					number_units = 1
-				# Else if its just pretty big make it gelatin caps.
-				elsif weight > max_weight * 0.7 && bristol_score == 4
-					product = 'gelatin_capsules'
-					number_units = 125
-				else 
-					product = 'fmp_250'
-					number_units = (weight - (weight % 35)) / 35
-				end
+# 			def decide_product(weight, bristol_score, max_weight)
+# 				# If it's a big solid poop, make it an enema.
+# 				if weight > max_weight * 0.9 && bristol_score == (4 || 3)
+# 					product = 'fmp_enema'
+# 					number_units = 1
+# 				# Else if its just pretty big make it gelatin caps.
+# 				elsif weight > max_weight * 0.7 && bristol_score == 4
+# 					product = 'gelatin_capsules'
+# 					number_units = 125
+# 				else 
+# 					product = 'fmp_250'
+# 					number_units = (weight - (weight % 35)) / 35
+# 				end
 
-				return {
-					product: product,
-					number_units: number_units
-				}
-			end
+# 				return {
+# 					product: product,
+# 					number_units: number_units
+# 				}
+# 			end
 
-			# Set times. 
-			time_of_passage = Time.zone.now - ta_week.weeks - ta_day.days - ta_hour.hours - ta_min.minutes
-			time_received = time_of_passage + (10..40).to_a.sample.minutes
-			time_started = time_received + (5..25).to_a.sample.minutes
-			time_finished = time_started + (10..50).to_a.sample.minutes
+# 			# Set times. 
+# 			time_of_passage = Time.zone.now - ta_week.weeks - ta_day.days - ta_hour.hours - ta_min.minutes
+# 			time_received = time_of_passage + (10..40).to_a.sample.minutes
+# 			time_started = time_received + (5..25).to_a.sample.minutes
+# 			time_finished = time_started + (10..50).to_a.sample.minutes
 
-			# Create the log. 
-			l = donor.open_biome_logs.new(
-				donated_on: Time.zone.now.beginning_of_day,
-				donor_group: 'Ferret',
-				donor_number: donor.donor_id,
-				sample: "#{donor.donor_id} - 00#{t}",
-				quarantine_state: (t < (open_biome_logs_num * portion_to_release)) ? 'released' : 'quarantined',
-				product: decide_product(weight, bristol_score, max_weight)[:product],
-				usage: usage, # Could be improved with timing.
-				processing_state: decide_processing(bristol_score, weight, portion_to_reject)[:processing_state],
-				weight: weight,
-				bristol_score: bristol_score,
-				batch: nil,
-				bio_safety_cabinet_number: bio_safety_cabinet_number,
-				buffer_multiplier_used: buffer_multiplier_scale[decide_product(weight, bristol_score, max_weight)[:product]],
-				number_units_produced: decide_product(weight, bristol_score, max_weight)[:number_units],
-				on_site_donation: rand < on_site_donation_rate ? 'TRUE' : 'FALSE',
-				received_by_name: lab_techs.sample,
-				processed_by_name: lab_techs.sample,
-				time_of_passage: time_of_passage,
-				time_received: time_received,
-				time_started: time_started,
-				time_finished: time_finished,
-				rejection_reason: decide_processing(bristol_score, weight, portion_to_reject)[:rejection_reason],
-				rejection_reason_other: decide_processing(bristol_score, weight, portion_to_reject)[:rejection_reason_other],
-				biologics_master_file_version_number: biologics_master_file_version_number
-				)
-			l.save!
-		end
+# 			# Create the log. 
+# 			l = donor.open_biome_logs.new(
+# 				donated_on: Time.zone.now.beginning_of_day,
+# 				donor_group: 'Ferret',
+# 				donor_number: donor.donor_id,
+# 				sample: "#{donor.donor_id} - 00#{t}",
+# 				quarantine_state: (t < (open_biome_logs_num * portion_to_release)) ? 'released' : 'quarantined',
+# 				product: decide_product(weight, bristol_score, max_weight)[:product],
+# 				usage: usage, # Could be improved with timing.
+# 				processing_state: decide_processing(bristol_score, weight, portion_to_reject)[:processing_state],
+# 				weight: weight,
+# 				bristol_score: bristol_score,
+# 				batch: nil,
+# 				bio_safety_cabinet_number: bio_safety_cabinet_number,
+# 				buffer_multiplier_used: buffer_multiplier_scale[decide_product(weight, bristol_score, max_weight)[:product]],
+# 				number_units_produced: decide_product(weight, bristol_score, max_weight)[:number_units],
+# 				on_site_donation: rand < on_site_donation_rate ? 'TRUE' : 'FALSE',
+# 				received_by_name: lab_techs.sample,
+# 				processed_by_name: lab_techs.sample,
+# 				time_of_passage: time_of_passage,
+# 				time_received: time_received,
+# 				time_started: time_started,
+# 				time_finished: time_finished,
+# 				rejection_reason: decide_processing(bristol_score, weight, portion_to_reject)[:rejection_reason],
+# 				rejection_reason_other: decide_processing(bristol_score, weight, portion_to_reject)[:rejection_reason_other],
+# 				biologics_master_file_version_number: biologics_master_file_version_number
+# 				)
+# 			l.save!
+# 		end
 		 
-	end # if donor.save!
+# 	end # if donor.save!
 
-end
+# end
 
-############################################################
+# ############################################################
 
-tags_pool = []
-75.times do |t|
-	tags_pool.append(Faker::Hipster.word)
-end
+# tags_pool = []
+# 75.times do |t|
+# 	tags_pool.append(Faker::Hipster.word)
+# end
 
-DonorLog.all.each do |dl|
-	n = (rand*3).round
-	dl.notes = Faker::Hipster.sentence
-	n.times do |t|
-		random_tag = tags_pool.sample
-		puts "Tagging log #{dl.id} by #{dl.user.email}'s from #{dl.time_of_passage} with: #{random_tag}."
-		dl.notes += " ##{random_tag}"
-	end
-	dl.save!
-end
+# DonorLog.all.each do |dl|
+# 	n = (rand*3).round
+# 	dl.notes = Faker::Hipster.sentence
+# 	n.times do |t|
+# 		random_tag = tags_pool.sample
+# 		puts "Tagging log #{dl.id} by #{dl.user.email}'s from #{dl.time_of_passage} with: #{random_tag}."
+# 		dl.notes += " ##{random_tag}"
+# 	end
+# 	dl.save!
+# end
 
 
-isaac.donor_logs.create([
+User.first.donor_logs.create([
+# isaac.donor_logs.create([
   {
     bristol_score: 4,
     weight: 72,

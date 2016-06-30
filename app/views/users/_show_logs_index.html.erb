@@ -127,9 +127,9 @@
 	<!-- render the corresponding donor log -->
 	<div class="col-xs-12 hidden-sm-up">
 		<ul class="list-group">
-			<% if false#  not open_biome_log.present? %>
+			<% unless open_biome_log.present? %>
 				<%= render partial: 'layouts/log', locals: {log: donor_log} %>
-			<% elsif false# %>
+			<% else %>
 				<%= render partial: 'layouts/log', locals: {log: open_biome_log} %>
 			<% end %>
 		</ul>

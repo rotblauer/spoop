@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160616122628) do
+ActiveRecord::Schema.define(version: 20160617205230) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,10 +62,12 @@ ActiveRecord::Schema.define(version: 20160616122628) do
     t.integer  "open_biome_log_id"
     t.datetime "time_of_passage",   null: false
     t.datetime "date_of_passage",   null: false
+    t.integer  "donor_id"
   end
 
   add_index "meta_logs", ["donor_log_id"], name: "index_meta_logs_on_donor_log_id", using: :btree
   add_index "meta_logs", ["open_biome_log_id"], name: "index_meta_logs_on_open_biome_log_id", using: :btree
+  add_index "meta_logs", ["user_id", "donor_id"], name: "index_meta_logs_on_user_id_and_donor_id", using: :btree
   add_index "meta_logs", ["user_id"], name: "index_meta_logs_on_user_id", using: :btree
 
   create_table "non_donors", force: :cascade do |t|

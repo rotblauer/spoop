@@ -15,10 +15,10 @@
 	lifecycle_times = [] #passage -> finish
 
 	@open_biome_logs.processed.each do |log|
-		transport_times.append((log.time_received - log.time_of_passage))
-		holding_times.append((log.time_started - log.time_received))
-		processing_times.append((log.time_finished - log.time_started))
-		lifecycle_times.append((log.time_finished - log.time_of_passage))
+		transport_times.append((log.time_received - log.time_of_passage)) if log.time_of_passage.present? && log.time_received.present?
+		holding_times.append((log.time_started - log.time_received)) if log.time_received.present? && log.time_started.present?
+		processing_times.append((log.time_finished - log.time_started)) if log.time_started.present? && log.time_finished.present?
+		lifecycle_times.append((log.time_finished - log.time_of_passage)) if log.time_of_passage.present? && log.time_finished.present?
 	end
 %>
 

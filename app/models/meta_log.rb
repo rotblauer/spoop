@@ -8,12 +8,38 @@ class MetaLog < ActiveRecord::Base
 
 	before_create :default_values
 
+	scope :non_empty, -> { where.not('donor_log_id IS ? AND open_biome_log_id IS ?', nil, nil) }
+	scope :orphans, -> { where('donor_log_id IS ? AND open_biome_log_id IS ?', nil, nil) }
+
 	def default_values
 		# choose donor log top as priority over obl
 		# will have at least either donor_log or obl
 		self.time_of_passage ||= (self.donor_log_id ? DonorLog.find(self.donor_log_id).time_of_passage : OpenBiomeLog.find(self.open_biome_log_id).time_of_passage)
 		self.date_of_passage ||= (self.donor_log_id ? DonorLog.find(self.donor_log_id).date_of_passage : Helpers.get_date_of_passage(OpenBiomeLog.find(self.open_biome_log_id).time_of_passage))
+		self.donor_id ||= donor_log.present? ? donor_log.donor_number : open_biome_log.donor_number
+		self.user_id ||= donor_log.present? ? donor_log.user_id : open_biome_log.user_id
 	end
+
+	def self.has_relations
+		donor_log_id.present? || open_biome_log_id.present?
+	end
+
+	def self.is_orphan
+		!has_relations
+	end
+
+	# def ensure_one_parent
+	# 	self.delete unless donor_log_id.present? || open_biome_log_id.present?
+	# end
+
+	# def destroy
+	#   return false if donor_log.present? || open_biome_log.present?
+	#   super
+	# end
+
+	# def destroy_if_empty
+	# 	self.delete if (self.donor_log_id.nil? && self.open_biome_log_id.nil?)
+	# end
 
 	# Called after db migrate to create joins between already-existing dl and ob logs. 
 	# This should only need to be called once, or on the reg in case of updates/whatever. 

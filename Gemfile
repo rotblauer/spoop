@@ -61,6 +61,9 @@ gem 'figaro'
 
 gem 'acts-as-taggable-on', '~> 3.5'
 
+gem 'roo'
+gem 'time_zone_ext'
+
 # heroku needs this to do logging right
 # $ heroku logs -t --source app --remote web
 gem 'rails_12factor', group: :production

@@ -134,7 +134,7 @@ class OpenBiomeLogsController < ApplicationController
       a.each do |record|
         begin
           
-          existing_record = OpenBiomeLog.find_by(user_id: @user.id, donated_on: record['donated_on'], weight: record['weight'], sample: record['sample'])
+          existing_record = OpenBiomeLog.find_by(user_id: @user.id, donated_on: record['donated_on'], weight: record['weight'].to_i, sample: record['sample'])
           # if record does exist
           if !existing_record.nil?
             existing_record.update_attributes(record)
