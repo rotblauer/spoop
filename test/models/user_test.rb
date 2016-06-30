@@ -62,7 +62,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'donor_must_have_legit_donor_id' do 
   	u = users(:ob_donor)
-  	u.update(donor_id: 1999)
+  	u.update(donor_id: 1996)
   	assert_not u.valid?
   	assert_includes u.errors.keys, :donor_id, 'Validated illegit donor_id.'
   	
