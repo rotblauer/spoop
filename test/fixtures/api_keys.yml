@@ -1,11 +1,19 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  access_token: MyString
-  role: MyString
-  expires_at: 2016-05-26 08:53:53
+  user: isaac
+  access_token: aaaa
+  role: donor
+  expires_at: <%= Time.zone.now + 6.months %>
 
 two:
-  access_token: MyString
-  role: MyString
-  expires_at: 2016-05-26 08:53:53
+  user: ob_donor
+  access_token: bbbb
+  role: donor
+  expires_at: <%= Time.zone.now + 6.months %>
+
+three: 
+  user: eduardo
+  access_token: cccc
+  role: admin
+  expires_at: <%= Time.zone.now + 6.months %>

@@ -1,53 +1,27 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one: 
+  user: ob_donor
+  donor_group: "Wombat"
+  donor_number: 88
+  sample: "0438-0091"
+  quarantine_state: "available"
+  product: "fmp_250"
+  usage: "treatment"
+  processing_state: "processed"
+  weight: 125.0
+  bristol_score: 4
+  batch: 
+  bio_safety_cabinet_number: 2
+  buffer_multiplier_used: 10.0
+  number_units_produced: 4
+  on_site_donation: "f"
+  received_by_name: "Sarah Alley"
+  processed_by_name: "Suja Vinothe"
+  time_of_passage: "2016-05-09 12:20:59"
+  time_received: "2016-05-09 12:37:00"
+  time_started: 
+  time_finished: 
+  rejection_reason: 
+  rejection_reason_other: 
+  biologics_master_file_version_number: 
+  donated_on: "2016-05-09 00:00:00"
 
-# one:
-#   donated_on: MyString
-#   donor_group: MyString
-#   donor_number: 1
-#   sample: MyString
-#   quarantine_state: MyString
-#   product: MyString
-#   usage: MyString
-#   processing_state: MyString
-#   weight: 1.5
-#   bristol_score: 1
-#   batch: MyString
-#   bio_safety_cabinet_number: 1
-#   buffer_multiplier_used: 1.5
-#   number_units_produced: 1
-#   on_site_donation: MyString
-#   received_by_name: MyString
-#   processed_by_name: MyString
-#   time_of_passage: 2016-05-21 18:25:54
-#   time_received: 2016-05-21 18:25:54
-#   time_started: 2016-05-21 18:25:54
-#   time_finished: 2016-05-21 18:25:54
-#   rejection_reason: MyString
-#   rejection_reason_other: MyString
-#   biologics_master_file_version_number: 1
-
-# two:
-#   donated_on: MyString
-#   donor_group: MyString
-#   donor_number: 1
-#   sample: MyString
-#   quarantine_state: MyString
-#   product: MyString
-#   usage: MyString
-#   processing_state: MyString
-#   weight: 1.5
-#   bristol_score: 1
-#   batch: MyString
-#   bio_safety_cabinet_number: 1
-#   buffer_multiplier_used: 1.5
-#   number_units_produced: 1
-#   on_site_donation: MyString
-#   received_by_name: MyString
-#   processed_by_name: MyString
-#   time_of_passage: 2016-05-21 18:25:54
-#   time_received: 2016-05-21 18:25:54
-#   time_started: 2016-05-21 18:25:54
-#   time_finished: 2016-05-21 18:25:54
-#   rejection_reason: MyString
-#   rejection_reason_other: MyString
-#   biologics_master_file_version_number: 1

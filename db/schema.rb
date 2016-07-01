@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160617205230) do
+ActiveRecord::Schema.define(version: 20160630212056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,10 +157,11 @@ ActiveRecord::Schema.define(version: 20160617205230) do
     t.boolean  "donor_logs_are_private_by_default", default: true,  null: false
     t.boolean  "read_the_fine_print",               default: false, null: false
     t.boolean  "demo",                              default: false, null: false
-    t.string   "admin_secret"
     t.string   "group"
     t.string   "email"
     t.integer  "donor_id"
+    t.string   "encrypted_admin_secret"
+    t.string   "encrypted_admin_secret_iv"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

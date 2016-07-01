@@ -13,6 +13,7 @@ class DonorLog < ActiveRecord::Base
   before_save :date_of_passage_depends_on_time_of_passage
 
   after_create :parse_tags_from_notes
+  after_update :parse_tags_from_notes
   
   # Create. 
   # - look for meta_log in time frame
@@ -37,6 +38,7 @@ class DonorLog < ActiveRecord::Base
   end
   def find_and_update_or_initialize_meta_log_on_change
     meta = self.meta_logs.first
+    #FIXME -- so that if a user adjusts dl time by 4 minutes that change is visible in the logs index
     #if meta ISN'T still within time frame
     unless meta.time_of_passage < time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW || meta.time_of_passage > time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW
       # remove self from old meta_log
@@ -63,7 +65,7 @@ class DonorLog < ActiveRecord::Base
     MetaLog.orphans.each(&:destroy)
   end
   
-  after_update :parse_tags_from_notes
+  
 
   acts_as_taggable # Alias for acts_as_taggable_on :tags
 
@@ -105,6 +107,7 @@ class DonorLog < ActiveRecord::Base
 
   validate :time_of_passage_is_less_than_or_equal_to_about_now
   validate :belongs_to_donor
+  validate :must_be_donated_to_be_processable
 
   def set_default_values
     self.donor_number ||= self.user.donor_id
@@ -127,15 +130,22 @@ class DonorLog < ActiveRecord::Base
   def parse_tags_from_notes
     # notes = self.notes #=> 'I ate a #cucumber and went for a #run today.'
     self.tag_list = '' # clear out the tag list
-    self.tag_list.add(self.notes, parser: HashtagParser) # this IS persisting the new tag. idk why. 
+    self.tag_list.add(notes, parser: HashtagParser) # this IS persisting the new tag. idk why. 
   end
 
   def time_of_passage_is_less_than_or_equal_to_about_now
-    errors.add(:time_of_passage, 'can\'t be (too far) in the future.') if time_of_passage > Time.zone.now + 10.minutes
+    errors.add(:time_of_passage, 'can\'t be (too far) in the future.') if time_of_passage > Time.zone.now + SpoopConstants::LOG_MATCH_MINUTES_WINDOW
   end
 
   def belongs_to_donor
-    flash[:danger] = 'You must be an Open Biome donor to deal in donor logs.' && errors.add(:user_id, 'isn\'t an Open Biome donor.') unless self.user.role == 'donor'
+    # flash[:danger] = 'You must be an Open Biome donor to deal in donor logs.' &&
+    errors.add(:user_id, 'isn\'t an Open Biome donor.') unless user.role == 'donor'
+  end
+
+  def must_be_donated_to_be_processable
+    if processable
+      errors.add(:processable, 'must be true.') unless donated
+    end
   end
 
 end

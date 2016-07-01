@@ -1,7 +1,11 @@
 class ApiKey < ActiveRecord::Base
   belongs_to :user
-  before_create :generate_access_token
-  before_create :set_expiration
+  before_validation :generate_access_token
+  before_validation :set_expiration
+
+  validates :user_id, presence: true, uniqueness: true
+  validates :role, presence: true
+  validates :access_token, presence: true, uniqueness: true
 
   def expired?
     DateTime.now >= self.expires_at

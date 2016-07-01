@@ -13,9 +13,11 @@ donor_log_processable:
   weight: <%= Array(65..150).sample %>
   donated: true
   processable: true
-  notes: I eat \#kale.
+  notes: 'I eat #kale.'
   time_of_passage: <%= dl_p_top %>
   date_of_passage: <%= dl_p_top.beginning_of_day %>
+  is_private: true
+  donor_number: 88
 
 donor_log_rejected: 
   user: ob_donor
@@ -23,9 +25,11 @@ donor_log_rejected:
   weight: <%= Array(65..150).sample %>
   donated: true
   processable: false
-  notes: I ate too much \#kale.
+  notes: 'I ate too much #kale.'
   time_of_passage: <%= dl_r_top %>
   date_of_passage: <%= dl_r_top.beginning_of_day %>
+  is_private: true
+  donor_number: 88
 
 donor_log_not_donated: 
   user: ob_donor
@@ -33,8 +37,10 @@ donor_log_not_donated:
   weight: <%= Array(65..150).sample %>
   donated: false
   processable: false
-  notes: I went to the beach.
+  notes: 'I went to the beach.'
   time_of_passage: <%= dl_nd_top %>
   date_of_passage: <%= dl_nd_top.beginning_of_day %>
+  is_private: true
+  donor_number: 88
 
 

@@ -8,7 +8,8 @@ isaac:
   donor_logs_are_private_by_default: true
   read_the_fine_print: true
   demo: false
-  admin_secret: <%= ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(ENV['admin_secret']) %>
+  encrypted_admin_secret: asdf
+  encrypted_admin_secret_iv: asdfasdf
   group: open_biome
   email: isaac.ardis@gmail.com
   donor_id: 438
@@ -21,20 +22,20 @@ ob_donor:
   donor_logs_are_private_by_default: true
   read_the_fine_print: true
   demo: false
-  admin_secret: 
   group: open_biome
   email: george@yahoo.com
   donor_id: 88
 
 eduardo: 
   role: admin
-  name: Eduardo
+  name: Kelly
   donor_since: 
   encrypted_password: <%= Devise::Encryptor.digest(User, 'beaconstreet') %>
   donor_logs_are_private_by_default: true
   read_the_fine_print: true
   demo: false
-  admin_secret: <%= ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base).encrypt_and_sign(ENV['admin_secret']) %>
+  encrypted_admin_secret: asdf
+  encrypted_admin_secret_iv: asdfasdf
   group: open_biome
   email: eduardo@openbiome.org
   donor_id: 

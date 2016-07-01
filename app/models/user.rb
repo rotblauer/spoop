@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
          :confirmable, :lockable, :timeoutable, :validatable
 
   # attr_encrypted :donor_id, key: Rails.application.secrets.secret_key_base, if: :donor?
+  attr_encrypted :admin_secret, key: Rails.application.secrets.secret_key_base, if: :admin?
 
   ROLES = ['donor', 'admin', 'public']
   GROUPS = ['open_biome', 'site', 'public']
@@ -39,16 +40,12 @@ class User < ActiveRecord::Base
 	
 	
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
-	# FIXME
-	unless Rails.env.test?
-		validate :knows_admin_secret_if_admin, on: :create
-	end
-
+	validate :knows_admin_secret_if_admin, on: :create
 
 	before_create :set_default_values
 	# before_create :set_admin_number, if: :admin?
 	after_create :create_user_api_key
-	after_save :sync_api_key_role, if: :role_changed?
+	after_update :sync_api_key_role, if: :role_changed?
 
 
 	scope :donors, -> { where(role: 'donor') }
@@ -70,13 +67,9 @@ class User < ActiveRecord::Base
   # end
 
   # encrypt the admin secret before writing.
-  def admin_secret=(adminsecret)
-  	write_attribute(:admin_secret, Helpers.encryptify(adminsecret))
-  end
-
-  def create_user_api_key
-		self.create_api_key(role: self.role) if self.api_key.nil?
-  end
+  # def admin_secret=(adminsecret)
+  # 	write_attribute(:admin_secret, Helpers.encryptify(adminsecret))
+  # end
 
   ## FIXME: should be suffixed with '?' --> admin?
 	def admin?
@@ -94,26 +87,24 @@ class User < ActiveRecord::Base
 		self == user
 	end
 
-	private
+  def create_user_api_key
+		ApiKey.find_or_create_by!(user_id: id, role: role)
+  end
 
 	def sync_api_key_role
-		create_user_api_key
-		self.api_key.update_column(:role, self.role) 
+		ApiKey.find_by(user_id: id).update_column(:role, role) 
 	end
+
+	private
 
 	def knows_admin_secret_if_admin
 		unless donor?
-			# decrypt before checking against env var
-			unless ADMIN_SECRETS.include?(Helpers.decryptify(admin_secret))
+			unless ADMIN_SECRETS.include?(self.admin_secret)
 				errors.add(:admin_secret, 'is wrong')
 			end
 		end
 	end
 
 	protected
-
-	# def validate_email_uniqueness
-	#   errors.add(:email, :taken) unless email_unique?
-	# end
 
 end
