@@ -17,3 +17,9 @@ three:
   access_token: cccc
   role: admin
   expires_at: <%= Time.zone.now + 6.months %>
+
+four: 
+  user: mrroboto
+  access_token: dddd
+  role: donor
+  expires_at: <%= Time.zone.now + 6.months %>

@@ -1,11 +1,67 @@
 ENV['RAILS_ENV'] ||= 'test'
-
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require 'capybara/rails'
 
+# Because Devise test helpers don't like capybara
+class ActionController::TestCase
+  include Devise::TestHelpers
+end
+
+## Clicky tests.
+#
+require "minitest/rails/capybara"
+
+## CLI create a new capybara feature test 
+# rails g minitest:feature InteractWithDonorLogs
+# rake minitest:features
+
+# https://github.com/plataformatec/devise/wiki/How-To:-Test-with-Capybara
+class Capybara::Rails::TestCase
+  #   include Warden::Test::Helpers
+  #   Warden.test_mode!
+  
+  def user
+    users(:ob_donor)
+  end
+  def password(word='password')
+    word
+  end
+
+  def do_sign_in(user, options={})
+    visit root_path
+    click_link 'Login'
+    assert_content 'Log in'
+
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: options[:password] || password
+    # check 'Remember me'
+    click_button 'Log in'
+
+    assert_content page, "#{user.role.capitalize!} #{user.donor_id}"
+  end
+
+  def teardown
+    Capybara.reset_sessions!
+    Capybara.use_default_driver
+  end
+end
+
+## Integration tests.
+#
+class ActionDispatch::IntegrationTest
+  # # Make the Capybara DSL available in all integration tests
+  # include Capybara::DSL
+  # # Reset sessions and driver between tests
+  # # Use super wherever this method is redefined in your individual test classes
+  # def teardown
+  #   Capybara.reset_sessions!
+  #   Capybara.use_default_driver
+  # end
+end
+
+## Unit tests. 
+#
 class ActiveSupport::TestCase
-
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
@@ -30,7 +86,9 @@ class ActiveSupport::TestCase
     JSON.parse(response_body)
   end
 
-  include Devise::TestHelpers
+  def path_at(url)
+    URI.parse(url).path
+  end
 
   # http://stackoverflow.com/questions/32168204/how-to-sign-in-for-devise-to-test-controller-with-minitest
   # Returns true if a test user is logged in.
@@ -43,9 +101,7 @@ class ActiveSupport::TestCase
     password    = options[:password]    || 'password'
     remember_me = options[:remember_me] || '1'
     if integration_test?
-      post login_path, session: { email:       user.email,
-                                  password:    password,
-                                  remember_me: remember_me }
+      post_via_redirect user_session_path, 'user[email]' => user.email, 'user[password]' => password#, 'user[remember_me]' => remember_me
     else
       session[:user_id] = user.id
     end
@@ -57,6 +113,5 @@ class ActiveSupport::TestCase
   def integration_test?
     defined?(post_via_redirect)
   end
-  
   
 end

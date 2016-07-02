@@ -107,7 +107,9 @@ end
 # end
 
 group :test do
-  gem "capybara"
+  # gem "capybara"
+  gem 'minitest-rails-capybara'
+  # gem 'minitest-capybara', '~> 0.8'
   # gem "connection_pool"
   # gem "launchy"
   gem "minitest-reporters"

@@ -19,7 +19,7 @@
 			we only allow actual users to edit their registrations, but admins can edit as resource 
 			-->
 			<% if current_user.is_user(@user) %>
-			  <%= link_to edit_user_registration_path, class:'text-primary m-r-1' do %>
+			  <%= link_to edit_user_registration_path, class:'text-primary m-r-1', id:'edit-user-link' do %>
 			    <i class="fa fa-pencil fa-5x"></i>
 			    <div class="hidden-xs-down">
 			    	<p class="lead">Edit your profile</p>
@@ -27,7 +27,7 @@
 			  <% end %>
 			<!-- else is admin -->
 			<% else %>
-			  <%= link_to edit_user_path(current_user), class:'text-primary m-r-1' do %>
+			  <%= link_to edit_user_path(current_user), class:'text-primary m-r-1', id:'edit-user-link' do %>
 			    <i class="fa fa-pencil fa-5x"></i>
 			    <div class="hidden-xs-down">
 			    	<p class="lead">Edit profile</p>
@@ -37,7 +37,7 @@
 		</div>
 		
 		<div class="col-sm-4 p-y-2">
-			<%= link_to import_user_open_biome_logs_path(current_user), class:"text-primary m-r-1" do %>
+			<%= link_to import_user_open_biome_logs_path(current_user), class:"text-primary m-r-1", id:'import-logs-link' do %>
 			  <i class="fa fa-cloud-upload fa-5x"></i>
 			  <div class="hidden-xs-down">
 			  	<p class="lead">Import Open Biome logs</p>
@@ -46,7 +46,7 @@
 		</div>
 
 		<div class="col-sm-4 p-y-2">
-			<%= link_to  api_info_user_path(current_user), class:'m-r-1 text-primary' do %>
+			<%= link_to  api_info_user_path(current_user), class:'m-r-1 text-primary', id:'api-key-link' do %>
 				<i class='fa fa-key fa-5x'></i>
 				<div class="hidden-xs-down">
 					<p class="lead">iOS and API key</p>

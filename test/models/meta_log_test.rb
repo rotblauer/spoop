@@ -9,8 +9,8 @@ class MetaLogTest < ActiveSupport::TestCase
 		OpenBiomeLog.create!(open_biome_logs(:one).attributes.merge(id: 123))
 	end
 	def create_matching_dl_and_obl
-		d = DonorLog.create!(donor_logs(:processable).attributes.merge(id: 123))
-		o = OpenBiomeLog.create!(open_biome_logs(:one).attributes.merge(id: 123, time_of_passage: Time.zone.at(d.time_of_passage + 6.minutes)))
+		d = DonorLog.create!(donor_logs(:processable).attributes.merge(id: 123, time_of_passage: Time.zone.now, date_of_passage: Time.zone.now.beginning_of_day))
+		o = OpenBiomeLog.create!(open_biome_logs(:one).attributes.merge(id: 123, time_of_passage: Time.zone.at(d.time_of_passage + 6.minutes), donated_on: d.date_of_passage))
 		{dl: d, obl: o}
 	end
 
@@ -25,14 +25,17 @@ class MetaLogTest < ActiveSupport::TestCase
 	end
 
 	test 'created matching obl and dl should init one meta log' do
-		n = create_matching_dl_and_obl
-		assert_equal 1, MetaLog.count #no meta log fixtures
 		
-		m = MetaLog.first
+		assert_difference 'MetaLog.count', +1 do
+			@n = create_matching_dl_and_obl
+		end
+		
+		m = MetaLog.last
 		
 		# check parentage
-		assert_equal n[:dl].id, m.donor_log_id
-		assert_equal n[:obl].id, m.open_biome_log_id
+		assert_equal @n[:dl].user_id, m.user_id
+		assert_equal @n[:dl].id, m.donor_log_id
+		assert_equal @n[:obl].id, m.open_biome_log_id
 	end
 
 	test 'destructive capacities' do

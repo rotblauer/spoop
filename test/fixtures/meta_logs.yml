@@ -1,0 +1,8 @@
+# {user_id: 1, donor_log_id: nil, open_biome_log_id: 3960, time_of_passage: "2016-06-15 16:30:00", date_of_passage: "2016-06-15 04:00:00", donor_id: 438}
+one:
+  user: ob_donor
+  donor_log: processable
+  open_biome_log: one
+  time_of_passage: "2016-05-09 12:20:59"
+  date_of_passage: "2016-05-09 04:00:00"
+  donor_id: 88

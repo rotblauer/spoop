@@ -8,7 +8,6 @@ class DonorLogTest < ActiveSupport::TestCase
 	end
 
 	test 'fixtures should be valid' do 
-		assert DonorLog.count == 3, "Should have 3 donor log fixtures"
 		donor_logs.each do |d|
 			assert d.valid?, "Donor log fixtures should be valid"
 		end
@@ -78,7 +77,7 @@ class DonorLogTest < ActiveSupport::TestCase
 	end
 
 	test 'should destroy orphaned meta log on destroy' do
-		d = DonorLog.create!(dl.attributes.merge(id: 43123123))
+		d = DonorLog.create!(dl.attributes.merge(id: 43123123, time_of_passage: Time.zone.now, date_of_passage: Time.zone.now.beginning_of_day))
 		m = d.own_meta_log
 		assert_not_nil m, "There is a meta log to destroy"
 		d.destroy!

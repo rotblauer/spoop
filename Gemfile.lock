@@ -169,6 +169,20 @@ GEM
     mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (5.9.0)
+    minitest-capybara (0.8.2)
+      capybara (~> 2.2)
+      minitest (~> 5.0)
+      rake
+    minitest-metadata (0.6.0)
+      minitest (>= 4.7, < 6.0)
+    minitest-rails (2.2.1)
+      minitest (~> 5.7)
+      railties (~> 4.1)
+    minitest-rails-capybara (2.1.2)
+      capybara (~> 2.7)
+      minitest-capybara (~> 0.8)
+      minitest-metadata (~> 0.6)
+      minitest-rails (~> 2.1)
     minitest-reporters (1.1.9)
       ansi
       builder
@@ -305,7 +319,6 @@ DEPENDENCIES
   bootstrap (~> 4.0.0.alpha3)
   bower-rails (~> 0.10.0)
   byebug
-  capybara
   chartkick
   coffee-rails (~> 4.1.0)
   d3-rails
@@ -322,6 +335,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   lazy_high_charts
+  minitest-rails-capybara
   minitest-reporters
   pg (~> 0.15)
   query_diet

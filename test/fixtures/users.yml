@@ -16,21 +16,38 @@ isaac:
 
 ob_donor:
   role: donor
-  name: George
+  name: Georgina
   donor_since: 
-  encrypted_password: <%= Devise::Encryptor.digest(User, 'beaconstreet') %>
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: 3
+  current_sign_in_at: 
+  last_sign_in_at: 2016-06-17 09:25:13
+  current_sign_in_ip: '::1'
+  last_sign_in_ip: '::1'
+  confirmation_token: 
+  confirmed_at: 2016-06-16 13:03:32
+  confirmation_sent_at: 
+  unconfirmed_email: 
+  failed_attempts: 0
+  unlock_token: 
+  locked_at: 
   donor_logs_are_private_by_default: true
   read_the_fine_print: true
   demo: false
   group: open_biome
   email: george@yahoo.com
   donor_id: 88
+  encrypted_admin_secret: 
+  encrypted_admin_secret_iv: 
 
 eduardo: 
   role: admin
   name: Kelly
   donor_since: 
-  encrypted_password: <%= Devise::Encryptor.digest(User, 'beaconstreet') %>
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
   donor_logs_are_private_by_default: true
   read_the_fine_print: true
   demo: false
@@ -39,6 +56,35 @@ eduardo:
   group: open_biome
   email: eduardo@openbiome.org
   donor_id: 
+
+mrroboto:
+  role: donor
+  name: Mr. Roboto
+  donor_since: 
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'shitshitshit') %>
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: 0
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  confirmation_token: 
+  confirmed_at: 2016-06-16 13:03:32
+  confirmation_sent_at: 
+  unconfirmed_email: 
+  failed_attempts: 0
+  unlock_token: 
+  locked_at: 
+  donor_logs_are_private_by_default: true
+  read_the_fine_print: true
+  demo: true
+  group: open_biome
+  email: mrroboto@spoop.info
+  donor_id: 9999
+  encrypted_admin_secret: 
+  encrypted_admin_secret_iv:
 
 # TODO: add public user 
 

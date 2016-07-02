@@ -50,7 +50,7 @@ class OpenBiomeLogTest < ActiveSupport::TestCase
 	end
 
 	test 'should destroy orphaned meta log on destroy' do
-		o = OpenBiomeLog.create!(obl.attributes.merge(id: 43123123))
+		o = OpenBiomeLog.create!(obl.attributes.merge(id: 43123123, time_of_passage: Time.zone.now, donated_on: Time.zone.now.beginning_of_day))
 		m = o.own_meta_log
 		assert_not_nil m, "There is a meta log to destroy"
 		
