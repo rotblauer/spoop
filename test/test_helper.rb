@@ -1,7 +1,9 @@
 ENV['RAILS_ENV'] ||= 'test'
+
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-# include Api
+require 'capybara/rails'
+
 class ActiveSupport::TestCase
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -11,10 +13,6 @@ class ActiveSupport::TestCase
   
   # Improved Minitest output (color and progress bar)
   require "minitest/reporters"
-  # Minitest::Reporters.use!(
-  #   Minitest::Reporters::ProgressReporter.new,
-  #   ENV,
-  #   Minitest.backtrace_filter)
   Minitest::Reporters.use!(
     Minitest::Reporters::SpecReporter.new,
     ENV,
