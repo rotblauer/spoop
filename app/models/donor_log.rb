@@ -25,43 +25,44 @@ class DonorLog < ActiveRecord::Base
   # - - remove self.id from old meta_log
   # - if < 10.minutes diff from existing meta_log
   # - - do nothing
+  # 
+  # TODO refactor duplicate code in open_biome_log.rb
   after_create :find_and_update_or_initialize_meta_log
   after_update :find_and_update_or_initialize_meta_log_on_change, if: :time_of_passage_changed?
   def find_and_update_or_initialize_meta_log
-    meta = MetaLog.where('time_of_passage > ?', time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW).where('time_of_passage < ?', time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW).first #only is one
+    meta = meta_log_by_time
     if meta.present?
-      #IMPROVE this assumes that poops are unique to within the time frame -- ie if you have two poops within 20 minutes of each other, they'll disappear (not deleted, but 'opposite-orphaned')
+      #FIXME this assumes that poops are unique to within the time frame -- ie if you have two poops within 20 minutes of each other, they'll disappear (not deleted, but 'opposite-orphaned')
       meta.update_attributes(donor_log_id: id) 
     else 
       meta_logs.create(time_of_passage: time_of_passage)
     end
   end
   def find_and_update_or_initialize_meta_log_on_change
-    meta = self.meta_logs.first
-    #FIXME -- so that if a user adjusts dl time by 4 minutes that change is visible in the logs index
-    #if meta ISN'T still within time frame
-    unless meta.time_of_passage < time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW || meta.time_of_passage > time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW
-      # remove self from old meta_log
-      meta.donor_log_id = nil
-      # same as on create
+    unless meta_log_is_within_time_frame?
+      own_meta_log.update_attributes(donor_log_id: nil)
       find_and_update_or_initialize_meta_log
     end
   end
-  # after_save :establish_meta_log
-  # def establish_meta_log
-    # if !meta_logs.any? || 
-    #   match = OpenBiomeLog.where(donor_number: self.donor_number).where('time_of_passage > ?', self.time_of_passage - SpoopConstants::LOG_MATCH_MINUTES_WINDOW).where('time_of_passage < ?', self.time_of_passage + SpoopConstants::LOG_MATCH_MINUTES_WINDOW).first
-    #   if match.present?
-    #     m = MetaLog.find_by(user_id: user_id, open_biome_log_id: match.id)
-    #     m.update_attributes(donor_log_id: id) 
-    #   else 
-    #     MetaLog.create!(user_id: user_id, donor_log_id: id)
-    #   end
-  #   end
-  # end
 
-  after_destroy :update_and_maybe_remove_meta_log
-  def update_and_maybe_remove_meta_log
+  ## extended meta helpers
+  #TODO implement for DonorLog
+  def own_meta_log
+    meta_logs.first
+  end
+  def meta_log_by_time(time_of_passage=self.time_of_passage)
+    window = SpoopConstants::LOG_MATCH_MINUTES_WINDOW
+    time_frame_start = time_of_passage - window
+    time_frame_latest = time_of_passage + window
+    MetaLog.where('time_of_passage > ? AND time_of_passage < ?', time_frame_start, time_frame_latest).first #is only one. better be
+  end
+  def meta_log_is_within_time_frame?
+    own_meta_log == meta_log_by_time
+  end
+  
+  #de-orphan metalogs
+  after_destroy :remove_orphaned_meta_logs
+  def remove_orphaned_meta_logs
     MetaLog.orphans.each(&:destroy)
   end
   

@@ -7,7 +7,7 @@
   dl_r_top = Time.zone.now - Array(0..10).sample.days - Array(0..23).sample.hours - Array(0..60).sample.minutes
 %>
 
-donor_log_processable:
+processable:
   user: ob_donor
   bristol_score: <%= [3,4,5].sample %>
   weight: <%= Array(65..150).sample %>
@@ -19,7 +19,7 @@ donor_log_processable:
   is_private: true
   donor_number: 88
 
-donor_log_rejected: 
+rejected: 
   user: ob_donor
   bristol_score: <%= [1,2,6,7].sample %>
   weight: <%= Array(65..150).sample %>
@@ -31,7 +31,7 @@ donor_log_rejected:
   is_private: true
   donor_number: 88
 
-donor_log_not_donated: 
+not_donated: 
   user: ob_donor
   bristol_score: <%= [1,2,3,4,5,6,7].sample %>
   weight: <%= Array(65..150).sample %>

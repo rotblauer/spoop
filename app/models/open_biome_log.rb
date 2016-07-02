@@ -11,6 +11,7 @@ class OpenBiomeLog < ActiveRecord::Base
   has_many :donor_logs, through: :meta_logs
 
   # Damn it Eduardo, changing up the attributes. 
+  # alias, original
   alias_attribute :processing_result, :processing_state
 
   scope :processed, -> {
@@ -52,7 +53,7 @@ class OpenBiomeLog < ActiveRecord::Base
   # - - do nothing
   # 
   # 
-  # 
+  # TODO refactor duplicate code in donor_log.rb
   after_create :find_and_update_or_initialize_meta_log
   after_update :find_and_update_or_initialize_meta_log_on_change, if: :time_of_passage_changed?
   def find_and_update_or_initialize_meta_log
@@ -87,8 +88,8 @@ class OpenBiomeLog < ActiveRecord::Base
   end
   
   #de-orphan metalogs
-  after_destroy :update_and_maybe_remove_meta_log
-  def update_and_maybe_remove_meta_log
+  after_destroy :remove_orphaned_meta_logs
+  def remove_orphaned_meta_logs
     MetaLog.orphans.each(&:destroy)
   end
 

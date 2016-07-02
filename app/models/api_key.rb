@@ -16,12 +16,12 @@ class ApiKey < ActiveRecord::Base
 	  def generate_access_token
 	  	begin 
 	  		# https://github.com/genericsteele/token_phrase
-	  		self.access_token = TokenPhrase.generate(:numbers => false) # SecureRandom.hex
+	  		self.access_token ||= TokenPhrase.generate(:numbers => false) # SecureRandom.hex
 	  	end while self.class.exists?(access_token: access_token)
 	  end
 
 	  def set_expiration
-	    self.expires_at = DateTime.now.in_time_zone + 3.years # TODO: halflife
+	    self.expires_at ||= DateTime.now.in_time_zone + 3.years # TODO: halflife
 	 	end
 
 end

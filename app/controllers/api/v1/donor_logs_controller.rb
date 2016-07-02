@@ -35,7 +35,8 @@ class Api::V1::DonorLogsController < Api::ApiController
 
   def update
     if @donor_log.update(donor_log_params)
-      head :no_content
+      # head :no_content
+      render json: @donor_log
     else 
       render json: @donor_log.errors, status: :unprocessable_entity
     end

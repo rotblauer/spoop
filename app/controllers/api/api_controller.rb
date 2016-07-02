@@ -28,9 +28,9 @@ class Api::ApiController < ApplicationController
 	  	else
 		    authenticate_or_request_with_http_token do |token, options|
 		    	key = ApiKey.find_by_access_token(token)
-    		  handle_key(key)
+	  		  handle_key(key)
 		    end
 		  end
-	  end
+	  end		
 
 end
