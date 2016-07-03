@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class InteractWithDonorLogsTest < ActionDispatch::IntegrationTest
+class InteractWithDonorLogsWebTest < ActionDispatch::IntegrationTest
   
   def user
   	users(:ob_donor)
@@ -44,8 +44,10 @@ class InteractWithDonorLogsTest < ActionDispatch::IntegrationTest
   	get new_user_donor_log_path(user)
   	assert_response :success
 
-  	post user_donor_logs_path, {user_id: user.id, donor_log: valid_dl_params}
-  	assert_redirected_to user_path(user)
+    assert_difference 'DonorLog.count', +1 do 
+  	 post user_donor_logs_path, {user_id: user.id, donor_log: valid_dl_params}
+    end
+    assert_redirected_to user_path(user)
 	end
 
 	test 'edit donor log' do

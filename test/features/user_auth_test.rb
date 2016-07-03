@@ -3,7 +3,27 @@ require "test_helper"
 class UserAuthTest < Capybara::Rails::TestCase
 
 	# TODO sign up
-	# TODO edit user
+  
+  test 'donor can sign up' do
+    visit root_path
+    click_link 'Sign up'
+
+    assert_content 'Sign up'
+
+    fill_in 'Email', with: 'test@es.com'
+    fill_in 'Donor number', with: ENV['valid_donor_numbers'].split(',')[1]
+    fill_in 'Password', with: 'password'
+    fill_in 'Password confirmation', with: 'password'
+    find(:css, '#user_read_the_fine_print').set(true)
+
+    click_button 'Sign up'
+      
+
+    assert_equal path_at(current_url), new_user_registration_path
+    assert_content "A message with a confirmation link has been sent to your email address. Please follow the link to activate your account."
+
+
+  end
 
   test 'user sign in and out' do
   	do_sign_in(user)

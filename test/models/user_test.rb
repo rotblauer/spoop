@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
 	end
 
 	def valid_donor_attrs
-		{email:'jeff@yahoo.com', donor_id: valid_donor_ids[5], role: 'donor', group: 'open_biome', password:'asdfasdf', password_confirmation:'asdfasdf', read_the_fine_print: true}
+		{email:'jeff@yahoo.com', donor_id: valid_donor_ids[1], role: 'donor', group: 'open_biome', password:'asdfasdf', password_confirmation:'asdfasdf', read_the_fine_print: true}
 	end
 	def valid_admin_attrs
 		{email:'jeff@yahoo.com', admin_secret: ENV['admin_secret'], donor_id: nil, role: 'admin', group: 'open_biome', password:'asdfasdf', password_confirmation:'asdfasdf', read_the_fine_print: true}
@@ -80,7 +80,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'donor_must_have_legit_donor_id' do 
   	u = users(:ob_donor)
-  	u.update(donor_id: 1996)
+  	u.update(donor_id: 99999)
   	assert_not u.valid?
   	assert_includes u.errors.keys, :donor_id, 'Validated illegit donor_id.'
   	
@@ -88,7 +88,7 @@ class UserTest < ActiveSupport::TestCase
   	assert_not u.valid?
   	assert_includes u.errors.keys, :donor_id, 'Validated without donor_id.'
 
-  	u.update(donor_id: valid_donor_ids[1])
+  	u.update(donor_id: users(:mrroboto).donor_id)
   	assert_not u.valid?
   	assert_includes u.errors.keys, :donor_id, 'Validated with duplicate donor_id.'
   end
@@ -113,11 +113,14 @@ class UserTest < ActiveSupport::TestCase
   end
   #User.create_user_api_key
   test 'gets_api_key_on_create' do
-  	u = User.new(valid_donor_attrs)
-  	n = ApiKey.count
-  	u.save
+    u = User.new(valid_donor_attrs)
+    assert_difference 'ApiKey.count', +1 do 
+      u.save
+      u.reload # api key create on #after_save
+    end
+
+    # Check attrs of api key compared to user. 
   	assert_not_nil u.api_key, "User should have child api key created when user is created"
-  	assert_equal n+1, ApiKey.count, "Api key was not created upon user creation"
   	assert_equal u.api_key.user_id, u.id, "Api key should have same id as user"
   	assert_equal u.api_key.role, u.role, "Api key has different role from created user"
 
@@ -125,15 +128,18 @@ class UserTest < ActiveSupport::TestCase
 
   #User.sync_api_key_role
   test 'api_key_updates_role_on_role_changed' do 
-  	u = User.create(valid_donor_attrs)
-  	u.update(role: 'public')
+  	u = users(:ob_donor)
+    assert_equal u.api_key.role, u.role
+
+    u.update(role: 'public')
+    u.reload
   	assert_equal u.api_key.role, u.role, "Api key has different role when user changed roles"
   end
 
   #User.has_one :api_key, dependent: :destroy
   test 'api_key_is_destroyed_with_user_destroy' do
   	# assert_equal User.count, ApiKey.count, "Not equal numbers of users and api keys."
-  	i = users(:isaac)
+  	i = users(:ob_donor)
   	assert i.api_key.present?, "User doesnt have an api key to begin with"
   	n = i.id
   	i.destroy!

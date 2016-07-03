@@ -1,8 +1,8 @@
 one: 
   user: ob_donor
   donor_group: "Wombat"
-  donor_number: 88
-  sample: "0438-0091"
+  donor_number: 1
+  sample: "0001-0001"
   quarantine_state: "available"
   product: "fmp_250"
   usage: "treatment"

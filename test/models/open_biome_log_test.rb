@@ -20,7 +20,7 @@ class OpenBiomeLogTest < ActiveSupport::TestCase
 		# check init
 		assert_equal obl.donor_number, obl.user.donor_id, "Fixture donor number should match its users donor id"
 		
-		obl.update(donor_number: 89)
+		obl.update(donor_number: 2)
 		assert_includes obl.errors.keys, :donor_number, "Donor number must match user donor id"
 	end
 

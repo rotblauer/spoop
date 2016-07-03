@@ -38,7 +38,7 @@ class ApiKeyTest < ActiveSupport::TestCase
 	end
 
 	test 'user id must be unique' do 
-		k = ApiKey.new(valid_api_key_attrs.merge(user_id: users(:isaac).id))
+		k = ApiKey.new(valid_api_key_attrs.merge(user_id: users(:ob_donor).id))
 		assert_not k.valid?
 		assert_includes k.errors.keys, :user_id, "Api key should not be valid without user_id"
 	end
