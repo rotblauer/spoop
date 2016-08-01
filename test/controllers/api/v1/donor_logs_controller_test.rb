@@ -5,6 +5,12 @@ class Api::V1::DonorLogsControllerTest < ActionController::TestCase
 
   setup do
     @user = users(:ob_donor)
+
+    # Testing with token params for authorization. 
+    # 1 of 3 ways in which authorization can happen, though the other two are the
+    # ways I expect authorization to actually happen. 
+    # 
+    # TODO: Test the other ways. 
     @token = @user.api_key.access_token
 
     sign_in_as @user
