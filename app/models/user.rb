@@ -13,32 +13,32 @@ class User < ActiveRecord::Base
   ROLES = ['donor', 'admin', 'public']
   GROUPS = ['open_biome', 'site', 'public']
 
-  # TODO: destroy, really? 
+  # TODO: destroy, really?
 	has_many :open_biome_logs, dependent: :destroy
 	has_many :donor_logs, dependent: :destroy
-	has_many :meta_logs, dependent: :destroy 
+  has_many :meta_logs, dependent: :destroy
 	has_many :visits
 	has_one :api_key, dependent: :destroy
-	
+
 
 	validates :email, presence: true
 	validates :email, uniqueness: true
 	# validates_format_of :email, with: Devise.email_regexp, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
 	validates_format_of :email, with: SpoopConstants::VALID_EMAIL_REGEX, if: :email_changed?, allow_blank: false #with: Devise.email_regexp,
-	
+
 	validates :read_the_fine_print, inclusion: {in: [true]}
-	
+
 	validates :role, presence: true
 	validates :role, inclusion: { in: ROLES }
 
 	validates :group, inclusion: { in: GROUPS }
-	
+
 	validates :donor_id, presence: true, if: :donor?
 	validates :donor_id, uniqueness: true, if: :donor?
-	VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }  
+  VALID_DONOR_NUMBERS = ENV['valid_donor_numbers'].split(',').map{ |a| a.to_i }
 	validates :donor_id, :inclusion => { :in => VALID_DONOR_NUMBERS }, if: :donor?
-	
-	
+
+
 	ADMIN_SECRETS = [].append(ENV['admin_secret'])
 	validate :knows_admin_secret_if_admin, on: :create
 
@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
   end
 
 	def sync_api_key_role
-		ApiKey.find_by(user_id: id).update_column(:role, role) 
+    ApiKey.find_by(user_id: id).update_column(:role, role)
 	end
 
 	private
