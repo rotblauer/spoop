@@ -48,7 +48,7 @@ gem 'devise'
 gem 'attr_encrypted'
 gem 'token_phrase'
 
-# For opening API. 
+# For opening API.
 gem 'rack-cors', :require => 'rack/cors'
 gem 'table_print'
 
@@ -85,7 +85,7 @@ group :development, :test do
   gem 'guard-livereload', '~> 2.5', require: false
   gem 'rack-livereload'
   gem 'rb-fsevent', require: false
-  
+
 end
 
 group :development do
@@ -94,7 +94,6 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-
   gem 'seed_dump'
 end
 
@@ -105,24 +104,20 @@ end
 #   gem "rb-fsevent", :require => false
 #   gem "terminal-notifier-guard", :require => false
 # end
+gem "minitest-rails"
 
 group :test do
-  # gem "capybara"
   gem 'minitest-rails-capybara'
+  gem "minitest-reporters"
+  # gem "capybara"
+  #gem 'minitest-rails-capybara'
   # gem 'minitest-capybara', '~> 0.8'
   # gem "connection_pool"
   # gem "launchy"
-  gem "minitest-reporters"
+  #gem "minitest-reporters"
   # gem "mocha"
   # gem "poltergeist"
   # gem "shoulda-context"
   # gem "shoulda-matchers", ">= 3.0.1"
   # gem "test_after_commit"
 end
-
-
-
-
-
-
-

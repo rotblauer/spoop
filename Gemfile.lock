@@ -335,6 +335,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   lazy_high_charts
+  minitest-rails
   minitest-rails-capybara
   minitest-reporters
   pg (~> 0.15)

@@ -7,11 +7,12 @@ class ActionController::TestCase
   include Devise::TestHelpers
 end
 
-## Clicky tests.
+## Minitests should test clicking and UI interaction flows.
 #
+#require "minitest/rails"
 require "minitest/rails/capybara"
 
-## CLI create a new capybara feature test 
+## CLI create a new capybara feature test
 # rails g minitest:feature InteractWithDonorLogs
 # rake minitest:features
 
@@ -19,7 +20,7 @@ require "minitest/rails/capybara"
 class Capybara::Rails::TestCase
   #   include Warden::Test::Helpers
   #   Warden.test_mode!
-  
+
   def user
     users(:ob_donor)
   end
@@ -44,6 +45,7 @@ class Capybara::Rails::TestCase
     Capybara.reset_sessions!
     Capybara.use_default_driver
   end
+
 end
 
 ## Integration tests.
@@ -59,14 +61,14 @@ class ActionDispatch::IntegrationTest
   # end
 end
 
-## Unit tests. 
+## Unit tests.
 #
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
-  
+
   # Improved Minitest output (color and progress bar)
   require "minitest/reporters"
   Minitest::Reporters.use!(
@@ -81,7 +83,7 @@ class ActiveSupport::TestCase
   # Minitest::Reporters::JUnitReporter    # => JUnit test reporter designed for JetBrains TeamCity
   # Minitest::Reporters::MeanTimeReporter # => Produces a report summary showing the slowest running tests
   # Minitest::Reporters::HtmlReporter     # => Generates an HTML report of the test results
-  
+
   def json(response_body)
     JSON.parse(response_body)
   end
@@ -113,5 +115,5 @@ class ActiveSupport::TestCase
   def integration_test?
     defined?(post_via_redirect)
   end
-  
+
 end

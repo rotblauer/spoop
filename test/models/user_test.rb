@@ -146,5 +146,9 @@ class UserTest < ActiveSupport::TestCase
   	assert_not ApiKey.find_by(user_id: n), "Did not destroy api key along with user"
   end
 
+  # TODO: ensure user receivs confirmation email with appropriate information
+  # (confirmation token, and in case of email encryption, admins also would receive the right 'donor number')
+  # TODO: separate Admin from Users into two models. There is just no use overfuckincomplicating the single model in the name
+  # of not wanting to fuck about more with the views. And that's just how I feel about it.
 
 end

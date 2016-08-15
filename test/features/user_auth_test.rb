@@ -2,8 +2,7 @@ require "test_helper"
 
 class UserAuthTest < Capybara::Rails::TestCase
   # include ActionDispatch
-	# TODO sign up
-  
+
   test 'donor can sign up' do
     visit root_path
     click_link 'Sign up'
@@ -26,6 +25,10 @@ class UserAuthTest < Capybara::Rails::TestCase
     assert path_at(current_url), new_user_session_path
     assert_content "Your email address has been successfully confirmed. Sign on in!"
   end
+
+  # TODO: as described in User unit test, ensure that in case of an assigned 'donor number', the user
+  # actually receives one in the email and that it is the right one, and that it can actually be used
+  # to sign in. Seems important.
 
   test 'user sign in and out' do
   	do_sign_in(user)
