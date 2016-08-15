@@ -1,14 +1,14 @@
 <style>
       rect.bordered {
         stroke: #fff; //#E6E6E6;
-        stroke-width:1px;   
+        stroke-width:1px;
       }
 
       text.mono {
       	font-size: 0.8rem;
         /*font-size: 9pt;*/
         /*font-family: Consolas, courier;*/
-        fill: #aaa; 
+        fill: #aaa;
       }
 
       text.axis-workweek {
@@ -44,37 +44,37 @@
 	<% (1..24).to_a.each_with_index do |hour| %>
 
 	<div class="row" >
-		
+
 		<!-- label -->
 		<div class="col-xs-1">
 			<small class="text-muted text-lighter"><%= hour %></small>
 		</div>
-		
+
 		<!-- days by hour -->
 		<div class="col-xs-11" >
 			<% (1..7).to_a.each do |day| %>
-				
-				<% 
+
+        <%
 					val = @punchcard[day][hour]
 					mode = @ds[:mode] == 0 ? 1 : @ds[:mode]
-					if val == 0 
+          if val == 0
 						q_class = 'bg-muted'
-					elsif val == mode 
+          elsif val == mode
 						q_class = 'bg-q1'
 					elsif val == @ds[:max]
 						q_class = 'bg-q4'
 					elsif val > @ds[:q3]
 						q_class = 'bg-q3'
-					else 
+          else
 						q_class = 'bg-q2'
 					end
 				%>
-				
+
 				<!-- and each day gets a nice little 1/7 column -->
 				<div class="col-xs-1-7 <%= q_class %> text-lighter" style='border-right: 1px solid white; border-bottom: 1px solid white;'><%= val > 0 ? val : "&nbsp;".html_safe %></div>
 			<% end %>
 		</div>
 	</div>
 	<% end %>
-	
+
 </div>
