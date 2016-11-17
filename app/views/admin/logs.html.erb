@@ -14,18 +14,31 @@
 	processing_times = [] #start -> finish
 	lifecycle_times = [] #passage -> finish
 
-	@open_biome_logs.processed.each do |log|
-		transport_times.append((log.time_received - log.time_of_passage)) if log.time_of_passage.present? && log.time_received.present?
-		holding_times.append((log.time_started - log.time_received)) if log.time_received.present? && log.time_started.present?
-		processing_times.append((log.time_finished - log.time_started)) if log.time_started.present? && log.time_finished.present?
-		lifecycle_times.append((log.time_finished - log.time_of_passage)) if log.time_of_passage.present? && log.time_finished.present?
-	end
+  @open_biome_logs.processed.each do |log|
+    if ( log.time_of_passage.present? && log.time_received.present? )
+      transport_times.append((log.time_received - log.time_of_passage))
+    end
+    if ( log.time_received.present? && log.time_started.present? )
+      holding_times.append((log.time_started - log.time_received))
+    end
+    if ( log.time_started.present? && log.time_finished.present? )
+      processing_times.append((log.time_finished - log.time_started))
+    end
+    if ( log.time_of_passage.present? && log.time_finished.present? )
+      lifecycle_times.append((log.time_finished - log.time_of_passage))
+    end
+  end
+
+  transport_time_mean = transport_times.map{|t| (t/60).to_f}.mean.round
+  holding_time_mean = holding_times.map{|t| (t/60).to_f }.mean.round
+  processing_time_mean = processing_times.map{|t| (t/60).to_f }.mean.round
+  lifecycle_time_mean = lifecycle_times.map{|t| (t/60).to_f }.mean.round
 %>
 
 
 <div class="row text-xs-center p-y-2">
 <p>
-	
+
 </p>
 	<div class="col-sm-3">
 		<p class="text-muted">
@@ -33,7 +46,7 @@
 		~ transport time</p>
 		<h2 class="mocha">
 			<i class="fa fa-plus "></i>&nbsp;
-			<%= transport_times.map{|t| (t/60).to_f }.mean.round %>	min
+      <%= tranport_time_mean %>	min
 		</h2>
 	</div>
 	<div class="col-sm-3">
@@ -42,7 +55,7 @@
 		~ holding time</p>
 		<h2 class="mocha">
 			<i class="fa fa-plus "></i>&nbsp;
-			<%= holding_times.map{|t| (t/60).to_f }.mean.round %>	min
+      <%= holding_time_mean %>	min
 		</h2>
 	</div>
 	<div class="col-sm-3">
@@ -51,7 +64,7 @@
 		~ processing time</p>
 		<h2 class="mocha">
 			<i class="fa fa-plus "></i>&nbsp;
-			<%= processing_times.map{|t| (t/60).to_f }.mean.round %>	min
+      <%= processing_time_mean %>	min
 		</h2>
 	</div>
 	<div class="col-sm-3">
@@ -60,7 +73,7 @@
 		~ lifecycle time</p>
 		<h2 class="mocha">
 			<strong>=</strong>&nbsp;
-			<%= lifecycle_times.map{|t| (t/60).to_f }.mean.round %>	min
+      <%= lifecycle_time_mean %>	min
 		</h2>
 	</div>
 </div>
@@ -70,7 +83,7 @@
 <p class="text-muted m-t-3">Sum weight (grams) daily for <span class="text-success">processed</span> donations</p>
 <div class="row p-t-3">
 	<%= line_chart @open_biome_logs.processed.group_by_day(:time_finished).sum(:weight), library: {chart: {zoomType: 'x'}, xAxis: {type: 'datetime'}}, colors: ['#5cb85c']
-		%>	
+    %>
 </div>
 
 <p class="text-muted m-t-3">Bristol weekly</p>
@@ -78,27 +91,27 @@
 	<div class="col-sm-9">
 		<%= column_chart @open_biome_logs.order('bristol_score ASC').group(:bristol_score).group_by_week(:time_of_passage).count, stacked: true, library: {chart: {zoomType: 'x'}, xAxis: {type: 'datetime', tickInterval: 5}}, colors: [
 				"#5C2E00",
-				"#703800", 
-				'#854200', 
-				'#9A4D00', 
-				'#AB5500', 
-				'#BC5D00', 
+        "#703800",
+        '#854200',
+        '#9A4D00',
+        '#AB5500',
+        '#BC5D00',
 				'#CD6600'
-			] 
-			%>	
+      ]
+      %>
 	</div>
 	<div class="col-sm-3">
 		<p class="text-muted"><em>Overall</em></p>
 		<%= pie_chart @open_biome_logs.order('bristol_score ASC').group(:bristol_score).count, colors: [
 				"#5C2E00",
-				"#703800", 
-				'#854200', 
-				'#9A4D00', 
-				'#AB5500', 
-				'#BC5D00', 
+        "#703800",
+        '#854200',
+        '#9A4D00',
+        '#AB5500',
+        '#BC5D00',
 				'#CD6600'
-			] 
-			%>	
+      ]
+      %>
 	</div>
 </div>
 
@@ -106,14 +119,14 @@
 <div class="row p-t-3">
 	<div class="col-sm-9">
 	<%= line_chart @open_biome_logs.group(:processing_state).group_by_week(:time_of_passage).count, library: {chart: {zoomType: 'x'}, xAxis: {type: 'datetime'}}, colors: ['#5cb85c', '#d9534f']
-		%>	
+    %>
 
 	</div>
 
 	<div class="col-sm-3">
 		<p class="text-muted"><em>Overall</em></p>
 		<%= pie_chart @open_biome_logs.where.not(processing_state: '').group(:processing_state).count, colors: ['#5cb85c', '#d9534f']
-			%>	
+      %>
 	</div>
 </div>
 
@@ -121,25 +134,23 @@
 <div class="row p-t-3">
 	<div class="col-sm-9">
 	<%= line_chart @open_biome_logs.processed.order('product ASC').group(:product).group_by_week(:time_finished).count, library: {chart: {zoomType: 'x'}, xAxis: {type: 'datetime'}}, colors: [
-			
+
 			'#5bc0de', #250
 			'#804000', #enema
 			'#f0ad4e', # gelatin caps
 			'#0275d8' # screening
-			
+
 			] %>
 	</div>
 	<div class="col-sm-3">
 		<p class="text-muted"><em>Overall</em></p>
 		<%= pie_chart @open_biome_logs.processed.order('product ASC').group(:product).count, colors: [
-			
+
 			'#5bc0de', #250
 			'#804000', #enema
 			'#f0ad4e', # gelatin caps
 			'#0275d8' # screening
-			
+
 			] %>
 	</div>
 </div>
-
-

@@ -3,7 +3,7 @@ require 'spoop_constants'
 require 'hashtag_parser'
 
 class DonorLog < ActiveRecord::Base
-  
+
   belongs_to :user
   has_many :meta_logs, dependent: :nullify
   has_many :open_biome_logs, through: :meta_logs
@@ -14,8 +14,8 @@ class DonorLog < ActiveRecord::Base
 
   after_create :parse_tags_from_notes
   after_update :parse_tags_from_notes
-  
-  # Create. 
+
+  # Create.
   # - look for meta_log in time frame
   # - add self id to meta_log or create meta_log
   # Update.
@@ -25,7 +25,7 @@ class DonorLog < ActiveRecord::Base
   # - - remove self.id from old meta_log
   # - if < 10.minutes diff from existing meta_log
   # - - do nothing
-  # 
+  #
   # TODO refactor duplicate code in open_biome_log.rb
   after_create :find_and_update_or_initialize_meta_log
   after_update :find_and_update_or_initialize_meta_log_on_change, if: :time_of_passage_changed?
@@ -33,8 +33,8 @@ class DonorLog < ActiveRecord::Base
     meta = meta_log_by_time
     if meta.present?
       #FIXME this assumes that poops are unique to within the time frame -- ie if you have two poops within 20 minutes of each other, they'll disappear (not deleted, but 'opposite-orphaned')
-      meta.update_attributes(donor_log_id: id) 
-    else 
+      meta.update_attributes(donor_log_id: id)
+    else
       meta_logs.create(time_of_passage: time_of_passage)
     end
   end
@@ -59,14 +59,15 @@ class DonorLog < ActiveRecord::Base
   def meta_log_is_within_time_frame?
     own_meta_log == meta_log_by_time
   end
-  
+
   #de-orphan metalogs
+  after_update :remove_orphaned_meta_logs
   after_destroy :remove_orphaned_meta_logs
   def remove_orphaned_meta_logs
     MetaLog.orphans.each(&:destroy)
   end
-  
-  
+
+
 
   acts_as_taggable # Alias for acts_as_taggable_on :tags
 
@@ -79,20 +80,20 @@ class DonorLog < ActiveRecord::Base
 
   # times
   scope :last_three_months, -> {
-      where( 'time_of_passage > ? AND time_of_passage < ?', 
-              3.month.ago, 
+      where( 'time_of_passage > ? AND time_of_passage < ?',
+              3.month.ago,
               Time.zone.now )}
   scope :last_two_months, -> {
-      where( 'time_of_passage > ? AND time_of_passage < ?', 
-              2.month.ago, 
+      where( 'time_of_passage > ? AND time_of_passage < ?',
+              2.month.ago,
               Time.zone.now )}
   scope :this_month, -> {
-  	where('time_of_passage > ? AND time_of_passage < ?', 
+    where('time_of_passage > ? AND time_of_passage < ?',
   		1.month.ago,
   		Time.zone.now)
   }
   scope :this_week, -> {
-  	where('time_of_passage > ? AND time_of_passage < ?', 
+    where('time_of_passage > ? AND time_of_passage < ?',
   		1.week.ago,
   		Time.zone.now)
   }
@@ -117,13 +118,13 @@ class DonorLog < ActiveRecord::Base
   def date_of_passage_depends_on_time_of_passage
     self.date_of_passage = Helpers.get_date_of_passage(self.time_of_passage)
   end
-  
+
   def outcome_in_words
     if processable
       return 'processable'
     elsif !processable && donated
       return 'rejected'
-    else 
+    else
       return 'not_donated'
     end
   end
@@ -131,7 +132,7 @@ class DonorLog < ActiveRecord::Base
   def parse_tags_from_notes
     # notes = self.notes #=> 'I ate a #cucumber and went for a #run today.'
     self.tag_list = '' # clear out the tag list
-    self.tag_list.add(notes, parser: HashtagParser) # this IS persisting the new tag. idk why. 
+    self.tag_list.add(notes, parser: HashtagParser) # this IS persisting the new tag. idk why.
   end
 
   def time_of_passage_is_less_than_or_equal_to_about_now
